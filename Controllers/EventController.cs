@@ -124,13 +124,13 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
 
         [HttpDelete]
         [Route("DeleteEvent")]
-        public async Task<IActionResult> DeleteEvent(Event name)
+        public async Task<IActionResult> DeleteEvent(string name)
         {
             try
             {
-                var existingEvent = name;
+                var existingEvent = await _eventRepository.getEventAsync(name);
                 if (existingEvent == null) return NotFound();
-
+     
 
                 _eventRepository.Delete(existingEvent);
 
