@@ -12,25 +12,25 @@ namespace EPIWalletAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class ExpenseTypeController : ControllerBase
     {
-        private readonly IEventRepository _eventRepository;
+        private readonly IExpenseTypeRepository _expenseTypeRepository;
         //return data from the database
-      
+
         //dependency injection
-        public EventController(IEventRepository eventRepository)
+        public ExpenseTypeController(IExpenseTypeRepository expenseTypeRepository)
         {
-            _eventRepository = eventRepository;
+            _expenseTypeRepository = expenseTypeRepository;
         }
 
 
         [HttpGet]
-        [Route("GetAllEvents")]
+        [Route("GetAllExpenseTypes")]
         public async Task<ActionResult> GetAllEventsAsync()
         {
             try
             {
-                var results = await _eventRepository.getAllEventsAsync();
+                var results = await _expenseTypeRepository.getAllExpenseTypesAsync();
                 return Ok(results);
             }
 
@@ -46,60 +46,16 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpPost]
-        [Route("AddEvent")]
-public async Task<IActionResult> AddEvent(EventViewModel evm)
+        [Route("AddExpenseType")]
+        public async Task<IActionResult> AddEvent(ExpenseTypeViewModel etvm)
         {
 
-            var Tevent = new Event { TypeID = evm.TypeID, name = evm.name, description = evm.description, date = evm.date };
+            var type = new ExpenseType { Type = etvm.Type, EventID = etvm.EventID};
 
             try
             {
-                _eventRepository.Add(Tevent);
-                await _eventRepository.SaveChangesAsync();
-            }
-
-
-
-
-            catch(Exception)
-            {
-                return BadRequest("Error");
-            }
-
-            return Ok("Success");
-
-
-
-        }
-
-
-
-        [HttpPut]
-        [Route("UpdateEvent")]
-
-        public async Task<ActionResult> UpdateEvent(string name, EventViewModel evm)
-        {
-
-          
-
-            try
-            {
-                var existingEvent = await _eventRepository.getEventAsync(name);
-
-                if (existingEvent == null) return NotFound("Could not find event: "+ name);
-
-                existingEvent.TypeID = evm.TypeID;
-                existingEvent.name = evm.name;
-                existingEvent.description = evm.description;
-                existingEvent.date = evm.date;
-
-
-                if (await _eventRepository.SaveChangesAsync())
-                {
-                    return Ok("event updated successfully");
-                }
-
-                
+                _expenseTypeRepository.Add(type);
+                await _expenseTypeRepository.SaveChangesAsync();
             }
 
 
@@ -114,27 +70,60 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
 
 
 
-
-
         }
 
 
+        [HttpPut]
+        [Route("UpdateExpenseType")]
+
+        public async Task<ActionResult> UpdateExpenseType(string name, ExpenseTypeViewModel etvm)
+        {
 
 
+
+            try
+            {
+                var existingEvent = await _expenseTypeRepository.getExpenseType(name);
+
+                if (existingEvent == null) return NotFound("Could not find event: " + name);
+
+                existingEvent.EventID = etvm.EventID;
+                existingEvent.Type = etvm.Type;
+
+
+                if (await _expenseTypeRepository.SaveChangesAsync())
+                {
+                    return Ok("event updated successfully");
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return BadRequest("Error");
+            }
+
+            return Ok("Success");
+
+        }
 
         [HttpDelete]
-        [Route("DeleteEvent")]
-        public async Task<IActionResult> DeleteEvent(string name)
+        [Route("DeleteExpenseType")]
+        public async Task<IActionResult> DeleteExpenseType(string name)
         {
             try
             {
-                var existingEvent = await _eventRepository.getEventAsync(name);
+                var existingEvent = await _expenseTypeRepository.getExpenseType(name);
                 if (existingEvent == null) return NotFound();
 
 
-                _eventRepository.Delete(existingEvent);
+                _expenseTypeRepository.Delete(existingEvent);
 
-                if (await _eventRepository.SaveChangesAsync())
+                if (await _expenseTypeRepository.SaveChangesAsync())
                 {
                     return Ok("event deleted successfully");
                 }
@@ -144,19 +133,11 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
             catch (Exception)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError,"Error");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
 
             return BadRequest();
         }
-
-
-
-
-
-
-
-
 
     }
 }

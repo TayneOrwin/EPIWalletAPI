@@ -38,6 +38,7 @@ namespace EPIWalletAPI
             services.AddDbContext<AppDbContext>(options => 
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IEventRepository, EventRepository>();
+            services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

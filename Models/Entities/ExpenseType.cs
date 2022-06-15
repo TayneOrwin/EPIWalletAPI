@@ -15,7 +15,7 @@ namespace EPIWalletAPI.Models.Entities
 
 
         //1-1 relationship
-        public virtual Event Event { get; set; }
+       // public virtual Event Event { get; set; } to be fixed in the event entity, also needs to be 1-n relationship
 
 
     }
