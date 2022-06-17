@@ -24,7 +24,7 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpPost]
-        [Route("SendEmail")]
+        [Route("SendOTPEmail")]
         public int sendEmail(toEmail toEmail)
         {
 

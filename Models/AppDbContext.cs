@@ -76,6 +76,25 @@ namespace EPIWalletAPI.Models
 
 
 
+            modelBuilder.Entity<Sponsor>()
+             .HasData(
+             new
+             {
+                 SponsorID = 1,
+                 EventID = 17,
+                 name = "Bryan",
+                 Surname = "Heuston",
+                 Amount = 399.22,
+                 Company = "Striker Investments",
+                 Email = "strikerproducts@gmail.com"
+           
+
+             }
+
+             );
+
+
+
 
 
 
