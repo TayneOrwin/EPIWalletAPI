@@ -30,7 +30,7 @@ namespace EPIWalletAPI.Controllers
         {
             try
             {
-                var results = await _eventRepository.getAllEventsAsync();
+                var results = await  _eventRepository.getAllEventsAsync();
                 return Ok(results);
             }
 
