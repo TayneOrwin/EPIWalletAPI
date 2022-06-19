@@ -4,6 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EPIWalletAPI.Models;
+
+
 
 namespace EPIWalletAPI.Models
 {
@@ -21,6 +24,10 @@ namespace EPIWalletAPI.Models
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
 
+   
+
+        public DbSet<VendorAddress> VendorAddresses { get; set; }
+        public DbSet<Vendor> Vendors { get; set; }
 
 
 
@@ -87,12 +94,38 @@ namespace EPIWalletAPI.Models
                  Amount = 399.22,
                  Company = "Striker Investments",
                  Email = "strikerproducts@gmail.com"
-           
-
              }
+           );
 
-             );
 
+
+            modelBuilder.Entity<Vendor>()
+      .HasData(
+      new
+      {
+          VendorID = 1,
+          Name = "Bryan",
+          Description = "Main Bakery on 4th Street",
+          Availability = true,
+          VendorAddressID = 1,
+      }
+    );
+
+
+
+            modelBuilder.Entity<VendorAddress>()
+      .HasData(
+      new
+      {
+          VendorAddressID = 1,
+          VendorID = 1,
+          Country = "South Africa",
+          Province = "Gauteng",
+         Suburb = "Menlo Park",
+         AddressLine1 =  "578 Saint Street",
+         AddressLine2= "No 57"
+      }
+    );
 
 
 
