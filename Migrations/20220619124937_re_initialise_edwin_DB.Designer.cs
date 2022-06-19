@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220619124937_re_initialise_edwin_DB")]
+    partial class re_initialise_edwin_DB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,12 +37,15 @@ namespace EPIWalletAPI.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TitlesID")
+                    b.Property<int>("TitleID")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TitlesTitleID")
                         .HasColumnType("int");
 
                     b.HasKey("EmployeeID");
 
-                    b.HasIndex("TitlesID");
+                    b.HasIndex("TitlesTitleID");
 
                     b.ToTable("Employees");
                 });
@@ -159,7 +164,7 @@ namespace EPIWalletAPI.Migrations
 
             modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>
                 {
-                    b.Property<int>("TitlesID")
+                    b.Property<int>("TitleID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -167,7 +172,7 @@ namespace EPIWalletAPI.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("TitlesID");
+                    b.HasKey("TitleID");
 
                     b.ToTable("Titles");
                 });
@@ -176,9 +181,7 @@ namespace EPIWalletAPI.Migrations
                 {
                     b.HasOne("EPIWalletAPI.Models.Titles", "Titles")
                         .WithMany()
-                        .HasForeignKey("TitlesID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TitlesTitleID");
 
                     b.Navigation("Titles");
                 });

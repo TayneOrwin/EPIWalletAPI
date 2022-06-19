@@ -1,4 +1,5 @@
-﻿using EPIWalletAPI.Models.Entities;
+﻿using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,10 @@ namespace EPIWalletAPI.Models
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
-
+        
+        public DbSet<Titles> Titles { get; set; }
+        
+        public DbSet<Employees> Employees { get; set; }
 
 
 
