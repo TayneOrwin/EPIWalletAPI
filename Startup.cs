@@ -43,77 +43,78 @@ namespace EPIWalletAPI
             options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IEventRepository, EventRepository>();
 
-            //Login
+            //Login old
 
 
-            IdentityBuilder builder = services.AddDefaultIdentity<ApplicationUser>();
+            //IdentityBuilder builder = services.AddDefaultIdentity<ApplicationUser>();
 
-            builder = new IdentityBuilder(builder.UserType, builder.Services);
+            //builder = new IdentityBuilder(builder.UserType, builder.Services);
 
-            builder.AddRoles<IdentityRole>();
+            //builder.AddRoles<IdentityRole>();
 
-            builder.AddSignInManager<SignInManager<ApplicationUser>>();
+            //builder.AddSignInManager<SignInManager<ApplicationUser>>();
 
-            builder.AddEntityFrameworkStores<AppDbContext>();  //Here
+            //builder.AddEntityFrameworkStores<AppDbContext>();  //Here
 
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-            });
+            //services.Configure<IdentityOptions>(options =>
+            //     {
+            //       options.Password.RequireDigit = false;
+            //     options.Password.RequireNonAlphanumeric = false;
+            //   options.Password.RequireLowercase = false;
+            // options.Password.RequireUppercase = false;
+            //});
 
 
-           var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());  //Here
+            //var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());  //Here
 
-            services.AddAuthentication(x =>
-            {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = false;
-                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
-        }
-        //Login end
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EPIWalletAPI v1"));
+            //     services.AddAuthentication(x =>
+            //     {
+            //         x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //        x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //         x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //   }).AddJwtBearer(x =>
+            //    {
+            //        x.RequireHttpsMetadata = false;
+            //        x.SaveToken = false;
+            //        x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+            //        {
+            //            ValidateIssuerSigningKey = true,
+            //            IssuerSigningKey = new SymmetricSecurityKey(key),
+            //            ValidateIssuer = false,
+            //            ValidateAudience = false,
+            //            ClockSkew = TimeSpan.Zero
+            //        };
+            //    });
             }
+            //Login end
 
-            app.UseHttpsRedirection();
-
-
-            app.UseCors(x => x
-           .AllowAnyOrigin()
-           .AllowAnyMethod()
-           .AllowAnyHeader());
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             {
-                endpoints.MapControllers();
-            });
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                    app.UseSwagger();
+                    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "EPIWalletAPI v1"));
+                }
+
+                app.UseHttpsRedirection();
+
+
+                app.UseCors(x => x
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+                app.UseRouting();
+
+                app.UseAuthentication();
+                app.UseAuthorization();
+
+                app.UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
+            }
         }
-    }
-}
+    } 
 
