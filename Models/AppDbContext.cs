@@ -112,8 +112,7 @@ namespace EPIWalletAPI.Models
           VendorID = 1,
           Name = "Bryan",
           Description = "Main Bakery on 4th Street",
-          Availability = true,
-          VendorAddressID = 1,
+          Availability = true
       }
     );
 
