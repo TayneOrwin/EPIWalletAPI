@@ -98,7 +98,7 @@ namespace EPIWalletAPI.Controllers
 
                 if (await _sponsorRepository.SaveChangesAsync())
                 {
-                    return Ok("event updated successfully");
+                    return Ok("sponsor updated successfully");
                 }
 
 
@@ -138,7 +138,7 @@ namespace EPIWalletAPI.Controllers
 
                 if (await _sponsorRepository.SaveChangesAsync())
                 {
-                    return Ok("event deleted successfully");
+                    return Ok("sponsor deleted successfully");
                 }
 
 

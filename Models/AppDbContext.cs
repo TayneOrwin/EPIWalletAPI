@@ -6,12 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EPIWalletAPI.Models;
-
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace EPIWalletAPI.Models
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<AppUser>
     {
         public AppDbContext() // initialise
         {
@@ -115,8 +114,7 @@ namespace EPIWalletAPI.Models
           VendorID = 1,
           Name = "Bryan",
           Description = "Main Bakery on 4th Street",
-          Availability = true,
-          VendorAddressID = 1,
+          Availability = true
       }
     );
 

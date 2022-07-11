@@ -50,7 +50,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddVendor(VendorViewModel vvm)
         {
 
-            var Tvendor = new Vendor { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability, VendorAddressID = vvm.VendorAddressID};
+            var Tvendor = new Vendor { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability};
 
             try
             {
@@ -91,7 +91,7 @@ namespace EPIWalletAPI.Controllers
                 existingVendor.Name = vvm.Name;
                 existingVendor.Description = vvm.Description;
                 existingVendor.Availability = vvm.Availability;
-                existingVendor.VendorAddressID = vvm.VendorAddressID;
+          
 
 
                 if (await _vendorRepository.SaveChangesAsync())
