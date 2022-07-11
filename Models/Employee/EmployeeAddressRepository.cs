@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models.Employee
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class EmployeeAddressRepository : IEmployeeAddressRepository
     {
 
         private readonly AppDbContext _appDbContext;
 
-        public EmployeeRepository(AppDbContext appDbContext)
+        public EmployeeAddressRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -26,31 +26,21 @@ namespace EPIWalletAPI.Models.Employee
             _appDbContext.Remove(entity);
         }
 
-        public async Task<Employees[]> getAllEmployeesAsync()
+        public async Task<EmployeeAddress[]> getAllEmployeeAddress()
         {
-            IQueryable<Employees> query = _appDbContext.Employees;
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress;
             return await query.ToArrayAsync();
         }
 
-        public async Task<Employees> getEmployeeAsync(string name)
+        public async Task<EmployeeAddress> getEmployeeAddress(string name)
         {
-            IQueryable<Employees> query = _appDbContext.Employees.Where(zz => zz.Name == name);
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.Province == name);
             return await query.FirstOrDefaultAsync();
         }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<Employees[]> getTitleByID(int id)
-        {
-            IQueryable<Employees> query = (IQueryable<Employees>)_appDbContext.Employees
-                .Where(zz => zz.Titles.TitlesID == id)
-                .Select(d => d.Titles.Description);
-                
-
-            return await query.ToArrayAsync();
         }
     }
 }

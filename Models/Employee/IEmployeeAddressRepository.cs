@@ -5,16 +5,13 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models.Employee
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeAddressRepository
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
 
         Task<bool> SaveChangesAsync();
-
-        Task<Employees[]> getAllEmployeesAsync();
-        Task<Employees> getEmployeeAsync(string name);
-
-        Task<Employees[]> getTitleByID(int id);
+        Task<EmployeeAddress[]> getAllEmployeeAddress();
+        Task<EmployeeAddress> getEmployeeAddress(string name);
     }
 }
