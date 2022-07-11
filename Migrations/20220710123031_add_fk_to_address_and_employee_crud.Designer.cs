@@ -4,52 +4,22 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220710123031_add_fk_to_address_and_employee_crud")]
+    partial class add_fk_to_address_and_employee_crud
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeAddress", b =>
-                {
-                    b.Property<int>("AddressID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AddressLine1")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("AddressLine2")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Province")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Suburb")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AddressID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.ToTable("EmployeeAddress");
-                });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.Employees", b =>
                 {
@@ -283,15 +253,6 @@ namespace EPIWalletAPI.Migrations
                             Suburb = "Menlo Park",
                             VendorID = 1
                         });
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeAddress", b =>
-                {
-                    b.HasOne("EPIWalletAPI.Models.Employee.Employees", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeID");
-
-                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.Employees", b =>

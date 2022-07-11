@@ -1,4 +1,5 @@
-﻿using EPIWalletAPI.Models.Employee;
+﻿using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,7 @@ namespace EPIWalletAPI.Controllers
     public class EmployeeController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly AppDbContext _appDbContext = new AppDbContext();
 
         public EmployeeController(IEmployeeRepository employeeRepository)
         {
@@ -25,6 +27,14 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<ActionResult> GetAllEmployeesAsync()
         {
+            /*var employeeTitle = _appDbContext.Titles.Where(zz => zz.TitlesID == */
+            //List<Titles> title = from t in _appDbContext.Titles.ToList()
+            //                     join e in _appDbContext.Employees.ToList()
+            //                     on t.TitlesID equals e.TitlesID
+            //                     select t.Description.ToList();
+
+           // var employeetitle = _appDbContext.Titles.Select(zz => zz.Description).ToList();
+
             try
             {
                 var results = await _employeeRepository.getAllEmployeesAsync();
@@ -69,6 +79,7 @@ namespace EPIWalletAPI.Controllers
             try
             {
                 var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
+                
 
                 if (existingEmployee == null) return NotFound("Could not find event: " + name);
 
