@@ -15,6 +15,7 @@ namespace EPIWalletAPI.Models
 
         public Boolean Availability { get; set; }
 
+        public int VendorAddressID { get; set; }
         public virtual VendorAddress address { get; set; }
 
 

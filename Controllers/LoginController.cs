@@ -42,26 +42,27 @@ namespace EPIWalletAPI.Controllers
 
 
 
-        [HttpPost]
-        [Route("Login")]
-         public async Task<IActionResult> Login(UserViewModel uvm)
-        {
+        //        [HttpPost]
+        //        [Route("Login")]
+        //         public async Task<IActionResult> Login(UserViewModel uvm)
+        //        {
 
-            var user = await _userManager.FindByNameAsync(uvm.EmailAddress);
+        //            var user = await _userManager.FindByNameAsync(uvm.EmailAddress);
 
-            if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
-            {
-                try
-                {
-                    var principal = await _claimsPrincipalFactory.CreateAsync(user);
-                    await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
-                }
-                catch(Exception)
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal error");
-                }
-            }
-            return Ok();
-        }
+        //            if (user != null && await _userManager.CheckPasswordAsync(user, uvm.Password))
+        //            {
+        //                try
+        //                {
+        //                    var principal = await _claimsPrincipalFactory.CreateAsync(user);
+        //                    await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme, principal);
+        //                }
+        //                catch(Exception)
+        //                {
+        //                    return StatusCode(StatusCodes.Status500InternalServerError, "Internal error");
+        //                }
+        //            }
+        //            return Ok();
+        //        }
+        //    }
     }
 }
