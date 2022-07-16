@@ -43,14 +43,16 @@ namespace EPIWalletAPI.Models.Employee
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<Employees[]> getTitleByID(int id)
-        {
-            IQueryable<Employees> query = (IQueryable<Employees>)_appDbContext.Employees
-                .Where(zz => zz.Titles.TitlesID == id)
-                .Select(d => d.Titles.Description);
+        //public async Task<Titles[]> getTitleByID(int id)
+        //{
+        //    IQueryable<Titles> query = _appDbContext.Titles
+        //        .Where(zz => zz.TitlesID == id)
+        //        .Select(d => d.Description);
+            
+                
                 
 
-            return await query.ToArrayAsync();
-        }
+        //    return await query.ToArrayAsync();
+        //}
     }
 }

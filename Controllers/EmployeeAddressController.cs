@@ -1,4 +1,5 @@
 ﻿using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -36,6 +37,15 @@ namespace EPIWalletAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
+
+
+        //[HttpPost]
+        //[Route("AddEmployeeAddress")]
+
+        //public Task<ActionResult> AddEmployeeAddress(EmployeeAddressViewModel eavm)
+        //{
+        //   var address = new EmployeeAddress(Country = eavm.Country)
+        //}
 
         //[HttpGet]
         //[Route("getEmployeeAddress")]
