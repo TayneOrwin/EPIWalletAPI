@@ -11,7 +11,7 @@ namespace EPIWalletAPI.Models
         void Delete<T>(T entity) where T : class;
 
         Task<bool> SaveChangesAsync();
-        Task<VendorAddress[]> getAllVendorAddressesAsync();
+        Task<VendorAddress[]> getAllVendorAddressAsync();
         Task<VendorAddress> getVendorAddress(string VendorName);
     }
 }
