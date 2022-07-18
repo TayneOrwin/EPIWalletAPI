@@ -32,9 +32,9 @@ namespace EPIWalletAPI.Models
         public DbSet<Employees> Employees { get; set; }
 
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
-
+        public DbSet<VendorAddress> VendorAddress { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
-        public DbSet<VendorAddress> VendorAddresses { get; set; }
+    
 
 
 

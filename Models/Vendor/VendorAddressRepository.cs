@@ -27,15 +27,15 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<VendorAddress[]> getAllVendorAddressesAsync()
+        public async Task<VendorAddress[]> getAllVendorAddressAsync()
         {
-            IQueryable<VendorAddress> query = _appDbContext.VendorAddresses;
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress;
             return await query.ToArrayAsync();
         }
 
         public async Task<VendorAddress> getVendorAddress(string address1)
         {
-            IQueryable<VendorAddress> query = _appDbContext.VendorAddresses.Where(c => c.AddressLine1 == address1);
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress.Where(c => c.AddressLine1 == address1);
             return await query.FirstOrDefaultAsync();
         }
 
