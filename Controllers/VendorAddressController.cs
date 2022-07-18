@@ -24,7 +24,7 @@ namespace EPIWalletAPI.Controllers
         [HttpGet]
         [Route("GetAllVendorAddress")]
 
-        public async Task<ActionResult> GetAllVendorAddresses()
+        public async Task<ActionResult> GetAllVendorAddress()
         {
             try
             {

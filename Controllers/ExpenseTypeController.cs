@@ -47,7 +47,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("AddExpenseType")]
-        public async Task<IActionResult> AddEvent(ExpenseTypeViewModel etvm)
+        public async Task<object> AddEvent(ExpenseTypeViewModel etvm)
         {
 
             var type = new ExpenseType { Type = etvm.Type, EventID = etvm.EventID };
@@ -59,14 +59,14 @@ namespace EPIWalletAPI.Controllers
             }
 
 
-
+        
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            return Ok(new { code = 200 });
 
 
 
@@ -76,7 +76,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateExpenseType")]
 
-        public async Task<ActionResult> UpdateExpenseType(string name, ExpenseTypeViewModel etvm)
+        public async Task<object> UpdateExpenseType(string name, ExpenseTypeViewModel etvm)
         {
 
 
@@ -101,13 +101,13 @@ namespace EPIWalletAPI.Controllers
 
 
 
-
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            return Ok(new { code = 200 });
+
 
         }
 
