@@ -59,6 +59,7 @@ namespace EPIWalletAPI.Controllers
         {
 
             var employee = new Employees { Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.Email, TitlesID = evm.TitleID };
+            //var description = emp.Titles.Description;
 
             try
             {
