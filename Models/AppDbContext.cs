@@ -33,7 +33,7 @@ namespace EPIWalletAPI.Models
 
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
 
-    
+   // public DbSet<Estimate> Estimates { get; set; }
 
 
 
