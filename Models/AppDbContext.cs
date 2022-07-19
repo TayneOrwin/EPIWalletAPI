@@ -1,4 +1,5 @@
 ﻿using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Estimate;
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,6 +28,8 @@ namespace EPIWalletAPI.Models
         public DbSet<Titles> Titles { get; set; }
         
         public DbSet<Employees> Employees { get; set; }
+
+        public DbSet<Estimates> Estimates { get; set; }
 
 
    
@@ -131,7 +134,14 @@ namespace EPIWalletAPI.Models
       }
     );
 
-
+            modelBuilder.Entity<Estimates>()
+                  .HasData(
+                  new
+                  {
+                      EstimateID = 1,
+                      Amount = 200
+                  }
+                ) ;
 
 
 

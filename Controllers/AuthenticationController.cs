@@ -17,6 +17,7 @@ namespace EPIWalletAPI.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
+        private readonly IRepository repository;
         private readonly IUserClaimsPrincipalFactory<AppUser> _claimsPrincipalFactory;
         private static Dictionary<string, TwoFactorCode> _twoFactorCodeDictionary
             = new Dictionary<string, TwoFactorCode>();
@@ -69,14 +70,7 @@ namespace EPIWalletAPI.Controllers
             return Ok(loggedInUser);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-
-            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
-
-            return Ok("Successfully logged out");
-        }
+        
 
         [HttpPost]
         [Route("Otp")]

@@ -2,6 +2,7 @@ using AutoMapper;
 using EPIWalletAPI.Factory;
 using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Estimate;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -79,6 +80,7 @@ namespace EPIWalletAPI
             services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
             services.AddScoped<ISponsorRepository, SponsorRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEstimateRepository, EstimateRepository>();
             services.AddScoped<IVendorRepository, VendorRepository>();
             services.AddScoped<IVendorAddressRepository, VendorAddressRepository>();
         }
