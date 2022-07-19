@@ -86,7 +86,7 @@ namespace EPIWalletAPI.Controllers
                 var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
                 
 
-                if (existingEmployee == null) return NotFound("Could not find event: " + name);
+                if (existingEmployee == null) return NotFound("Could not find employee: " + name);
 
                 existingEmployee.Name = evm.Name;
                 existingEmployee.Surname = evm.Surname;

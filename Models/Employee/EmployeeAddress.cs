@@ -15,7 +15,7 @@ namespace EPIWalletAPI.Models.Employee
         public string Suburb { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
-
+        public int EmployeeID { get; set; }
         public virtual Employees Employee { get; set; }
 
     }
