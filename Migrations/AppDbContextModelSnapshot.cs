@@ -244,6 +244,28 @@ namespace EPIWalletAPI.Migrations
                         });
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Estimate.Estimates", b =>
+                {
+                    b.Property<int>("EstimateID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.HasKey("EstimateID");
+
+                    b.ToTable("Estimates");
+
+                    b.HasData(
+                        new
+                        {
+                            EstimateID = 1,
+                            Amount = 200
+                        });
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>
                 {
                     b.Property<int>("TitlesID")
