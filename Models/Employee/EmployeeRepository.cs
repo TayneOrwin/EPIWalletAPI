@@ -14,6 +14,7 @@ namespace EPIWalletAPI.Models.Employee
         public EmployeeRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+            
         }
 
         public void Add<T>(T entity) where T : class
@@ -26,10 +27,24 @@ namespace EPIWalletAPI.Models.Employee
             _appDbContext.Remove(entity);
         }
 
+        public async Task<IEnumerable<Employees>> Search(string name)
+        {
+            IQueryable<Employees> query = _appDbContext.Employees;
+
+            if(!string.IsNullOrEmpty(name)) // if there is anything
+            {
+                query = query.Where(e => e.Name.Contains(name) || e.Surname.Contains(name));
+            }
+
+            return await query.ToListAsync();
+        }
+        
         public async Task<Employees[]> getAllEmployeesAsync()
         {
             IQueryable<Employees> query = _appDbContext.Employees;
             return await query.ToArrayAsync();
+
+            
         }
 
         public async Task<Employees> getEmployeeAsync(string name)
