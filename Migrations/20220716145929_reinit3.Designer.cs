@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220716145929_reinit3")]
+    partial class reinit3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -251,28 +253,6 @@ namespace EPIWalletAPI.Migrations
                             EventID = 17,
                             Surname = "Heuston",
                             name = "Bryan"
-                        });
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Estimate.Estimates", b =>
-                {
-                    b.Property<int>("EstimateID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.HasKey("EstimateID");
-
-                    b.ToTable("Estimates");
-
-                    b.HasData(
-                        new
-                        {
-                            EstimateID = 1,
-                            Amount = 200
                         });
                 });
 

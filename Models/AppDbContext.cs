@@ -13,6 +13,9 @@ namespace EPIWalletAPI.Models
 {
     public class AppDbContext : IdentityDbContext<AppUser>
     {
+        public AppDbContext() // initialise
+        {
+        }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -36,7 +39,6 @@ namespace EPIWalletAPI.Models
 
         public DbSet<VendorAddress> VendorAddresses { get; set; }
         public DbSet<Vendor> Vendors { get; set; }
-
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -107,32 +109,9 @@ namespace EPIWalletAPI.Models
 
 
 
-            modelBuilder.Entity<Vendor>()
-      .HasData(
-      new
-      {
-          VendorID = 1,
-          Name = "Bryan",
-          Description = "Main Bakery on 4th Street",
-          Availability = true
-      }
-    );
+     
 
 
-
-            modelBuilder.Entity<VendorAddress>()
-      .HasData(
-      new
-      {
-          VendorAddressID = 1,
-          VendorID = 1,
-          Country = "South Africa",
-          Province = "Gauteng",
-         Suburb = "Menlo Park",
-         AddressLine1 =  "578 Saint Street",
-         AddressLine2= "No 57"
-      }
-    );
 
             modelBuilder.Entity<Estimates>()
                   .HasData(

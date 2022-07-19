@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220711164115_re iitalization")]
+    partial class reiitalization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,28 +256,6 @@ namespace EPIWalletAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Estimate.Estimates", b =>
-                {
-                    b.Property<int>("EstimateID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.HasKey("EstimateID");
-
-                    b.ToTable("Estimates");
-
-                    b.HasData(
-                        new
-                        {
-                            EstimateID = 1,
-                            Amount = 200
-                        });
-                });
-
             modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>
                 {
                     b.Property<int>("TitlesID")
@@ -307,17 +287,18 @@ namespace EPIWalletAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VendorAddressID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("addressVendorAddressID")
-                        .HasColumnType("int");
-
                     b.HasKey("VendorID");
 
-                    b.HasIndex("addressVendorAddressID");
-
                     b.ToTable("Vendors");
+
+                    b.HasData(
+                        new
+                        {
+                            VendorID = 1,
+                            Availability = true,
+                            Description = "Main Bakery on 4th Street",
+                            Name = "Bryan"
+                        });
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.VendorAddress", b =>
@@ -347,7 +328,10 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("VendorAddressID");
 
-                    b.ToTable("VendorAddress");
+                    b.HasIndex("VendorID")
+                        .IsUnique();
+
+                    b.ToTable("VendorAddresses");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -512,13 +496,13 @@ namespace EPIWalletAPI.Migrations
                     b.Navigation("Event");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Vendor", b =>
+            modelBuilder.Entity("EPIWalletAPI.Models.VendorAddress", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.VendorAddress", "address")
-                        .WithMany()
-                        .HasForeignKey("addressVendorAddressID");
-
-                    b.Navigation("address");
+                    b.HasOne("EPIWalletAPI.Models.Vendor", null)
+                        .WithOne("address")
+                        .HasForeignKey("EPIWalletAPI.Models.VendorAddress", "VendorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -570,6 +554,11 @@ namespace EPIWalletAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Vendor", b =>
+                {
+                    b.Navigation("address");
                 });
 #pragma warning restore 612, 618
         }

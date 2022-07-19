@@ -42,5 +42,17 @@ namespace EPIWalletAPI.Models.Employee
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+        //public async Task<Titles[]> getTitleByID(int id)
+        //{
+        //    IQueryable<Titles> query = _appDbContext.Titles
+        //        .Where(zz => zz.TitlesID == id)
+        //        .Select(d => d.Description);
+            
+                
+                
+
+        //    return await query.ToArrayAsync();
+        //}
     }
 }

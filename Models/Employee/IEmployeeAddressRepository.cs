@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models
+namespace EPIWalletAPI.Models.Employee
 {
-    public interface IVendorAddressRepository
+    public interface IEmployeeAddressRepository
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
 
         Task<bool> SaveChangesAsync();
-        Task<VendorAddress[]> getAllVendorAddressAsync();
-        Task<VendorAddress> getVendorAddress(string VendorName);
+        Task<EmployeeAddress[]> getAllEmployeeAddress();
+        Task<EmployeeAddress> getEmployeeAddress(string name);
     }
 }

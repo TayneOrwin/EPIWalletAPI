@@ -1,18 +1,17 @@
-﻿using EPIWalletAPI.Models.Entities;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models
+namespace EPIWalletAPI.Models.Employee
 {
-
-    public class VendorAddressRepository : IVendorAddressRepository
+    public class EmployeeAddressRepository : IEmployeeAddressRepository
     {
+
         private readonly AppDbContext _appDbContext;
 
-        public VendorAddressRepository(AppDbContext appDbContext)
+        public EmployeeAddressRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -27,15 +26,15 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<VendorAddress[]> getAllVendorAddressAsync()
+        public async Task<EmployeeAddress[]> getAllEmployeeAddress()
         {
-            IQueryable<VendorAddress> query = _appDbContext.VendorAddress;
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress;
             return await query.ToArrayAsync();
         }
 
-        public async Task<VendorAddress> getVendorAddress(string address1)
+        public async Task<EmployeeAddress> getEmployeeAddress(string name)
         {
-            IQueryable<VendorAddress> query = _appDbContext.VendorAddress.Where(c => c.AddressLine1 == address1);
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.Province == name);
             return await query.FirstOrDefaultAsync();
         }
 
