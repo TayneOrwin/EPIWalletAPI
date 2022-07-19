@@ -154,24 +154,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("EventID");
 
                     b.ToTable("Events");
-
-                    b.HasData(
-                        new
-                        {
-                            EventID = 1,
-                            TypeID = 1,
-                            date = new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            description = "Organized work social by the team",
-                            name = "Work Social"
-                        },
-                        new
-                        {
-                            EventID = 2,
-                            TypeID = 1,
-                            date = new DateTime(2009, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            description = "Organized Breakfast",
-                            name = "Morning Social"
-                        });
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseType", b =>
@@ -192,14 +174,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasIndex("EventID");
 
                     b.ToTable("ExpenseTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            TypeID = 1,
-                            EventID = 1,
-                            Type = "Social"
-                        });
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.Sponsor", b =>
@@ -230,40 +204,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("SponsorID");
 
                     b.ToTable("Sponsors");
-
-                    b.HasData(
-                        new
-                        {
-                            SponsorID = 1,
-                            Amount = 399.22000000000003,
-                            Company = "Striker Investments",
-                            Email = "strikerproducts@gmail.com",
-                            EventID = 17,
-                            Surname = "Heuston",
-                            name = "Bryan"
-                        });
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Estimate.Estimates", b =>
-                {
-                    b.Property<int>("EstimateID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.HasKey("EstimateID");
-
-                    b.ToTable("Estimates");
-
-                    b.HasData(
-                        new
-                        {
-                            EstimateID = 1,
-                            Amount = 200
-                        });
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>

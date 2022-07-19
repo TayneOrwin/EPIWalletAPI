@@ -28,8 +28,8 @@ namespace EPIWalletAPI.Controllers
         public int sendEmail(toEmail toEmail)
         {
 
-            var fromAddress = new MailAddress("tayne.orwin@gmail.com", "System");
-            var toAddress = new MailAddress(toEmail.address, "User");
+            var fromAddress = new MailAddress("tayne.orwin@gmail.com", "EPI Wallet");
+            var toAddress = new MailAddress(toEmail.address, "EPI Login");
             const string fromPassword = "wxifdmferszbrjjj";
 
 
@@ -39,7 +39,7 @@ namespace EPIWalletAPI.Controllers
 
 
 
-            const string subject = "Requested OTP";
+            const string subject = "EPI Wallet Requested OTP";
             string body = "Your OTP is \n" + otp.ToString();
 
             var smtp = new SmtpClient
