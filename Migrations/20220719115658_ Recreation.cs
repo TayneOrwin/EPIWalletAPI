@@ -2,7 +2,7 @@
 
 namespace EPIWalletAPI.Migrations
 {
-    public partial class reinit12 : Migration
+    public partial class Recreation : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

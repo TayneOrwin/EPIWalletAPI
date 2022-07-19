@@ -5,12 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EPIWalletAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using EPIWalletAPI.Models.Identity;
 
 namespace EPIWalletAPI.Models
 {
-    public class AppDbContext : IdentityDbContext<AppUser>
+    public class AppDbContext : DbContext
     {
         public AppDbContext() // initialise
         {
@@ -21,7 +21,7 @@ namespace EPIWalletAPI.Models
 
         }
 
-
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Event> Events { get; set; }
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
@@ -32,8 +32,7 @@ namespace EPIWalletAPI.Models
         public DbSet<Employees> Employees { get; set; }
 
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
-        public DbSet<VendorAddress> VendorAddress { get; set; }
-        public DbSet<Vendor> Vendors { get; set; }
+
     
 
 
