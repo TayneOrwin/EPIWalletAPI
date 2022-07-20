@@ -35,6 +35,7 @@ namespace EPIWalletAPI.Models
         public DbSet<Estimates> Estimates { get; set; }
 
 
+
    
 
         public DbSet<VendorAddress> VendorAddresses { get; set; }
