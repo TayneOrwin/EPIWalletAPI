@@ -1,8 +1,7 @@
 using AutoMapper;
-using EPIWalletAPI.Factory;
 using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Employee;
-using EPIWalletAPI.Models.Estimate;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -13,11 +12,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace EPIWalletAPI
@@ -31,45 +32,99 @@ namespace EPIWalletAPI
 
         public IConfiguration Configuration { get; }
 
-        //Password
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors(options => options.AddDefaultPolicy(
-                include =>
-                {
-                    include.AllowAnyHeader();
-                    include.AllowAnyMethod();
-                    include.AllowAnyOrigin();
-                }));
+                   include =>
+                   {
+                       include.AllowAnyHeader();
+                       include.AllowAnyMethod();
+                       include.AllowAnyOrigin();
+                   }));
+
+
+
 
             services.AddControllers();
-            services.AddIdentity<AppUser, IdentityRole>(options =>
-            {
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.User.RequireUniqueEmail = true;
-            })
-           .AddEntityFrameworkStores<AppDbContext>()
-           .AddDefaultTokenProviders();
-
-            services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, AppUserClaimsPrincipalFactory>();
-
-            services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(3));
-
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EPIWalletAPI", Version = "v1" });
             });
+
+
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddScoped<IRepository, Repository>();
+               options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.Configure<ApplicatonSettings>(Configuration.GetSection("ApplicationSettings"));
+
+            //Injuct User 
+            IdentityBuilder builder = services.AddIdentityCore<ApplicationUser>();
+
+
+            builder = new IdentityBuilder(builder.UserType, builder.Services);
+
+            builder.AddRoles<IdentityRole>();
+
+            builder.AddSignInManager<SignInManager<ApplicationUser>>();
+
+            builder.AddEntityFrameworkStores<AppDbContext>();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 4;
+            }
+            );
+
+
+
+           
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-        
-    
-        // This method gets called by the runtime. Use this method to add services to the container.
-        
+
+
+
+
+            //Jwt Authentication
+
+            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSettings:JWT_Secret"].ToString());
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = false;
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             services.AddControllers();
             
@@ -80,9 +135,6 @@ namespace EPIWalletAPI
             services.AddScoped<IExpenseTypeRepository, ExpenseTypeRepository>();
             services.AddScoped<ISponsorRepository, SponsorRepository>();
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddScoped<IEstimateRepository, EstimateRepository>();
-            services.AddScoped<IVendorRepository, VendorRepository>();
-            services.AddScoped<IVendorAddressRepository, VendorAddressRepository>();
             services.AddScoped<IEmployeeAddressRepository, EmployeeAddressRepository>();
         }
 
@@ -104,7 +156,9 @@ namespace EPIWalletAPI
            .AllowAnyMethod()
            .AllowAnyHeader());
             app.UseRouting();
-     
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
