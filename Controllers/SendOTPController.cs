@@ -28,9 +28,9 @@ namespace EPIWalletAPI.Controllers
         public int sendEmail(toEmail toEmail)
         {
 
-            var fromAddress = new MailAddress("tayne.orwin@gmail.com", "EPI Wallet");
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress(toEmail.address, "EPI Login");
-            const string fromPassword = "wxifdmferszbrjjj";
+            const string fromPassword = "vokbgidjiuxonyfl";
 
 
             //generate a new random OTP between 1-10000
