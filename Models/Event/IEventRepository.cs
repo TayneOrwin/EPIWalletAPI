@@ -17,16 +17,18 @@ namespace EPIWalletAPI.Models
         Task<Event[]> getAllEventsAsync();
         Task<Event> getEventAsync(string name);
 
-
-
-
-      //      Task<ExpenseType[]> GetExpenseTypesByEventID(int eventID);
-
+        Task<IEnumerable<Event>> Search(string name);
 
 
 
 
-    
+        //      Task<ExpenseType[]> GetExpenseTypesByEventID(int eventID);
+
+
+
+
+
+
 
 
     }

@@ -1,29 +1,25 @@
-﻿using System;
+using EPIWalletAPI.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models.Entities
+namespace EPIWalletAPI.Models.EventInvite
 {
-    public class Event
+    public class EventInvite
     {
+
+
         [Key]
-        public int EventID { get; set; }
-        
-        
-        //1-1 relationship 
-        public int TypeID { get; set; }
-
-
+        public virtual Event EventID { get; set; }
 
         public string name { get; set; }
         public string description { get; set; }
-
         public DateTime date { get; set; }
 
-        
-      
+        public string address { get; set; }
+
 
 
 
