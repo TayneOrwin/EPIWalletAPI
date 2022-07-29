@@ -26,6 +26,18 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
+        public async Task<IEnumerable<ExpenseType>> Search(string name)
+        {
+            IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(t => t.Type.Contains(name));
+            }
+            return await query.ToListAsync();
+
+        }
+
         public async Task<ExpenseType[]> getAllExpenseTypesAsync()
         {
             IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes;

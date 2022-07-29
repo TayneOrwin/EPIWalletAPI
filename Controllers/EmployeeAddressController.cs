@@ -53,7 +53,7 @@ namespace EPIWalletAPI.Controllers
             }
             catch(Exception err)
             {
-                return Ok(err);
+                return Ok("Make sure employee exists");
             }
             return Ok("Success");
 
@@ -115,7 +115,27 @@ namespace EPIWalletAPI.Controllers
             }
             return BadRequest();
         }
+       
+        [HttpGet]
+        [Route("SearchEmployeeAddress")]
+        public async Task<ActionResult<IEnumerable<EmployeeAddress>>> Search(string name)
+        {
+            try
+            {
+                var results = await _employeeAddressRepository.Search(name);
 
+                if(results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested address");
+
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database" + err);
+            }
+        }
 
     }
 }

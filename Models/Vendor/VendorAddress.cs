@@ -11,8 +11,6 @@ namespace EPIWalletAPI.Models
     {
         [Key]
         public int VendorAddressID { get; set; }
-   
-        public int VendorID { get; set; }
 
         public string Country { get; set; }
 
@@ -22,9 +20,11 @@ namespace EPIWalletAPI.Models
         public string AddressLine1 { get; set; }
 
         public string AddressLine2 { get; set; }
+        public int VendorID { get; set; }
+        public virtual Vendor Vendor { get; set; }
 
 
 
-        
+
     }
 }

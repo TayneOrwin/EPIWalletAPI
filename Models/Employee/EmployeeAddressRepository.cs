@@ -26,6 +26,16 @@ namespace EPIWalletAPI.Models.Employee
             _appDbContext.Remove(entity);
         }
 
+        public async Task<IEnumerable<EmployeeAddress>> Search(string name)
+        {
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress;
+
+          if(!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(a => a.Province.Contains(name) || a.Country.Contains(name) || a.Suburb.Contains(name));
+            }
+            return await query.ToListAsync();
+        }
         public async Task<EmployeeAddress[]> getAllEmployeeAddress()
         {
             IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress;
