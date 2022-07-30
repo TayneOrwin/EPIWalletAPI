@@ -139,5 +139,29 @@ namespace EPIWalletAPI.Controllers
             return BadRequest();
         }
 
+        [HttpGet]
+        [Route("SearchExpenseTypes")]
+
+        public async Task<ActionResult<IEnumerable<ExpenseType>>> Search(string name)
+        {
+            try
+            {
+                var results = await _expenseTypeRepository.Search(name);
+
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested Expense Type");
+            }
+
+            catch(Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
+
+
     }
 }

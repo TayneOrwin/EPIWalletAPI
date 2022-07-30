@@ -153,6 +153,27 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("SearchSponsor")]
+
+        public async Task<ActionResult<IEnumerable<Sponsor>>> Search(string name)
+        {
+            try
+            {
+                var results = _sponsorRepository.Search(name);
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested sponsor");
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the daatabase");
+            }
+
+
+        }
 
 
 
@@ -160,5 +181,5 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        }
     }
-}

@@ -16,7 +16,7 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly IEventRepository _eventRepository;
         //return data from the database
-      
+
         //dependency injection
         public EventController(IEventRepository eventRepository)
         {
@@ -47,7 +47,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("AddEvent")]
-public async Task<IActionResult> AddEvent(EventViewModel evm)
+        public async Task<IActionResult> AddEvent(EventViewModel evm)
         {
 
             var Tevent = new Event { TypeID = evm.TypeID, name = evm.name, description = evm.description, date = evm.date };
@@ -61,7 +61,7 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
 
 
 
-            catch(Exception)
+            catch (Exception)
             {
                 return BadRequest("Error");
             }
@@ -80,13 +80,13 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
         public async Task<ActionResult> UpdateEvent(string name, EventViewModel evm)
         {
 
-          
+
 
             try
             {
                 var existingEvent = await _eventRepository.getEventAsync(name);
 
-                if (existingEvent == null) return NotFound("Could not find event: "+ name);
+                if (existingEvent == null) return NotFound("Could not find event: " + name);
 
                 existingEvent.TypeID = evm.TypeID;
                 existingEvent.name = evm.name;
@@ -99,7 +99,7 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
                     return Ok("event updated successfully");
                 }
 
-                
+
             }
 
 
@@ -130,7 +130,7 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
             {
                 var existingEvent = await _eventRepository.getEventAsync(name);
                 if (existingEvent == null) return NotFound();
-     
+
 
                 _eventRepository.Delete(existingEvent);
 
@@ -144,12 +144,33 @@ public async Task<IActionResult> AddEvent(EventViewModel evm)
             catch (Exception)
             {
 
-                return this.StatusCode(StatusCodes.Status500InternalServerError,"Error");
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
 
             return BadRequest();
         }
 
+        [HttpGet]
+        [Route("SearchEvent")]
+
+        public async Task<ActionResult<IEnumerable<Event>>> Search(string name)
+        {
+            try
+            {
+                var results =  await _eventRepository.Search(name);
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+
+                return NotFound("Could not find the requested Event in the database");
+
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+        }
 
 
 
