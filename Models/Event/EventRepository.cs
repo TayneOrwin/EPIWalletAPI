@@ -1,6 +1,4 @@
-﻿
-
-using EPIWalletAPI.Models.Entities;
+﻿using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
