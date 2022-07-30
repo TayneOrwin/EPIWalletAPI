@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 {
     public class GuestViewModel
     {
+        public string EmailAddress { get; set; }
         public string Name { get; set; }
-
         public string Surname { get; set; }
-
-        public string address { get; set; }
-    }
 }
+    }
+
