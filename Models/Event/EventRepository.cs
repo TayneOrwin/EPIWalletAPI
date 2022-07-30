@@ -2,6 +2,7 @@
 
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -61,6 +62,18 @@ namespace EPIWalletAPI.Models
     public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<Event>> Search(string name)
+        {
+            IQueryable<Event> query = _appDbContext.Events;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(e => e.name.Contains(name) || e.description.Contains(name));
+            }
+            return await query.ToListAsync();
+
         }
     }
 }

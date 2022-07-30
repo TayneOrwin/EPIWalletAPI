@@ -11,7 +11,7 @@ namespace EPIWalletAPI.Models
 
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-
+        Task<IEnumerable<Sponsor>> Search(string name);
         Task<bool> SaveChangesAsync();
 
         Task<Sponsor[]> getAllSponsorsAsync();

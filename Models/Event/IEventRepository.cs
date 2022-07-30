@@ -12,21 +12,24 @@ namespace EPIWalletAPI.Models
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
 
+        Task<IEnumerable<Event>> Search(string name);
         Task<bool> SaveChangesAsync();
 
         Task<Event[]> getAllEventsAsync();
         Task<Event> getEventAsync(string name);
 
-
-
-
-      //      Task<ExpenseType[]> GetExpenseTypesByEventID(int eventID);
-
+        Task<IEnumerable<Event>> Search(string name);
 
 
 
 
-    
+        //      Task<ExpenseType[]> GetExpenseTypesByEventID(int eventID);
+
+
+
+
+
+
 
 
     }
