@@ -1,5 +1,9 @@
 ﻿using EPIWalletAPI.Models.Employee;
-using EPIWalletAPI.Models.EventInvite;
+
+using EPIWalletAPI.Models.Guest;
+
+using EPIWalletAModels.EventInvite;
+
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -34,7 +38,10 @@ namespace EPIWalletAPI.Models
 
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
 
+        public DbSet<Guests> Guest { get; set; }
+
         
+
 
 
 
