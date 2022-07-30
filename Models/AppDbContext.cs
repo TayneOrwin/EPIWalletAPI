@@ -2,7 +2,7 @@
 
 using EPIWalletAPI.Models.Guest;
 
-using EPIWalletAModels.EventInvite;
+using EPIWalletAPI.Models.EventInvite;
 
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
