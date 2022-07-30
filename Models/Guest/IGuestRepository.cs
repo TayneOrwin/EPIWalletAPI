@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models.Guest
+namespace EPIWalletAPI.Models
 {
     public interface IGuestRepository
     {
@@ -13,8 +13,8 @@ namespace EPIWalletAPI.Models.Guest
 
         Task<bool> SaveChangesAsync();
 
-        Task<Guests[]> getAllGuestsAsync();
-        Task<Guests> getGuestAsync(string name);
+        Task<Guest[]> getAllGuestsAsync();
+        Task<Guest> getGuestAsync(string name);
 
     }
 }

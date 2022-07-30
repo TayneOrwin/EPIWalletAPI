@@ -1,5 +1,5 @@
 ﻿using EPIWalletAPI.Models;
-using EPIWalletAPI.Models.Guest;
+using EPIWalletAPI.Models.Entities;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +50,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddGuest(GuestViewModel evm)
         {
 
-            var Tevent = new Guests { GuestID = evm.GuestID, Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.EmailAddress };
+            var Tevent = new Guest {Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.EmailAddress };
 
             try
             {
@@ -88,7 +88,7 @@ namespace EPIWalletAPI.Controllers
 
                 if (existingGuest == null) return NotFound("Could not find Guest: " + name);
 
-                existingGuest.GuestID = gvm.GuestID;
+             
                 existingGuest.Name = gvm.Name;
                 existingGuest.Surname = gvm.Surname;
                 existingGuest.EmailAddress = gvm.EmailAddress;

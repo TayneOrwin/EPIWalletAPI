@@ -1,6 +1,5 @@
 ﻿using EPIWalletAPI.Models.Employee;
 
-using EPIWalletAPI.Models.Guest;
 
 using EPIWalletAPI.Models.EventInvite;
 
@@ -38,7 +37,7 @@ namespace EPIWalletAPI.Models
 
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
 
-        public DbSet<Guests> Guest { get; set; }
+        public DbSet<Guest> Guests { get; set; }
 
         
 

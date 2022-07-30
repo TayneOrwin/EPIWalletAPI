@@ -1,12 +1,10 @@
 ﻿using EPIWalletAPI.Models.Entities;
-using EPIWalletAPI.Models.Guest;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
-
-
 namespace EPIWalletAPI.Models
-{
+
+{ 
     public class GuestRepository : IGuestRepository
 
     {
@@ -32,16 +30,16 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<Guests[]> getAllGuestsAsync()
+        public async Task<Guest[]> getAllGuestsAsync()
         {
-            IQueryable<Guests> query = _appDbContext.Guest;
+            IQueryable<Guest> query = _appDbContext.Guests;
             return await query.ToArrayAsync();
         }
 
 
-        public async Task<Guests> getGuestAsync(string name)
+        public async Task<Guest> getGuestAsync(string name)
         {
-            IQueryable<Guests> query = _appDbContext.Guest.Where(c => c.Name == name);
+            IQueryable<Guest> query = _appDbContext.Guests.Where(c => c.Name == name);
             return await query.FirstOrDefaultAsync();
         }
 

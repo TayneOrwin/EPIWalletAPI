@@ -1,7 +1,6 @@
 using AutoMapper;
 using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Employee;
-using EPIWalletAPI.Models.Guest;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
