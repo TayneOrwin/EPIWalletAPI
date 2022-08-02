@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-
-namespace EPIWalletAPI.Models
+namespace EPIWalletAPI.Models.Vendor
 {
     public class VendorAddress
     {
@@ -21,10 +16,6 @@ namespace EPIWalletAPI.Models
 
         public string AddressLine2 { get; set; }
         public int VendorID { get; set; }
-        public virtual Vendor Vendor { get; set; }
-
-
-
-
+        public virtual Vendors Vendor { get; set; }
     }
 }

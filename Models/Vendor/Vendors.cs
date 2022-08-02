@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models
+namespace EPIWalletAPI.Models.Vendor
 {
-    public class Vendor
+    public class Vendors
     {
         [Key]
         public int VendorID { get; set; }
@@ -14,10 +14,6 @@ namespace EPIWalletAPI.Models
         public string Description { get; set; }
 
         public Boolean Availability { get; set; }
-
-        public int VendorAddressID { get; set; }
-        public virtual VendorAddress address { get; set; }
-
 
     }
 }

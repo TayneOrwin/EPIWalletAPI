@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models.Vendor;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddVendor(VendorViewModel vvm)
         {
 
-            var Tvendor = new Vendor { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability};
+            var Tvendor = new Vendors { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability};
 
             try
             {
