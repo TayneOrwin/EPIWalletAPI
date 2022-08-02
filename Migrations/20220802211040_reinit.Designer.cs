@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220802195814_vendor_set_2")]
-    partial class vendor_set_2
+    [Migration("20220802211040_reinit")]
+    partial class reinit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -134,6 +134,21 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("Employees");
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ApprovalStatus", b =>
+                {
+                    b.Property<int>("ApprovalID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ApprovalID");
+
+                    b.ToTable("approvalStatuses");
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.Event", b =>
                 {
                     b.Property<int>("EventID")
@@ -156,6 +171,32 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("EventID");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
+                {
+                    b.Property<int>("ExpenseItemID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ExpenseID")
+                        .HasColumnType("int");
+
+                    b.Property<double>("estimateCost")
+                        .HasColumnType("float");
+
+                    b.Property<string>("itemDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("itemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ExpenseItemID");
+
+                    b.HasIndex("ExpenseID");
+
+                    b.ToTable("ExpenseItems");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseType", b =>
@@ -199,6 +240,26 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("Guests");
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ReasonForRejection", b =>
+                {
+                    b.Property<int>("ReasonForRejectionID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Reason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StatusIDApprovalID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReasonForRejectionID");
+
+                    b.HasIndex("StatusIDApprovalID");
+
+                    b.ToTable("ReasonForRejections");
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.Sponsor", b =>
                 {
                     b.Property<int>("SponsorID")
@@ -226,7 +287,44 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("SponsorID");
 
+                    b.HasIndex("EventID");
+
                     b.ToTable("Sponsors");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.ExpenseRequest", b =>
+                {
+                    b.Property<int>("ExpenseID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ApprovalID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("EmployeeID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TypeID1")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("VendorID1")
+                        .HasColumnType("int");
+
+                    b.Property<double>("totalEstimate")
+                        .HasColumnType("float");
+
+                    b.HasKey("ExpenseID");
+
+                    b.HasIndex("ApprovalID1");
+
+                    b.HasIndex("EmployeeID1");
+
+                    b.HasIndex("TypeID1");
+
+                    b.HasIndex("VendorID1");
+
+                    b.ToTable("ExpenseRequests");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>
@@ -319,6 +417,15 @@ namespace EPIWalletAPI.Migrations
                     b.Navigation("Titles");
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.ExpenseRequest", "Expense")
+                        .WithMany("expenseItems")
+                        .HasForeignKey("ExpenseID");
+
+                    b.Navigation("Expense");
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseType", b =>
                 {
                     b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
@@ -330,6 +437,53 @@ namespace EPIWalletAPI.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ReasonForRejection", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "StatusID")
+                        .WithMany()
+                        .HasForeignKey("StatusIDApprovalID");
+
+                    b.Navigation("StatusID");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.Sponsor", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.ExpenseRequest", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "ApprovalID")
+                        .WithMany()
+                        .HasForeignKey("ApprovalID1");
+
+                    b.HasOne("EPIWalletAPI.Models.Employee.Employees", "EmployeeID")
+                        .WithMany()
+                        .HasForeignKey("EmployeeID1");
+
+                    b.HasOne("EPIWalletAPI.Models.Entities.ExpenseType", "TypeID")
+                        .WithMany()
+                        .HasForeignKey("TypeID1");
+
+                    b.HasOne("EPIWalletAPI.Models.Vendor.Vendors", "VendorID")
+                        .WithMany()
+                        .HasForeignKey("VendorID1");
+
+                    b.Navigation("ApprovalID");
+
+                    b.Navigation("EmployeeID");
+
+                    b.Navigation("TypeID");
+
+                    b.Navigation("VendorID");
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Vendor.VendorAddress", b =>
                 {
                     b.HasOne("EPIWalletAPI.Models.Vendor.Vendors", "Vendor")
@@ -339,6 +493,11 @@ namespace EPIWalletAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Vendor");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.ExpenseRequest", b =>
+                {
+                    b.Navigation("expenseItems");
                 });
 #pragma warning restore 612, 618
         }
