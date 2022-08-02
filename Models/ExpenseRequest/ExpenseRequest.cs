@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Vendor;
 
 namespace EPIWalletAPI.Models
 
@@ -18,7 +21,7 @@ namespace EPIWalletAPI.Models
 
         public virtual Employees EmployeeID { get; set; }
 
-        public virtual Vendor VendorID { get; set; }
+        public virtual Vendors VendorID { get; set; }
 
         public double totalEstimate { get; set; }
 

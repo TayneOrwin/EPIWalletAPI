@@ -43,7 +43,11 @@ namespace EPIWalletAPI.Models
         public DbSet<Vendors> Vendors { get; set; }
         public DbSet<VendorAddress> VendorAddress { get; set; }
 
-
+        //public DbSet<ProductCode> ProductCodes { get; set; }
+        public DbSet<ReasonForRejection> ReasonForRejections { get; set; }
+        public DbSet<ExpenseItem> ExpenseItems { get; set; }
+        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
+        public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
 
 
 
