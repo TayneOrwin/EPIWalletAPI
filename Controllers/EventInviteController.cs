@@ -18,13 +18,15 @@ namespace EPIWalletAPI.Controllers
     public class EventInviteController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
-
-        string EventDetails;
+        
+       
        
         public EventInviteController(IEventRepository eventRepository)
         {
             _eventRepository = eventRepository;
         }
+
+        
 
 
 
@@ -33,6 +35,8 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<ActionResult> SendInvite(EventInviteViewModel evm)
         {
+            
+
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress(evm.address, "Invite");
             const string fromPassword = "vokbgidjiuxonyfl";

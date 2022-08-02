@@ -116,6 +116,10 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+
+
+
         }
 
 
@@ -150,6 +154,30 @@ namespace EPIWalletAPI.Controllers
             return BadRequest();
         }
 
+
+
+        [HttpGet]
+        [Route("SearchGuest")]
+        public async Task<ActionResult<IEnumerable<Guest>>> Search(string name) // IEnumerable used for iterating through collection of a type??
+        {
+            try
+            {
+                var result = await _guestRepository.Search(name);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound("Could not find the requested guest");
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+
+
+        }
 
 
     }

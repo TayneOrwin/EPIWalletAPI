@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 namespace EPIWalletAPI.Models
@@ -28,6 +29,18 @@ namespace EPIWalletAPI.Models
         public void Delete<T>(T entity) where T : class
         {
             _appDbContext.Remove(entity);
+        }
+
+        public async Task<IEnumerable<Guest>> Search(string name)
+        {
+            IQueryable<Guest> query = _appDbContext.Guests;
+
+            if (!string.IsNullOrEmpty(name)) // if there is anything
+            {
+                query = query.Where(e => e.Name.Contains(name) || e.Surname.Contains(name) || e.EmailAddress.Contains(name));
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<Guest[]> getAllGuestsAsync()
