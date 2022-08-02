@@ -11,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using EPIWalletAPI.Models.Identity;
+using EPIWalletAPI.Models.Vendor;
 
 namespace EPIWalletAPI.Models
 {
@@ -38,18 +39,10 @@ namespace EPIWalletAPI.Models
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
 
         public DbSet<Guest> Guests { get; set; }
-        
-        public DbSet<ExpenseItem> expenseItems { get; set; } 
 
-        public DbSet<ApprovalStatus> approvalStatuses { get; set; }
-        public DbSet<ReasonForRejection> reasonForRejections { get; set; }
+        public DbSet<Vendors> Vendors { get; set; }
+        public DbSet<VendorAddress> VendorAddress { get; set; }
 
-        public DbSet<ExpenseRequest> expenseRequests { get; set; }
-
-
-        public DbSet<ProductCode> productCodes { get; set; }
-
-   
 
 
 

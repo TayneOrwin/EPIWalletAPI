@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-using EPIWalletAPI.Models.Entities;
-namespace EPIWalletAPI.Models.Vendor
+
+namespace EPIWalletAPI.Models
 {
-    public class Vendor
+    public class Vendors
     {
         [Key]
         public int VendorID { get; set; }
@@ -14,10 +14,6 @@ namespace EPIWalletAPI.Models.Vendor
         public string Description { get; set; }
 
         public Boolean Availability { get; set; }
-
-        public int VendorAddressID { get; set; }
-        public virtual VendorAddress address { get; set; }
-
 
     }
 }

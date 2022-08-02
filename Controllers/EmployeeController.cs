@@ -160,9 +160,9 @@ namespace EPIWalletAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
             }
 
-
-
         }
+
+
 
     }
     }

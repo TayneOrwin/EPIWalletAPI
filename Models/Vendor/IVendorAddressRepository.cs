@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models
+namespace EPIWalletAPI.Models.Vendor
 {
     public interface IVendorAddressRepository
     {

@@ -1,4 +1,5 @@
 using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
