@@ -38,9 +38,18 @@ namespace EPIWalletAPI.Models
         public DbSet<EmployeeAddress> EmployeeAddress { get; set; }
 
         public DbSet<Guest> Guests { get; set; }
-
         
+        public DbSet<ExpenseItem> expenseItems { get; set; } 
 
+        public DbSet<ApprovalStatus> approvalStatuses { get; set; }
+        public DbSet<ReasonForRejection> reasonForRejections { get; set; }
+
+        public DbSet<ExpenseRequest> expenseRequests { get; set; }
+
+
+        public DbSet<ProductCode> productCodes { get; set; }
+
+   
 
 
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
-
-namespace EPIWalletAPI.Models
+using EPIWalletAPI.Models.Entities;
+namespace EPIWalletAPI.Models.Vendor
 {
     public class Vendor
     {
