@@ -8,6 +8,5 @@ namespace EPIWalletAPI.ViewModels
     public class ExpenseTypeViewModel
     {
         public string Type { get; set; }
-        public int EventID { get; set; }
     }
 }
