@@ -152,7 +152,26 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("SearchVendor")]
+        public async Task<ActionResult<IEnumerable<Vendors>>> Search(string name) // IEnumerable used for iterating through collection of a type??
+        {
+            try
+            {
+                var result = await _vendorRepository.Search(name);
 
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound("Could not find the requested employee");
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
 
 
 
