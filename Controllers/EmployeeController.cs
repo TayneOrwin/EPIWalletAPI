@@ -60,7 +60,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<ActionResult> AddEmployee(EmployeeViewModel evm)
         {
 
-            var employee = new Employees { Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.Email, TitlesID = evm.TitleID }
+            var employee = new Employees { Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.Email, TitlesID = evm.TitleID };
 
             try
             {

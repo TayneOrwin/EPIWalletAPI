@@ -24,13 +24,11 @@ namespace EPIWalletAPI.Models
 
         public virtual Employees Employee { get; set; }
         public int EmployeeID { get; set; }
-
         public virtual Vendors Vendor { get; set; }
         public int VendorID { get; set; }
 
         public double totalEstimate { get; set; }
 
         public ICollection<ExpenseItem> expenseItems { get; set; }
-
     }
 }

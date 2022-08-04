@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EPIWalletAPI.Migrations
 {
-    public partial class reinit : Migration
+    public partial class reInitialize : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -47,19 +47,16 @@ namespace EPIWalletAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Events",
+                name: "ExpenseTypes",
                 columns: table => new
                 {
-                    EventID = table.Column<int>(type: "int", nullable: false)
+                    TypeID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TypeID = table.Column<int>(type: "int", nullable: false),
-                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Events", x => x.EventID);
+                    table.PrimaryKey("PK_ExpenseTypes", x => x.TypeID);
                 });
 
             migrationBuilder.CreateTable(
@@ -111,61 +108,40 @@ namespace EPIWalletAPI.Migrations
                 {
                     ReasonForRejectionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    StatusIDApprovalID = table.Column<int>(type: "int", nullable: true),
+                    StatusApprovalID = table.Column<int>(type: "int", nullable: true),
+                    ApprovalID = table.Column<int>(type: "int", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ReasonForRejections", x => x.ReasonForRejectionID);
                     table.ForeignKey(
-                        name: "FK_ReasonForRejections_approvalStatuses_StatusIDApprovalID",
-                        column: x => x.StatusIDApprovalID,
+                        name: "FK_ReasonForRejections_approvalStatuses_StatusApprovalID",
+                        column: x => x.StatusApprovalID,
                         principalTable: "approvalStatuses",
                         principalColumn: "ApprovalID",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExpenseTypes",
+                name: "Events",
                 columns: table => new
                 {
-                    TypeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EventID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExpenseTypes", x => x.TypeID);
-                    table.ForeignKey(
-                        name: "FK_ExpenseTypes_Events_EventID",
-                        column: x => x.EventID,
-                        principalTable: "Events",
-                        principalColumn: "EventID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Sponsors",
-                columns: table => new
-                {
-                    SponsorID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EventID = table.Column<int>(type: "int", nullable: false),
+                    TypeID = table.Column<int>(type: "int", nullable: false),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Amount = table.Column<double>(type: "float", nullable: false),
-                    Company = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    date = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sponsors", x => x.SponsorID);
+                    table.PrimaryKey("PK_Events", x => x.EventID);
                     table.ForeignKey(
-                        name: "FK_Sponsors_Events_EventID",
-                        column: x => x.EventID,
-                        principalTable: "Events",
-                        principalColumn: "EventID",
+                        name: "FK_Events_ExpenseTypes_TypeID",
+                        column: x => x.TypeID,
+                        principalTable: "ExpenseTypes",
+                        principalColumn: "TypeID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -216,6 +192,30 @@ namespace EPIWalletAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Sponsors",
+                columns: table => new
+                {
+                    SponsorID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EventID = table.Column<int>(type: "int", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Amount = table.Column<double>(type: "float", nullable: false),
+                    Company = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sponsors", x => x.SponsorID);
+                    table.ForeignKey(
+                        name: "FK_Sponsors_Events_EventID",
+                        column: x => x.EventID,
+                        principalTable: "Events",
+                        principalColumn: "EventID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "EmployeeAddress",
                 columns: table => new
                 {
@@ -245,39 +245,39 @@ namespace EPIWalletAPI.Migrations
                 {
                     ExpenseID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TypeID1 = table.Column<int>(type: "int", nullable: true),
-                    ApprovalID1 = table.Column<int>(type: "int", nullable: true),
-                    EmployeeID1 = table.Column<int>(type: "int", nullable: true),
-                    VendorID1 = table.Column<int>(type: "int", nullable: true),
+                    TypeID = table.Column<int>(type: "int", nullable: false),
+                    ApprovalID = table.Column<int>(type: "int", nullable: false),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    VendorID = table.Column<int>(type: "int", nullable: false),
                     totalEstimate = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ExpenseRequests", x => x.ExpenseID);
                     table.ForeignKey(
-                        name: "FK_ExpenseRequests_approvalStatuses_ApprovalID1",
-                        column: x => x.ApprovalID1,
+                        name: "FK_ExpenseRequests_approvalStatuses_ApprovalID",
+                        column: x => x.ApprovalID,
                         principalTable: "approvalStatuses",
                         principalColumn: "ApprovalID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpenseRequests_Employees_EmployeeID1",
-                        column: x => x.EmployeeID1,
+                        name: "FK_ExpenseRequests_Employees_EmployeeID",
+                        column: x => x.EmployeeID,
                         principalTable: "Employees",
                         principalColumn: "EmployeeID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpenseRequests_ExpenseTypes_TypeID1",
-                        column: x => x.TypeID1,
+                        name: "FK_ExpenseRequests_ExpenseTypes_TypeID",
+                        column: x => x.TypeID,
                         principalTable: "ExpenseTypes",
                         principalColumn: "TypeID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ExpenseRequests_Vendors_VendorID1",
-                        column: x => x.VendorID1,
+                        name: "FK_ExpenseRequests_Vendors_VendorID",
+                        column: x => x.VendorID,
                         principalTable: "Vendors",
                         principalColumn: "VendorID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -286,7 +286,7 @@ namespace EPIWalletAPI.Migrations
                 {
                     ExpenseItemID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ExpenseID = table.Column<int>(type: "int", nullable: true),
+                    ExpenseRequestID = table.Column<int>(type: "int", nullable: false),
                     itemName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     estimateCost = table.Column<double>(type: "float", nullable: false),
                     itemDescription = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -295,11 +295,11 @@ namespace EPIWalletAPI.Migrations
                 {
                     table.PrimaryKey("PK_ExpenseItems", x => x.ExpenseItemID);
                     table.ForeignKey(
-                        name: "FK_ExpenseItems_ExpenseRequests_ExpenseID",
-                        column: x => x.ExpenseID,
+                        name: "FK_ExpenseItems_ExpenseRequests_ExpenseRequestID",
+                        column: x => x.ExpenseRequestID,
                         principalTable: "ExpenseRequests",
                         principalColumn: "ExpenseID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -313,39 +313,39 @@ namespace EPIWalletAPI.Migrations
                 column: "TitlesID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseItems_ExpenseID",
+                name: "IX_Events_TypeID",
+                table: "Events",
+                column: "TypeID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ExpenseItems_ExpenseRequestID",
                 table: "ExpenseItems",
-                column: "ExpenseID");
+                column: "ExpenseRequestID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseRequests_ApprovalID1",
+                name: "IX_ExpenseRequests_ApprovalID",
                 table: "ExpenseRequests",
-                column: "ApprovalID1");
+                column: "ApprovalID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseRequests_EmployeeID1",
+                name: "IX_ExpenseRequests_EmployeeID",
                 table: "ExpenseRequests",
-                column: "EmployeeID1");
+                column: "EmployeeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseRequests_TypeID1",
+                name: "IX_ExpenseRequests_TypeID",
                 table: "ExpenseRequests",
-                column: "TypeID1");
+                column: "TypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseRequests_VendorID1",
+                name: "IX_ExpenseRequests_VendorID",
                 table: "ExpenseRequests",
-                column: "VendorID1");
+                column: "VendorID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExpenseTypes_EventID",
-                table: "ExpenseTypes",
-                column: "EventID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReasonForRejections_StatusIDApprovalID",
+                name: "IX_ReasonForRejections_StatusApprovalID",
                 table: "ReasonForRejections",
-                column: "StatusIDApprovalID");
+                column: "StatusApprovalID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Sponsors_EventID",
@@ -385,22 +385,22 @@ namespace EPIWalletAPI.Migrations
                 name: "ExpenseRequests");
 
             migrationBuilder.DropTable(
+                name: "Events");
+
+            migrationBuilder.DropTable(
                 name: "approvalStatuses");
 
             migrationBuilder.DropTable(
                 name: "Employees");
 
             migrationBuilder.DropTable(
-                name: "ExpenseTypes");
-
-            migrationBuilder.DropTable(
                 name: "Vendors");
 
             migrationBuilder.DropTable(
-                name: "Titles");
+                name: "ExpenseTypes");
 
             migrationBuilder.DropTable(
-                name: "Events");
+                name: "Titles");
         }
     }
 }

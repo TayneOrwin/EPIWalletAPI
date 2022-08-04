@@ -30,11 +30,28 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<ExpenseRequest[]> getAllExpenseRequestsAsync()
+        public async Task<ExpenseRequest[]> getPendingExpenseRequestsAsync()
         {
-            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests;
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c=>c.ApprovalID==1);
             return await query.ToArrayAsync();
         }
+
+
+
+        public async Task<ExpenseRequest[]> getApprovedExpenseRequestsAsync()
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.ApprovalID == 2);
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<ExpenseRequest[]> getPaidExpenseRequestsAsync()
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.ApprovalID == 3);
+            return await query.ToArrayAsync();
+        }
+
+
+
 
 
 

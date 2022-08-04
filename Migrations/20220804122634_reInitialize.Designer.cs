@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220802211040_reinit")]
-    partial class reinit
+    [Migration("20220804122634_reInitialize")]
+    partial class reInitialize
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -170,6 +170,8 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("EventID");
 
+                    b.HasIndex("TypeID");
+
                     b.ToTable("Events");
                 });
 
@@ -180,7 +182,7 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ExpenseID")
+                    b.Property<int>("ExpenseRequestID")
                         .HasColumnType("int");
 
                     b.Property<double>("estimateCost")
@@ -194,7 +196,7 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("ExpenseItemID");
 
-                    b.HasIndex("ExpenseID");
+                    b.HasIndex("ExpenseRequestID");
 
                     b.ToTable("ExpenseItems");
                 });
@@ -206,15 +208,10 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("EventID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Type")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("TypeID");
-
-                    b.HasIndex("EventID");
 
                     b.ToTable("ExpenseTypes");
                 });
@@ -247,15 +244,18 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("ApprovalID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Reason")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StatusIDApprovalID")
+                    b.Property<int?>("StatusApprovalID")
                         .HasColumnType("int");
 
                     b.HasKey("ReasonForRejectionID");
 
-                    b.HasIndex("StatusIDApprovalID");
+                    b.HasIndex("StatusApprovalID");
 
                     b.ToTable("ReasonForRejections");
                 });
@@ -299,16 +299,16 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ApprovalID1")
+                    b.Property<int>("ApprovalID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EmployeeID1")
+                    b.Property<int>("EmployeeID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("TypeID1")
+                    b.Property<int>("TypeID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("VendorID1")
+                    b.Property<int>("VendorID")
                         .HasColumnType("int");
 
                     b.Property<double>("totalEstimate")
@@ -316,13 +316,13 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("ExpenseID");
 
-                    b.HasIndex("ApprovalID1");
+                    b.HasIndex("ApprovalID");
 
-                    b.HasIndex("EmployeeID1");
+                    b.HasIndex("EmployeeID");
 
-                    b.HasIndex("TypeID1");
+                    b.HasIndex("TypeID");
 
-                    b.HasIndex("VendorID1");
+                    b.HasIndex("VendorID");
 
                     b.ToTable("ExpenseRequests");
                 });
@@ -417,33 +417,35 @@ namespace EPIWalletAPI.Migrations
                     b.Navigation("Titles");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.Event", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.ExpenseRequest", "Expense")
-                        .WithMany("expenseItems")
-                        .HasForeignKey("ExpenseID");
-
-                    b.Navigation("Expense");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseType", b =>
-                {
-                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
+                    b.HasOne("EPIWalletAPI.Models.Entities.ExpenseType", "Type")
                         .WithMany()
-                        .HasForeignKey("EventID")
+                        .HasForeignKey("TypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Event");
+                    b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.ExpenseRequest", "ExpenseRequest")
+                        .WithMany("expenseItems")
+                        .HasForeignKey("ExpenseRequestID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExpenseRequest");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ReasonForRejection", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "StatusID")
+                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "Status")
                         .WithMany()
-                        .HasForeignKey("StatusIDApprovalID");
+                        .HasForeignKey("StatusApprovalID");
 
-                    b.Navigation("StatusID");
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.Sponsor", b =>
@@ -459,29 +461,37 @@ namespace EPIWalletAPI.Migrations
 
             modelBuilder.Entity("EPIWalletAPI.Models.ExpenseRequest", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "ApprovalID")
+                    b.HasOne("EPIWalletAPI.Models.Entities.ApprovalStatus", "Approval")
                         .WithMany()
-                        .HasForeignKey("ApprovalID1");
+                        .HasForeignKey("ApprovalID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("EPIWalletAPI.Models.Employee.Employees", "EmployeeID")
+                    b.HasOne("EPIWalletAPI.Models.Employee.Employees", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeID1");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("EPIWalletAPI.Models.Entities.ExpenseType", "TypeID")
+                    b.HasOne("EPIWalletAPI.Models.Entities.ExpenseType", "Type")
                         .WithMany()
-                        .HasForeignKey("TypeID1");
+                        .HasForeignKey("TypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("EPIWalletAPI.Models.Vendor.Vendors", "VendorID")
+                    b.HasOne("EPIWalletAPI.Models.Vendor.Vendors", "Vendor")
                         .WithMany()
-                        .HasForeignKey("VendorID1");
+                        .HasForeignKey("VendorID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ApprovalID");
+                    b.Navigation("Approval");
 
-                    b.Navigation("EmployeeID");
+                    b.Navigation("Employee");
 
-                    b.Navigation("TypeID");
+                    b.Navigation("Type");
 
-                    b.Navigation("VendorID");
+                    b.Navigation("Vendor");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Vendor.VendorAddress", b =>
