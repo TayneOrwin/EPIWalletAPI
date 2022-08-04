@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,29 +8,49 @@ namespace EPIWalletAPI.Models.Vendor
 {
     public class VendorAddressRepository : IVendorAddressRepository
     {
+        private readonly AppDbContext _appDbContext;
+        public VendorAddressRepository(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
+
         public void Add<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _appDbContext.Add(entity);
         }
 
         public void Delete<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _appDbContext.Remove(entity);
         }
 
-        public Task<VendorAddress[]> getAllVendorAddressAsync()
+        public async Task<VendorAddress[]> getAllVendorAddressAsync()
         {
-            throw new NotImplementedException();
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress;
+            return await query.ToArrayAsync();
         }
 
-        public Task<VendorAddress> getVendorAddress(string VendorName)
+        public async Task<VendorAddress> getVendorAddress(string Name)
         {
-            throw new NotImplementedException();
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress.Where(zz => zz.Province == Name);
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _appDbContext.SaveChangesAsync() > 0;
+        }
+
+        public async Task<IEnumerable<VendorAddress>> Search(string name)
+        {
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress;
+
+            if (!string.IsNullOrEmpty(name))
+            {
+                query = query.Where(a => a.Province.Contains(name) || a.Country.Contains(name) || a.Suburb.Contains(name));
+            }
+            return await query.ToListAsync();
+
         }
     }
 }

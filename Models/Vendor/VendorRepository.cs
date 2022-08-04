@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -7,29 +8,49 @@ namespace EPIWalletAPI.Models.Vendor
 {
     public class VendorRepository : IVendorRepository
     {
+        private readonly AppDbContext _appDbContext;
+
+        public VendorRepository(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
+
         public void Add<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _appDbContext.Add(entity);
         }
 
         public void Delete<T>(T entity) where T : class
         {
-            throw new NotImplementedException();
+            _appDbContext.Remove(entity);
         }
 
-        public Task<Vendors[]> getAllVendorsAsync()
+        public async Task<Vendors[]> getAllVendorsAsync()
         {
-            throw new NotImplementedException();
+            IQueryable<Vendors> query = _appDbContext.Vendors;
+            return await query.ToArrayAsync();
         }
 
-        public Task<Vendors> getVendorAsync(string VendorName)
+        public async Task<Vendors> getVendorAsync(string VendorName)
         {
-            throw new NotImplementedException();
+            IQueryable<Vendors> query = _appDbContext.Vendors.Where(zz => zz.Name == VendorName);
+            return await query.FirstOrDefaultAsync();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public async Task<IEnumerable<Vendors>> Search(string name)
         {
-            throw new NotImplementedException();
+            IQueryable<Vendors> query = _appDbContext.Vendors;
+
+            if (!string.IsNullOrEmpty(name)) // if there is anything
+            {
+                query = query.Where(e => e.Name.Contains(name) || e.Description.Contains(name));
+            }
+
+            return await query.ToListAsync();
+        }
+        public async Task<bool> SaveChangesAsync()
+        {
+            return await _appDbContext.SaveChangesAsync() > 0;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace EPIWalletAPI.Models.Vendor
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-
+        Task<IEnumerable<VendorAddress>> Search(string name);
         Task<bool> SaveChangesAsync();
         Task<VendorAddress[]> getAllVendorAddressAsync();
         Task<VendorAddress> getVendorAddress(string VendorName);
