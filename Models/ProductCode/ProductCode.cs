@@ -13,8 +13,10 @@ namespace EPIWalletAPI.Models.Entities
     {
         [Key]
         public int productCode { get; set; }
-        public virtual Vendors VendorID { get; set; }
-        public virtual Event EventID { get; set; }
+        public virtual Vendors Vendor { get; set; }
+        public int VendorID { get; set; }
+        public virtual Event Event { get; set; }
+        public int EventID { get; set; }
 
     }
 }

@@ -11,7 +11,8 @@ namespace EPIWalletAPI.Models.Entities
     {
         [Key]
         public int ReasonForRejectionID { get; set; }
-        public virtual ApprovalStatus StatusID { get; set; }
+        public virtual ApprovalStatus Status { get; set; }
+        public int ApprovalID { get; set; }
 
         public string Reason { get; set; }
     }

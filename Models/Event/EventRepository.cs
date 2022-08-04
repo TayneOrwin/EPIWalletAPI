@@ -44,18 +44,6 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
-      // public async Task<ExpenseType[]> GetExpenseTypesByEventID(int eventID)
-     // {
-            //IQueryable<Event> query = _appDbContext.Events
-            //          .Where(e => e.EventID == eventID)
-            //          .Select(e => e.ExpenseType.TypeID)
-            //          .Where(type => type != 0)
-            //          .OrderBy(type => type.type).Distinct();
-
-
-//
-        //    return null;
-   // }
 
     public async Task<bool> SaveChangesAsync()
         {

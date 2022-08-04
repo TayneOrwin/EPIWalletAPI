@@ -11,11 +11,9 @@ namespace EPIWalletAPI.Models.Entities
         [Key]
         public int TypeID { get; set; }
         public string Type { get; set; }
-        public int EventID { get; set; }
 
 
-        //1-1 relationship
-        public virtual Event Event { get; set; }
+  
 
 
 

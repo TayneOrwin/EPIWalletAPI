@@ -65,24 +65,9 @@ namespace EPIWalletAPI.Models.Employee
 
             var results = query.Select(zz => zz.Description);
 
-            //var res = query.Select(zz => zz.Description);
-
-            //Titles res = new Titles();
-            //res.Description = query.Select(zz => zz.Description).ToString();
-
-
-            ////string[] firstString = new String[5];
-            ////firstString[0] =
-
-            //return await res.Description;
-
-
             return await results.ToArrayAsync();
         }
 
-        //Task<Employees[]> IEmployeeRepository.getTitleByID(int id)
-        //{
-        //    throw new NotImplementedException();
-        //}
+
     }
 }

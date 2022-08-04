@@ -9,11 +9,11 @@ namespace EPIWalletAPI.Models.Entities
     public class ExpenseItem
     {
         [Key]
-
-        public virtual ExpenseRequest Expense{ get; set; }
-     
         public int ExpenseItemID { get; set; }
+        public virtual ExpenseRequest ExpenseRequest{ get; set; }
+     public int ExpenseRequestID { get; set; }
 
+   
         public string itemName { get; set; }
 
         public double estimateCost { get; set; }
