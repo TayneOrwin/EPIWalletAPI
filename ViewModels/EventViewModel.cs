@@ -8,6 +8,8 @@ namespace EPIWalletAPI.ViewModels
     public class EventViewModel
     {
         public int TypeID { get; set; }
+
+        public string Type { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public DateTime date { get; set; }

@@ -15,12 +15,14 @@ namespace EPIWalletAPI.Controllers
     public class EventController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IExpenseTypeRepository _expenseTypeRepository;
         //return data from the database
 
         //dependency injection
-        public EventController(IEventRepository eventRepository)
+        public EventController(IEventRepository eventRepository, IExpenseTypeRepository expenseTypeRepository)
         {
             _eventRepository = eventRepository;
+            _expenseTypeRepository = expenseTypeRepository;
         }
 
 
@@ -49,8 +51,8 @@ namespace EPIWalletAPI.Controllers
         [Route("AddEvent")]
         public async Task<IActionResult> AddEvent(EventViewModel evm)
         {
-
-            var Tevent = new Event { TypeID = evm.TypeID, name = evm.name, description = evm.description, date = evm.date };
+            var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
+            var Tevent = new Event { TypeID = existingType.TypeID, name = evm.name, description = evm.description, date = evm.date };
 
             try
             {
