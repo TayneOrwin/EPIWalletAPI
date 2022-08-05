@@ -15,13 +15,16 @@ namespace EPIWalletAPI.Controllers
     public class ExpenseTypeController : ControllerBase
     {
         private readonly IExpenseTypeRepository _expenseTypeRepository;
+        private readonly IEventRepository _eventRepository;
         //return data from the database
 
         //dependency injection
-        public ExpenseTypeController(IExpenseTypeRepository expenseTypeRepository)
+        public ExpenseTypeController(IExpenseTypeRepository expenseTypeRepository, IEventRepository eventRepository)
         {
             _expenseTypeRepository = expenseTypeRepository;
+            _eventRepository = eventRepository; 
         }
+        
 
 
         [HttpGet]
