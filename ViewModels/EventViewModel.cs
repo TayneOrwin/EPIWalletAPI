@@ -12,8 +12,6 @@ namespace EPIWalletAPI.ViewModels
         public string description { get; set; }
         public DateTime date { get; set; }
 
-       // public string address { get; set; }
-    
 
 
     }

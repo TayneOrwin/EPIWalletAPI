@@ -53,7 +53,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<object> AddEvent(ExpenseTypeViewModel etvm)
         {
 
-            var type = new ExpenseType { Type = etvm.Type, EventID = etvm.EventID };
+            var type = new ExpenseType { Type = etvm.Type };
 
             try
             {
@@ -90,13 +90,12 @@ namespace EPIWalletAPI.Controllers
 
                 if (existingEvent == null) return NotFound("Could not find event: " + name);
 
-                existingEvent.EventID = etvm.EventID;
                 existingEvent.Type = etvm.Type;
 
 
                 if (await _expenseTypeRepository.SaveChangesAsync())
                 {
-                    return Ok("event updated successfully");
+                    return Ok("expense type updated successfully");
                 }
 
 
@@ -128,7 +127,7 @@ namespace EPIWalletAPI.Controllers
 
                 if (await _expenseTypeRepository.SaveChangesAsync())
                 {
-                    return Ok("event deleted successfully");
+                    return Ok("expense type updated successfully");
                 }
 
 

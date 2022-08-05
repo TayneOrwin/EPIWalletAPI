@@ -10,13 +10,9 @@ namespace EPIWalletAPI.Models.Entities
     {
         [Key]
         public int EventID { get; set; }
-        
-        
+        public ExpenseType Type { get; set; }
         //1-1 relationship 
         public int TypeID { get; set; }
-
-
-
         public string name { get; set; }
         public string description { get; set; }
 

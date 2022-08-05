@@ -5,8 +5,9 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.ViewModels
 {
-    public class ExpenseTypeViewModel
+    public class Receipt
     {
-        public string Type { get; set; }
+        public int id { get; set; }
+        public byte[] upload { get; set; }
     }
 }

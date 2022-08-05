@@ -3,27 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 namespace EPIWalletAPI.Models
 {
-    public interface IEventRepository
+    public interface IExpenseRequestRepository
     {
-
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
 
-        Task<IEnumerable<Event>> Search(string name);
         Task<bool> SaveChangesAsync();
 
-        Task<Event[]> getAllEventsAsync();
-        Task<Event> getEventAsync(string name);
-
-
-
-
-
-
-
+        Task<ExpenseRequest[]> getPendingExpenseRequestsAsync();
+        Task<ExpenseRequest[]> getApprovedExpenseRequestsAsync();
+        Task<ExpenseRequest[]> getPaidExpenseRequestsAsync();
+        Task<ExpenseRequest> getExpenseRequestAsync(int ExpenseID);
 
 
     }

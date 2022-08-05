@@ -6,15 +6,11 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models.Entities
 {
-    public class ExpenseType
+    public class ApprovalStatus
     {
         [Key]
-        public int TypeID { get; set; }
-        public string Type { get; set; }
-
-
-  
-
+        public int ApprovalID { get; set; }
+        public string status { get; set; }
 
 
 

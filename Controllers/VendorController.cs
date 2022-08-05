@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models.Vendor;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -50,7 +51,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddVendor(VendorViewModel vvm)
         {
 
-            var Tvendor = new Vendor { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability};
+            var Tvendor = new Vendors { Name = vvm.Name, Description = vvm.Description, Availability = vvm.Availability};
 
             try
             {
@@ -151,7 +152,26 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("SearchVendor")]
+        public async Task<ActionResult<IEnumerable<Vendors>>> Search(string name) // IEnumerable used for iterating through collection of a type??
+        {
+            try
+            {
+                var result = await _vendorRepository.Search(name);
 
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound("Could not find the requested employee");
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
 
 
 

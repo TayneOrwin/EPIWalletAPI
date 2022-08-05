@@ -27,8 +27,8 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<ActionResult> GetAllEmployeesAsync()
         {
-            var des = await _employeeRepository.getTitleByID(1);
-            
+            //var des = await _employeeRepository.getTitleByID(1);
+
             /*var employeeTitle = _appDbContext.Titles.Where(zz => zz.TitlesID == */
 
             //List<Titles> title = from t in _appDbContext.Titles.ToList()
@@ -39,14 +39,14 @@ namespace EPIWalletAPI.Controllers
             // var employeetitle = _appDbContext.Titles.Select(zz => zz.Description).ToList();
 
             //_employeeRepository.getTitleByID(_appDbContext.Employees.Select(zz => zz.Titles.TitlesID));
-          // var description = await _employeeRepository.getTitleByID(2);
+            // var description = await _employeeRepository.getTitleByID(2);
 
             try
             {
                 var results = await _employeeRepository.getAllEmployeesAsync();
                 return Ok(results);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
             }
@@ -61,7 +61,6 @@ namespace EPIWalletAPI.Controllers
         {
 
             var employee = new Employees { Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.Email, TitlesID = evm.TitleID };
-            //var description = emp.Titles.Description;
 
             try
             {
@@ -69,7 +68,7 @@ namespace EPIWalletAPI.Controllers
                 await _employeeRepository.SaveChangesAsync();
 
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 return Ok(err); ;
             }
@@ -86,7 +85,7 @@ namespace EPIWalletAPI.Controllers
             try
             {
                 var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
-                
+
 
                 if (existingEmployee == null) return NotFound("Could not find employee: " + name);
 
@@ -118,7 +117,7 @@ namespace EPIWalletAPI.Controllers
         {
             try
             {
-                    var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
+                var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
                 if (existingEmployee == null) return NotFound();
 
 
@@ -155,14 +154,33 @@ namespace EPIWalletAPI.Controllers
                 }
                 return NotFound("Could not find the requested employee");
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
             }
 
+        }
+
+        [HttpGet]
+        [Route("GetTitleByID")]
+
+        public async Task<IActionResult> GetTitleByID(int id)
+        {
+
+            var results = await _employeeRepository.getTitleByID(id);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch(Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
 
 
         }
+
 
     }
     }

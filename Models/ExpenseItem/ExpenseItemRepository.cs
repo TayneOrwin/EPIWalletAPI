@@ -1,20 +1,18 @@
 ﻿using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models
 {
-    public class EventRepository : IEventRepository
-
+    public class ExpenseItemRepository: IExpenseItemRepository
     {
-
-
         private readonly AppDbContext _appDbContext;
 
 
-        public EventRepository(AppDbContext appDbContext)
+        public ExpenseItemRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -31,35 +29,38 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<Event[]> getAllEventsAsync()
+        public async Task<ExpenseItem[]> getAllExpenseItemsAsync()
         {
-            IQueryable<Event> query = _appDbContext.Events;
+            IQueryable<ExpenseItem> query = _appDbContext.ExpenseItems;
             return await query.ToArrayAsync();
         }
 
 
-        public async Task<Event> getEventAsync(string name)
+        public async Task<ExpenseItem> getExpenseItemAsync(string itemName)
         {
-            IQueryable<Event> query = _appDbContext.Events.Where(c => c.name==name);
+            IQueryable<ExpenseItem> query = _appDbContext.ExpenseItems.Where(c => c.itemName == itemName);
             return await query.FirstOrDefaultAsync();
         }
 
 
-    public async Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<IEnumerable<Event>> Search(string name)
+        public async Task<IEnumerable<ExpenseItem>> Search(string itemName)
         {
-            IQueryable<Event> query = _appDbContext.Events;
+            IQueryable<ExpenseItem> query = _appDbContext.ExpenseItems;
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(itemName))
             {
-                query = query.Where(e => e.name.Contains(name) || e.description.Contains(name));
+                query = query.Where(e => e.itemName.Contains(itemName) || e.itemDescription.Contains(itemName));
             }
             return await query.ToListAsync();
 
         }
+
+     
+
     }
 }
