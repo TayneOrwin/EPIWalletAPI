@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220804122722_Initialize")]
-    partial class Initialize
+    [Migration("20220806181949_removeFullName")]
+    partial class removeFullName
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,6 +29,9 @@ namespace EPIWalletAPI.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<int>("AccessRoleID")
+                        .HasColumnType("int");
+
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -37,9 +40,6 @@ namespace EPIWalletAPI.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
-
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -72,6 +72,8 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AccessRoleID");
 
                     b.ToTable("ApplicationUsers");
                 });
@@ -132,6 +134,21 @@ namespace EPIWalletAPI.Migrations
                     b.HasIndex("TitlesID");
 
                     b.ToTable("Employees");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.AccessRole", b =>
+                {
+                    b.Property<int>("AccessRoleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AccessRoleDescription")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccessRoleID");
+
+                    b.ToTable("accessRoles");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ApprovalStatus", b =>
@@ -393,6 +410,17 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("VendorID");
 
                     b.ToTable("Vendors");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.Entities.AccessRole", "AccessRole")
+                        .WithMany()
+                        .HasForeignKey("AccessRoleID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AccessRole");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeAddress", b =>

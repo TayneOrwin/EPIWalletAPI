@@ -27,6 +27,7 @@ namespace EPIWalletAPI.Models
         }
 
        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
        public DbSet<Event> Events { get; set; }
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
@@ -46,7 +47,7 @@ namespace EPIWalletAPI.Models
         public DbSet<ExpenseItem> ExpenseItems { get; set; }
        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
-
+        public DbSet<AccessRole> accessRoles { get;set; }
 
 
 

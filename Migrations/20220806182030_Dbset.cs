@@ -2,7 +2,7 @@
 
 namespace EPIWalletAPI.Migrations
 {
-    public partial class Initialize : Migration
+    public partial class Dbset : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

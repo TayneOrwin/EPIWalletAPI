@@ -27,19 +27,7 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<ActionResult> GetAllEmployeesAsync()
         {
-            //var des = await _employeeRepository.getTitleByID(1);
-
-            /*var employeeTitle = _appDbContext.Titles.Where(zz => zz.TitlesID == */
-
-            //List<Titles> title = from t in _appDbContext.Titles.ToList()
-            //                     join e in _appDbContext.Employees.ToList()
-            //                     on t.TitlesID equals e.TitlesID
-            //                     select t.Description.ToList();
-
-            // var employeetitle = _appDbContext.Titles.Select(zz => zz.Description).ToList();
-
-            //_employeeRepository.getTitleByID(_appDbContext.Employees.Select(zz => zz.Titles.TitlesID));
-            // var description = await _employeeRepository.getTitleByID(2);
+ 
 
             try
             {

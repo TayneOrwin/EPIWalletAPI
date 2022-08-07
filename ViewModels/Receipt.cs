@@ -8,6 +8,6 @@ namespace EPIWalletAPI.ViewModels
     public class Receipt
     {
         public int id { get; set; }
-        public byte[] upload { get; set; }
+        public byte[] wallpaperContent { get; set; }
     }
 }
