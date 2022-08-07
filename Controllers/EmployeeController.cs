@@ -52,6 +52,22 @@ namespace EPIWalletAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetTitles")]
+
+        public async Task<IActionResult> GetTitles()
+        {
+            try
+            {
+                var results = await _employeeRepository.getTitlesAsync();
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
 
 
         [HttpPost]
@@ -174,6 +190,26 @@ namespace EPIWalletAPI.Controllers
                 return Ok(results);
             }
             catch(Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
+
+        [HttpGet]
+        [Route("GetIdByTitle")]
+
+        public async Task<IActionResult> GetIdByTitle(string title)
+        {
+
+            var results = await _employeeRepository.getIdByTitle(title);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
