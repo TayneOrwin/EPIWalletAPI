@@ -15,10 +15,6 @@ namespace EPIWalletAPI.Controllers
     public class UsersController : ControllerBase
     {
 
-        //reference for User and User identity
-        // //https://www.youtube.com/watch?v=CzRM-hOe35o&ab_channel=CodAffection
-
-
         //Add These
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _singInManager;
@@ -51,6 +47,9 @@ namespace EPIWalletAPI.Controllers
                 {
                     Email = model.Email,
                     UserName = model.Email,
+                    AccessRoleID= model.accessRole,
+                    EmployeeID = model.employeeID
+
                 };
 
                 try
@@ -58,7 +57,39 @@ namespace EPIWalletAPI.Controllers
                     var result = await _userManager.CreateAsync(applicationUser, model.Password);
                     if (result.Succeeded)
                     {
-                        return Ok(new { code = 200 });
+                    
+
+                        if (applicationUser.AccessRoleID==1)
+                        {
+                            return Ok(new { code = 201, message = "Employee Registered Succesfully" });
+                        }
+
+
+                        if (applicationUser.AccessRoleID == 2)
+                        {
+                            return Ok(new { code = 201, message = "Manager Registered Succesfully" });
+                        }
+
+                        if (applicationUser.AccessRoleID == 3)
+                        {
+                            return Ok(new { code = 201, message = "Creditor Registered Succesfully" });
+                        }
+                        if (applicationUser.AccessRoleID == 4)
+                        {
+                            return Ok(new { code = 201, message = "Administrator Registered Succesfully" });
+                        }
+
+
+                        else
+                        {
+                            return Ok(new { code = 404, message = "Register was succesful, Role Not Assigned" });
+                        }
+
+
+
+
+
+
                     }
                     else
                     {
@@ -93,7 +124,43 @@ namespace EPIWalletAPI.Controllers
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                     var token = tokenHandler.WriteToken(securityToken);
-                    return Ok(new { code = 200, token = token });
+
+
+
+                    if (user.AccessRoleID == 1)
+                    {
+                        return Ok(new { code = 200, token = token,message="Employee Access Granted" });
+                    }
+
+
+
+
+                    if (user.AccessRoleID == 2)
+                    {
+                        return Ok(new { code = 201, token = token, message="Manager Access Granted" });
+                    }
+
+                    if (user.AccessRoleID == 3)
+                    {
+                        return Ok(new { code = 202, token = token, message = "Creditor Access Granted" });
+                    }
+
+                    if (user.AccessRoleID == 4)
+                    {
+                        return Ok(new { code = 203, token = token, message = "Admin Access Granted" });
+                    }
+
+
+                    else
+                    {
+                        return Ok(new { code = 204, token = token, message = "Permission Level Not Asssigned" });
+                    }
+
+
+
+
+
+
                 }
                 else
                 {
@@ -116,5 +183,18 @@ namespace EPIWalletAPI.Controllers
             }
 
         }
+
+
+
+
+
+
+
+
+     
+
+
+
+
     }
 }
