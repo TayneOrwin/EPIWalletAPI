@@ -48,6 +48,8 @@ namespace EPIWalletAPI.Models.Vendor
             if (!string.IsNullOrEmpty(name))
             {
                 query = query.Where(a => a.Province.Contains(name) || a.Country.Contains(name) || a.Suburb.Contains(name));
+
+                
             }
             return await query.ToListAsync();
 

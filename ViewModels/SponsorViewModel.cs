@@ -10,6 +10,8 @@ namespace EPIWalletAPI.ViewModels
    
 
         public int EventID { get; set; }
+
+        public string Event { get; set; }
         public string name { get; set; }
         public string Surname { get; set; }
 

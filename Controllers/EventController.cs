@@ -86,11 +86,13 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
+                var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
                 var existingEvent = await _eventRepository.getEventAsync(name);
+                var tpyID = existingType.TypeID;
 
                 if (existingEvent == null) return NotFound("Could not find event: " + name);
 
-                existingEvent.TypeID = evm.TypeID;
+                existingEvent.TypeID = tpyID;
                 existingEvent.name = evm.name;
                 existingEvent.description = evm.description;
                 existingEvent.date = evm.date;
