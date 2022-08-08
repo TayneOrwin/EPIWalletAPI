@@ -13,7 +13,6 @@ namespace EPIWalletAPI.Models.Employee
       public int EmployeeID { get; set; }
       public string Name { get; set; }
       public string Surname { get; set; }
-      public string EmailAddress { get; set; }
        public int TitlesID { get; set; }
       public virtual Titles Titles { get; set; }
 
