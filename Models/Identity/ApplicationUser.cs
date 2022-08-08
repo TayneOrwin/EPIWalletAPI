@@ -8,7 +8,7 @@ namespace EPIWalletAPI.Models
     {
         [Column(TypeName = "nvarchar(150)")]
 
-        public virtual AccessRole AccessRole { get; set; }
+        public virtual Entities.AccessRole AccessRole { get; set; }
         public int AccessRoleID { get; set; }
 
         public virtual Employees Employee { get; set; }
