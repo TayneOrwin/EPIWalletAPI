@@ -48,7 +48,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<ActionResult> AddEmployee(EmployeeViewModel evm)
         {
 
-            var employee = new Employees { Name = evm.Name, Surname = evm.Surname, EmailAddress = evm.Email, TitlesID = evm.TitleID };
+            var employee = new Employees { Name = evm.Name, Surname = evm.Surname, TitlesID = evm.TitleID };
 
             try
             {
@@ -79,7 +79,6 @@ namespace EPIWalletAPI.Controllers
 
                 existingEmployee.Name = evm.Name;
                 existingEmployee.Surname = evm.Surname;
-                existingEmployee.EmailAddress = evm.Email;
                 existingEmployee.TitlesID = evm.TitleID;
 
 

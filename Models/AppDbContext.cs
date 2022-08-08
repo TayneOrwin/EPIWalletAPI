@@ -48,6 +48,16 @@ namespace EPIWalletAPI.Models
        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
         public DbSet<AccessRole> accessRoles { get;set; }
+        public DbSet<TopUpRequest> topUpRequests { get; set; }
+        public DbSet<ExpenseLine> expenseLines { get; set; }
+        public DbSet<PaymentStatus> paymentStatuses { get; set; }
+
+
+
+
+
+
+
 
 
 

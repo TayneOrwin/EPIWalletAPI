@@ -2,21 +2,21 @@
 
 namespace EPIWalletAPI.Migrations
 {
-    public partial class removeFullName : Migration
+    public partial class removeemailfromeployee : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "FullName",
-                table: "ApplicationUsers");
+                name: "EmailAddress",
+                table: "Employees");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<string>(
-                name: "FullName",
-                table: "ApplicationUsers",
-                type: "nvarchar(150)",
+                name: "EmailAddress",
+                table: "Employees",
+                type: "nvarchar(max)",
                 nullable: true);
         }
     }

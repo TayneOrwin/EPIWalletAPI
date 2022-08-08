@@ -133,8 +133,6 @@ namespace EPIWalletAPI.Controllers
                     }
 
 
-
-
                     if (user.AccessRoleID == 2)
                     {
                         return Ok(new { code = 201, token = token, message="Manager Access Granted" });
