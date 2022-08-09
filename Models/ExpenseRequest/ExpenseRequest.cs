@@ -15,19 +15,22 @@ namespace EPIWalletAPI.Models
     {
         [Key]
         public int ExpenseID { get; set; }
-        public virtual ExpenseType Type { get; set; }
+        public ExpenseType Type { get; set; }
 
         public int TypeID { get; set; }
 
-        public virtual ApprovalStatus Approval { get; set; }
+        public ApprovalStatus Approval { get; set; }
         public int ApprovalID { get; set; }
 
-        public virtual Employees Employee { get; set; }
+        public Employees Employee { get; set; }
         public int EmployeeID { get; set; }
-        public virtual Vendors Vendor { get; set; }
+        public Vendors Vendor { get; set; }
         public int VendorID { get; set; }
 
         public double totalEstimate { get; set; }
+
+        public PaymentStatus PaymentStatus { get; set; }
+            public int PaymentStatusID { get; set; }
 
         public ICollection<ExpenseItem> expenseItems { get; set; }
     }

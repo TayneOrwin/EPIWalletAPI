@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models.Entities
 {
-    public class AccessRole
+    public class ExpenseLine
     {
         [Key]
-        public int AccessRoleID { get; set; }
-        public string AccessRoleDescription { get; set; }
+        public int ExpenseLineID { get; set; }
+        public int ExpenseRequestID { get; set; }
+        public virtual ExpenseRequest ExpenseRequest { get; set; }
+     
+
+
     }
 }
