@@ -48,7 +48,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddExpenseItem(ExpenseItemViewModel evm)
         {
 
-            var Tevent = new ExpenseItem { ExpenseRequestID = evm.ExpenseRequestID, itemName = evm.itemName, itemDescription = evm.itemDescription, estimateCost= evm.estimateCost };
+            var Tevent = new ExpenseItem { ExpenseRequestID = evm.ExpenseRequestID, itemName = evm.itemName, itemDescription = evm.itemDescription, estimateCost= evm.estimateCost,supplier=evm.supplier };
 
             try
             {
@@ -90,6 +90,7 @@ namespace EPIWalletAPI.Controllers
                 existingItem.itemName = evm.itemName;
                 existingItem.itemDescription = evm.itemDescription;
                 existingItem.estimateCost = evm.estimateCost;
+                existingItem.supplier = evm.supplier;
 
 
                 if (await _expenseItemRepository.SaveChangesAsync())

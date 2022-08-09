@@ -16,5 +16,7 @@ namespace EPIWalletAPI.ViewModels
         public string itemDescription { get; set; }
         public string supplier { get; set; }
 
+        public string supplier { get; set; }
+
     }
 }
