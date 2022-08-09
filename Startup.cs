@@ -144,6 +144,7 @@ namespace EPIWalletAPI
             services.AddScoped<IExpenseRequestRepository, ExpenseRequestRepository>();
             services.AddScoped<IExpenseItemRepository, ExpenseItemRepository>();
             services.AddScoped<IAccessRoleRepository, AccessRoleRepository>();
+            services.AddScoped<ITopUpRequestRepository, TopUpRequestRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
