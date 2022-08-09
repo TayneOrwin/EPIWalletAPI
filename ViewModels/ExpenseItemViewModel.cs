@@ -14,6 +14,7 @@ namespace EPIWalletAPI.ViewModels
 
         public double estimateCost { get; set; }
         public string itemDescription { get; set; }
+        public string supplier { get; set; }
 
     }
 }
