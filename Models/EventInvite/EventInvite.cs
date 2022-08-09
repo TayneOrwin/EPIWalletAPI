@@ -12,9 +12,10 @@ namespace EPIWalletAPI.Models.Entities
 
 
         [Key]
-        public virtual Event EventID{ get; set; }
-        
         public int EventInviteID { get; set; }
+        public virtual Event Event{ get; set; }
+        public int EventID { get; set; }
+      
         public string name { get; set; }
         public string description { get; set; }
         public DateTime date { get; set; }

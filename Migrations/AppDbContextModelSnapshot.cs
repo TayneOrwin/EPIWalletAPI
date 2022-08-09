@@ -199,7 +199,7 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("EventID1")
+                    b.Property<int>("EventID")
                         .HasColumnType("int");
 
                     b.Property<string>("address")
@@ -216,7 +216,7 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasKey("EventInviteID");
 
-                    b.HasIndex("EventID1");
+                    b.HasIndex("EventID");
 
                     b.ToTable("EventInvites");
                 });
@@ -563,11 +563,13 @@ namespace EPIWalletAPI.Migrations
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.EventInvite", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "EventID")
+                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("EventID1");
+                        .HasForeignKey("EventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("EventID");
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
