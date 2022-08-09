@@ -143,6 +143,7 @@ namespace EPIWalletAPI
             services.AddScoped<IVendorAddressRepository, Models.Vendor.VendorAddressRepository>();
             services.AddScoped<IExpenseRequestRepository, ExpenseRequestRepository>();
             services.AddScoped<IExpenseItemRepository, ExpenseItemRepository>();
+            services.AddScoped<IEventInviteRepository, EventInviteRepository>();
             services.AddScoped<IAccessRoleRepository, AccessRoleRepository>();
             services.AddScoped<ITopUpRequestRepository, TopUpRequestRepository>();
         }

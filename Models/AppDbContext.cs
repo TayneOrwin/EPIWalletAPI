@@ -1,7 +1,6 @@
 ﻿using EPIWalletAPI.Models.Employee;
 
 
-using EPIWalletAPI.Models.EventInvite;
 
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +12,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.Vendor;
 using EPIWalletAPI.Models;
+
 
 
 namespace EPIWalletAPI.Models
@@ -32,6 +32,8 @@ namespace EPIWalletAPI.Models
        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
        public DbSet<Event> Events { get; set; }
+
+       public DbSet<EventInvite> EventInvites { get; set; } 
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }

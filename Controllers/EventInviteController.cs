@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using EPIWalletAPI.Models;
-using EPIWalletAPI.Models.EventInvite;
+using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
 
 namespace EPIWalletAPI.Controllers
@@ -18,15 +18,15 @@ namespace EPIWalletAPI.Controllers
     public class EventInviteController : ControllerBase
     {
         private readonly IEventRepository _eventRepository;
-        
-       
-       
-        public EventInviteController(IEventRepository eventRepository)
+        private readonly IEventInviteRepository _eventInviteRepository;
+
+        public EventInviteController(IEventRepository eventRepository, IEventInviteRepository eventInviteRepository)
         {
             _eventRepository = eventRepository;
+            _eventInviteRepository = eventInviteRepository;
         }
 
-        
+
 
 
 
@@ -43,7 +43,7 @@ namespace EPIWalletAPI.Controllers
 
             
                 var existingEvent = await _eventRepository.getEventAsync(evm.name);
-
+                var TInvite = new EventInvite {name = evm.name, description = evm.description, date = evm.date, address = evm.address};
 
 
                 const string subject = "You've been invited!";
@@ -71,7 +71,8 @@ namespace EPIWalletAPI.Controllers
             })
             {
                 smtp.Send(message);
-
+                _eventInviteRepository.Add(TInvite);
+                await _eventInviteRepository.SaveChangesAsync();
 
                 return Ok("success");
 

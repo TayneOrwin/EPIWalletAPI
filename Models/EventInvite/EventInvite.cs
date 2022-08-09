@@ -5,15 +5,16 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models.EventInvite
+namespace EPIWalletAPI.Models.Entities
 {
     public class EventInvite
     {
 
 
         [Key]
-        public Event EventID { get; set; }
-
+        public virtual Event EventID{ get; set; }
+        
+        public int EventInviteID { get; set; }
         public string name { get; set; }
         public string description { get; set; }
         public DateTime date { get; set; }
