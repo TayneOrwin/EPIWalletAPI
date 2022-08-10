@@ -220,11 +220,11 @@ namespace EPIWalletAPI.Controllers
             var employee = _employeeRepository.GetEmployeeByID(evm.EmployeeID);
 
            
-            const string subject = "Expense Request Approval!";
-            string body = "Please read the following information about the Expense Request: \n \n" + "Request from : "
-            + employee +  "\n \n" + "Total Estimate: "
+            const string subject = "New Expense Request Requiring Approval!";
+            string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
+            + employee +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
-             + "Vendor: "
+             + "Vendor Name: "
                 + evm.VendorID + "\n \n"
                   + "Type: "
                 + evm.TypeID + "\n \n"
