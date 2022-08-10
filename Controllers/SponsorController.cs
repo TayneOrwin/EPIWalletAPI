@@ -15,12 +15,14 @@ namespace EPIWalletAPI.Controllers
     public class SponsorController : ControllerBase
     {
         private readonly ISponsorRepository _sponsorRepository;
+        private readonly IEventRepository _eventRepository;
         //return data from the database
 
         //dependency injection
-        public SponsorController(ISponsorRepository sponsorRepository)
+        public SponsorController(ISponsorRepository sponsorRepository, IEventRepository eventRepository)
         {
            _sponsorRepository = sponsorRepository;
+            _eventRepository = eventRepository;
         }
 
 
@@ -49,8 +51,8 @@ namespace EPIWalletAPI.Controllers
         [Route("AddSponsor")]
         public async Task<IActionResult> AddSponsor(SponsorViewModel svm)
         {
-
-            var TSponsor = new Sponsor { EventID = svm.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email };
+            var existingEvent = await _eventRepository.getEventAsync(svm.Event);
+            var TSponsor = new Sponsor { EventID = existingEvent.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email };
 
             try
             {
@@ -84,11 +86,13 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
+                var existingEvent = await _eventRepository.getEventAsync(svm.Event);
                 var existingSponsor = await _sponsorRepository.getSponsorAsync(name);
+                var evntID = existingEvent.EventID;
 
                 if (existingSponsor == null) return NotFound("Could not find sponsor: " + name);
 
-                existingSponsor.EventID = svm.EventID;
+                existingSponsor.EventID = evntID;
                 existingSponsor.name = svm.name;
                 existingSponsor.Surname = svm.Surname;
                 existingSponsor.Amount = svm.Amount;

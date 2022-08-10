@@ -103,7 +103,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddExpenseRequest(ExpenseRequestViewModel evm)
         {
 
-            var TexpenseRequest = new ExpenseRequest { TypeID =evm.TypeID ,VendorID=evm.VendorID, EmployeeID = evm.EmployeeID, ApprovalID = evm.ApprovalID, totalEstimate=evm.TotalEstimate  };
+            var TexpenseRequest = new ExpenseRequest { TypeID =evm.TypeID ,VendorID=evm.VendorID, EmployeeID = evm.EmployeeID, ApprovalID = evm.ApprovalID, totalEstimate=evm.TotalEstimate , PaymentStatusID=evm.PaymentStatusID};
 
             try
             {
@@ -145,6 +145,7 @@ namespace EPIWalletAPI.Controllers
                 existingExpenseRequest.EmployeeID = evm.EmployeeID;
                 existingExpenseRequest.ApprovalID = evm.ApprovalID;
                 existingExpenseRequest.totalEstimate = evm.TotalEstimate;
+                existingExpenseRequest.PaymentStatusID = evm.PaymentStatusID;
 
 
 

@@ -11,7 +11,7 @@ namespace EPIWalletAPI.ViewModels
         public  int VendorID { get; set; }
         public int TypeID { get; set; }
         public int ApprovalID { get; set; }
- 
+ public int PaymentStatusID { get; set; }
         public double TotalEstimate { get; set; }
 
 

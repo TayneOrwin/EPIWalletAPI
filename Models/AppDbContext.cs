@@ -1,7 +1,6 @@
 ﻿using EPIWalletAPI.Models.Employee;
 
 
-using EPIWalletAPI.Models.EventInvite;
 
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -12,8 +11,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.Vendor;
+using EPIWalletAPI.Models;
+
+
 
 namespace EPIWalletAPI.Models
+
 {
     public class AppDbContext : DbContext
     {
@@ -29,6 +32,8 @@ namespace EPIWalletAPI.Models
        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
        public DbSet<Event> Events { get; set; }
+
+       public DbSet<EventInvite> EventInvites { get; set; } 
 
         public DbSet<ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
@@ -47,7 +52,17 @@ namespace EPIWalletAPI.Models
         public DbSet<ExpenseItem> ExpenseItems { get; set; }
        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
-        public DbSet<AccessRole> accessRoles { get;set; }
+        public DbSet<Entities.AccessRole> accessRoles { get;set; }
+        public DbSet<TopUpRequest> topUpRequests { get; set; }
+        public DbSet<ExpenseLine> expenseLines { get; set; }
+        public DbSet<PaymentStatus> paymentStatuses { get; set; }
+
+
+
+
+
+
+
 
 
 
