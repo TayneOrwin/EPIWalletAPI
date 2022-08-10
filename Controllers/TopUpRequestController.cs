@@ -88,7 +88,7 @@ namespace EPIWalletAPI.Controllers
 
             const string subject = "Top Up Request!";
             string body = "Please read the following information about the TopUp: \n \n" + "Request from : "
-            + "Tayne" + "\n \n" + "Expense Line ID : "
+            + evm.user + "\n \n" + "Expense Line ID : "
             + evm.ExpenseLineID + "\n \n" + "Top Up Amount: "
             + evm.amount + "\n \n"
              + "Reason: "
