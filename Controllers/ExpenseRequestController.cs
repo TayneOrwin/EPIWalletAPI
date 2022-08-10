@@ -217,7 +217,7 @@ namespace EPIWalletAPI.Controllers
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress("tayne.orwin@gmail.com", "Expense Request Approval");
             const string fromPassword = "vokbgidjiuxonyfl";
-            var employee = _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
 
            
             const string subject = "Expense Request Approval!";
