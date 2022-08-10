@@ -182,14 +182,21 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetEmployeeId")]
+        public async Task<IActionResult> GetEmployeeId(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            var results = user.EmployeeID;
+
+            return Ok(results);
+        }
 
 
 
 
 
 
-
-     
 
 
 

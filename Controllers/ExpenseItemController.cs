@@ -8,8 +8,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+
 namespace EPIWalletAPI.Controllers
 {
+    [Route("api/[controller]")]
+    [ApiController]
     public class ExpenseItemController : ControllerBase
     {
         private readonly IExpenseItemRepository _expenseItemRepository;
@@ -24,7 +27,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpGet]
         [Route("GetAllExpenseItems")]
-        public async Task<ActionResult> GetAllExpenseItemsAsync()
+        public async Task<IActionResult> GetAllExpenseItemsAsync()
         {
             try
             {
@@ -75,7 +78,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateExpenseItem")]
 
-        public async Task<ActionResult> UpdateExpenseItem(string name, ExpenseItemViewModel evm)
+        public async Task<IActionResult> UpdateExpenseItem(string name, ExpenseItemViewModel evm)
         {
 
 
