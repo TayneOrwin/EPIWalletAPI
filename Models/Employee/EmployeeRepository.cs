@@ -75,6 +75,18 @@ namespace EPIWalletAPI.Models.Employee
             return await results.ToArrayAsync();
         }
 
+
+        public async Task<string[]> getEmployeeByID(int id)
+        {
+            IQueryable<Employees> query = _appDbContext.Employees
+            .Where(zz => zz.EmployeeID == id);
+
+            var results = query.Select(zz => zz.Name);
+
+            return await results.ToArrayAsync();
+        }
+
+
         
 
         public async Task<int> getIdByTitle(string title)
