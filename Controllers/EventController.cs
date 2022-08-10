@@ -177,11 +177,26 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("getIdByEventName")]
+
+        public async Task<IActionResult> getIdByEventName(string Name)
+        {
+            try
+            {
+                var results = await _eventRepository.getIdByName(Name);
+                return Ok(results);
+            }
+            catch (Exception er)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error" + er);
+            }
+
+        }
 
 
-
-
+       
 
 
     }
-}
+    }
