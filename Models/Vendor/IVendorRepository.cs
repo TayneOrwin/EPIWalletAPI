@@ -14,5 +14,7 @@ namespace EPIWalletAPI.Models.Vendor
         Task<Vendors[]> getAllVendorsAsync();
         Task<Vendors> getVendorAsync(string VendorName);
         Task<int> getIdByName(string name);
+
+        Task<string> GetNameByID(int id);
     }
 }

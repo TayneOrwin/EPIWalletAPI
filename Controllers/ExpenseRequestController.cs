@@ -10,6 +10,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Vendor;
+
 namespace EPIWalletAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -21,11 +23,16 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly IExpenseRequestRepository _ExpenseRequestRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IVendorRepository _vendorRepository;
+        private readonly IExpenseTypeRepository _expenseTypeRepository;
 
-        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository)
+        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository)
         {
             _ExpenseRequestRepository = expenserequestRepository;
             _employeeRepository = employeeRepository;
+            _vendorRepository = vendorRepository;
+            _expenseTypeRepository = expenseTypeRepository;
+
         }
 
 
@@ -218,16 +225,17 @@ namespace EPIWalletAPI.Controllers
             var toAddress = new MailAddress("tayne.orwin@gmail.com", "Expense Request Approval");
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
-
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
            
             const string subject = "New Expense Request Requiring Approval!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
             + employee +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + evm.VendorID + "\n \n"
-                  + "Type: "
-                + evm.TypeID + "\n \n"
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
             var smtp = new SmtpClient

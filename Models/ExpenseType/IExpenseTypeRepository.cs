@@ -14,5 +14,9 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
         Task<ExpenseType[]> getAllExpenseTypesAsync();
         Task<ExpenseType> getExpenseType(string ExpenseTypeName);
+
+        Task<string> getExpenseTypeByID(int id);
+
+
     }
 }
