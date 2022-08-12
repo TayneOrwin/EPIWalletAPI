@@ -67,15 +67,10 @@ namespace EPIWalletAPI.Models
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
-    
-
-
-
-
-
-
-
-
-
+        public async Task<ExpenseRequest[]> getAllRequests()
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests;
+            return await query.ToArrayAsync();
+        }
     }
 }

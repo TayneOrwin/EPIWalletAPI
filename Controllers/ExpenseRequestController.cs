@@ -256,9 +256,26 @@ namespace EPIWalletAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetRequests")]
+
+        public async Task<IActionResult> GetRequests()
+        {
+            
+            try
+            {
+                var results = await _ExpenseRequestRepository.getAllRequests();
+                return Ok(results);
+            }
 
 
 
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
 
 
 
