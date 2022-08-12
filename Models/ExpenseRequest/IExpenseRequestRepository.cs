@@ -14,8 +14,13 @@ namespace EPIWalletAPI.Models
 
         Task<ExpenseRequest[]> getPendingExpenseRequestsAsync();
         Task<ExpenseRequest[]> getApprovedExpenseRequestsAsync();
-        Task<ExpenseRequest[]> getPaidExpenseRequestsAsync();
+        Task<ExpenseRequest[]> getUserPaidExpenseRequestsAsync(int id);
         Task<ExpenseRequest> getExpenseRequestAsync(int ExpenseID);
+
+        Task<ExpenseRequest[]> getUserPendingExpenseRequestsAsync(int id);
+
+        Task<ExpenseRequest[]> getUserApprovedExpenseRequestsAsync(int id);
+
 
 
     }
