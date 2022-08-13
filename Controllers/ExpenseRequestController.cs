@@ -59,6 +59,45 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+        [HttpGet]
+        [Route("GetUserPendingExpenseRequests")]
+        public async Task<ActionResult> GetUserPendingExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPendingExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         [HttpGet]
         [Route("GetApprovedExpenseRequests")]
         public async Task<ActionResult> GetApprovedExpenseRequestsAsync()
@@ -80,13 +119,50 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+
         [HttpGet]
-        [Route("GetPaidExpenseRequests")]
-        public async Task<ActionResult> GetPaidExpenseRequestsAsync()
+        [Route("GetUserApprovedExpenseRequests")]
+        public async Task<ActionResult> GetUserApprovedExpenseRequestsAsync(int id)
         {
             try
             {
-                var results = await _ExpenseRequestRepository.getPaidExpenseRequestsAsync();
+                var results = await _ExpenseRequestRepository.getUserApprovedExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetPaidExpenseRequests")]
+        public async Task<ActionResult> GetPaidExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPaidExpenseRequestsAsync(id);
                 return Ok(results);
             }
 
