@@ -16,6 +16,7 @@ namespace EPIWalletAPI.Models
         Task<ExpenseRequest[]> getApprovedExpenseRequestsAsync();
         Task<ExpenseRequest[]> getPaidExpenseRequestsAsync();
         Task<ExpenseRequest> getExpenseRequestAsync(int ExpenseID);
+        Task<ExpenseRequest[]> getExpenseRequestForEmployee(int EmployeeID);
 
 
     }

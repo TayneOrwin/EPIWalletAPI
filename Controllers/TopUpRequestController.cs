@@ -25,9 +25,10 @@ namespace EPIWalletAPI.Controllers
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
 
-        public TopUpRequestController(ITopUpRequestRepository topUpRequestRepository)
+        public TopUpRequestController(ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext)
         {
             _topUpRequestRepository = topUpRequestRepository;
+            _appDbContext = appDbContext;
         }
 
         [HttpGet]
@@ -120,5 +121,27 @@ namespace EPIWalletAPI.Controllers
 
             }
         }
+
+
+        [HttpGet]
+        [Route("GetExpenseRequestForTopUpRequest")]
+
+        public object GetExpenseRequestForTopUpRequest()
+        {
+
+            var result = (from topup in _appDbContext.topUpRequests.ToList()
+                          join line in _appDbContext.expenseLines.ToList()
+                          on topup.ExpenseLineID equals line.ExpenseLineID
+                          join request in _appDbContext.ExpenseRequests.ToList()
+                          on line.ExpenseRequestID equals request.ExpenseID
+                         // group topup by topup.TopUpRequestID);
+            select new ExpenseItem
+            {
+                itemName = _appDbContext.ExpenseItems.Select(x => x.itemName).FirstOrDefault()
+            }).ToList();
+
+            return Ok(result);
+        }
+
     }
 }

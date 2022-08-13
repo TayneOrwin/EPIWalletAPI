@@ -286,7 +286,20 @@ namespace EPIWalletAPI.Controllers
         }
 
 
-
+        [HttpGet]
+        [Route("getExpenseRequestForEmployee")]
+        public async Task<IActionResult> getExpenseRequestForEmployee(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getExpenseRequestForEmployee(id);
+                return Ok(results);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
 
 

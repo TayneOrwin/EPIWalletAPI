@@ -42,6 +42,15 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<ExpenseItem[]> getExpenseItemlistAsync(int id)
+        {
+            IQueryable<ExpenseItem> query = _appDbContext.ExpenseItems
+            .Where(zz => zz.ExpenseRequestID == id);
+
+           // var results = query.Select(zz => zz.itemName);
+
+            return await query.ToArrayAsync();
+        }
 
         public async Task<bool> SaveChangesAsync()
         {
