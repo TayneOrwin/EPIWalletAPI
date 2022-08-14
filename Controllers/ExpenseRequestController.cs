@@ -11,6 +11,10 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Vendor;
+using Microsoft.Extensions.Configuration;
+//using EPIWalletAPI.Models.ExpenseRequest;
+using Microsoft.Data.SqlClient;
+using EPIWalletAPI.Models.ExpenseType;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -25,13 +29,16 @@ namespace EPIWalletAPI.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly IVendorRepository _vendorRepository;
         private readonly IExpenseTypeRepository _expenseTypeRepository;
+        private readonly IConfiguration _configuration;
 
-        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository)
+        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,
+            IConfiguration configuration)
         {
             _ExpenseRequestRepository = expenserequestRepository;
             _employeeRepository = employeeRepository;
             _vendorRepository = vendorRepository;
             _expenseTypeRepository = expenseTypeRepository;
+            _configuration = configuration;
 
         }
 
@@ -378,10 +385,34 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("ExpenseTypeReport")]
+
+        public object ExpenseTypeReport()
+        {
+            var list = new List<ExpenseRequestPerTypeReport>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID Group by ExpenseTypes.Type";
 
 
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
 
+            while (reader.Read())
+            {
+                var report = new ExpenseRequestPerTypeReport
+                {
+                    Type = (string)reader["Type"],
+                    Requests = (int)reader["TotalRequests"]
+                };
 
+                list.Add(report);
+            }
+
+            return list;
+        }
 
 
 

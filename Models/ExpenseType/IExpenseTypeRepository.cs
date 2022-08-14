@@ -10,10 +10,10 @@ namespace EPIWalletAPI.Models
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-        Task<IEnumerable<ExpenseType>> Search(string name);
+        Task<IEnumerable<Models.Entities.ExpenseType>> Search(string name);
         Task<bool> SaveChangesAsync();
-        Task<ExpenseType[]> getAllExpenseTypesAsync();
-        Task<ExpenseType> getExpenseType(string ExpenseTypeName);
+        Task<Models.Entities.ExpenseType[]> getAllExpenseTypesAsync();
+        Task<Models.Entities.ExpenseType> getExpenseType(string ExpenseTypeName);
 
         Task<string> getExpenseTypeByID(int id);
 
