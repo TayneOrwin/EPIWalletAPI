@@ -29,9 +29,9 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<IEnumerable<TopUpRequest>> Search(string description)
+        public async Task<IEnumerable<Entities.TopUpRequest>> Search(string description)
         {
-            IQueryable<TopUpRequest> query = _appDbContext.topUpRequests;
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests;
 
             if (!string.IsNullOrEmpty(description))
             {
@@ -42,16 +42,16 @@ namespace EPIWalletAPI.Models
 
         }
 
-        public async Task<TopUpRequest[]> getAllTopUpRequestsAsync()
+        public async Task<Entities.TopUpRequest[]> getAllTopUpRequestsAsync()
         {
-            IQueryable<TopUpRequest> query = _appDbContext.topUpRequests;
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests;
             return await query.ToArrayAsync();
         }
 
 
-        public async Task<TopUpRequest> getTopUpRequestAsync(string description)
+        public async Task<Entities.TopUpRequest> getTopUpRequestAsync(string description)
         {
-            IQueryable<TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.Reason == description);
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.Reason == description);
             return await query.FirstOrDefaultAsync();
         }
 
