@@ -1,9 +1,13 @@
-﻿using EPIWalletAPI.Models;
+﻿
+using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models.TopUpRequest;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,17 +21,21 @@ namespace EPIWalletAPI.Controllers
     [ApiController]
     public class TopUpRequestController : ControllerBase
     {
-      
 
 
 
-            
+
+        private readonly IConfiguration _configuration;
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
+
+        public TopUpRequestController(ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration)
         private readonly IEmployeeRepository _employeeRepository;
         public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository)
         {
             _topUpRequestRepository = topUpRequestRepository;
+            _appDbContext = appDbContext;
+            _configuration = configuration;
             _employeeRepository = employeeRepository;
         }
 
@@ -120,5 +128,55 @@ namespace EPIWalletAPI.Controllers
 
             }
         }
+
+
+        [HttpGet]
+        [Route("GetExpenseRequestForTopUpRequest")]
+
+        public object GetExpenseRequestForTopUpRequest()
+        {
+            var list = new List<TopUpRequestReport>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "select ExpenseRequests.EmployeeID, topUpRequests.TopUpRequestID, topUpRequests.Amount, expenseLines.ExpenseLineID, ExpenseRequests.ExpenseID, ExpenseRequests.totalEstimate, (topUpRequests.Amount/ExpenseRequests.totalEstimate * 100) As Percentage from topUpRequests inner join expenseLines on topUpRequests.ExpenseLineID = expenseLines.ExpenseLineID inner join ExpenseRequests on expenseLines.ExpenseRequestID = ExpenseRequests.ExpenseID";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var report = new TopUpRequestReport()
+                {
+                    EmployeeID = (int)reader["EmployeeID"],
+                    percentage = (double)reader["Percentage"],
+                    amount = (double)reader["Amount"],
+                    TopUpRequestID = (int)reader["TopUpRequestID"],
+                    ExpenseLineID = (int)reader["ExpenseLineID"],
+                    ExpenseRequestID = (int)reader["ExpenseID"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+
+                list.Add(report);
+            }
+
+            return list;
+
+           // SqlCommand command = new SqlCommand()
+
+            //    var result = (from topup in _appDbContext.topUpRequests.ToList()
+            //                  join line in _appDbContext.expenseLines.ToList()
+            //                  on topup.ExpenseLineID equals line.ExpenseLineID
+            //                  join request in _appDbContext.ExpenseRequests.ToList()
+            //                  on line.ExpenseRequestID equals request.ExpenseID
+            //                  //group topup by topup.TopUpRequestID).ToList();
+            //                  select new ExpenseItem
+            //                  {
+            //                      itemName = _appDbContext.ExpenseItems.Select(x => x.itemName).FirstOrDefault()
+            //                  }).ToList();
+
+            //    return Ok(result);
+        }
+
     }
 }

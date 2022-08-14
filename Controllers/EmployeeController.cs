@@ -204,6 +204,25 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetEmployeeById")]
+
+        public async Task<IActionResult> GetEmployeeById(int id)
+        {
+
+            var results = await _employeeRepository.GetEmployeeByID(id);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
 
         [HttpGet]
         [Route("GetNameById")]

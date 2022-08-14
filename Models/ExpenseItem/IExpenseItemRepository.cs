@@ -17,7 +17,7 @@ namespace EPIWalletAPI.Models
 
         Task<ExpenseItem[]> getAllExpenseItemsAsync();
         Task<ExpenseItem> getExpenseItemAsync(string itemName);
-
+        Task<ExpenseItem[]> getExpenseItemlistAsync(int id);
 
 
     }

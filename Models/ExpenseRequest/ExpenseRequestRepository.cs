@@ -114,5 +114,11 @@ namespace EPIWalletAPI.Models
             IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests;
             return await query.ToArrayAsync();
         }
+
+        public async Task<ExpenseRequest[]> getExpenseRequestForEmployee(int EmployeeID)
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.EmployeeID == EmployeeID && c.ApprovalID == 2);
+            return await query.ToArrayAsync();
+        }
     }
 }
