@@ -26,9 +26,9 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<IEnumerable<ExpenseType>> Search(string name)
+        public async Task<IEnumerable<Models.Entities.ExpenseType>> Search(string name)
         {
-            IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes;
+            IQueryable<Models.Entities.ExpenseType> query = _appDbContext.ExpenseTypes;
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -38,15 +38,15 @@ namespace EPIWalletAPI.Models
 
         }
 
-        public async Task<ExpenseType[]> getAllExpenseTypesAsync()
+        public async Task<Models.Entities.ExpenseType[]> getAllExpenseTypesAsync()
         {
-            IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes;
+            IQueryable<Models.Entities.ExpenseType> query = _appDbContext.ExpenseTypes;
             return await query.ToArrayAsync();
         }
 
-        public async Task<ExpenseType> getExpenseType(string ExpenseTypeName)
+        public async Task<Models.Entities.ExpenseType> getExpenseType(string ExpenseTypeName)
         {
-            IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes.Where(c => c.Type == ExpenseTypeName);
+            IQueryable<Models.Entities.ExpenseType> query = _appDbContext.ExpenseTypes.Where(c => c.Type == ExpenseTypeName);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -54,7 +54,7 @@ namespace EPIWalletAPI.Models
 
         public async Task<string> getExpenseTypeByID(int id)
         {
-            IQueryable<ExpenseType> query = _appDbContext.ExpenseTypes
+            IQueryable<Models.Entities.ExpenseType> query = _appDbContext.ExpenseTypes
                 .Where(zz => zz.TypeID == id);
 
             var results = query.Select(zz => zz.Type);
