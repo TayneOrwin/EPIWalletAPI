@@ -58,6 +58,26 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetItemsByID")]
+        public async Task<ActionResult> GetItemsByID(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.GetExpenseItemsByID(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
+
+
 
 
         [HttpGet]

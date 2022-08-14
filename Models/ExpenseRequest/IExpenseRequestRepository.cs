@@ -21,6 +21,7 @@ namespace EPIWalletAPI.Models
 
         Task<ExpenseRequest[]> getUserApprovedExpenseRequestsAsync(int id);
 
+        Task<ExpenseItem[]> GetExpenseItemsByID(int id);
 
 
     }

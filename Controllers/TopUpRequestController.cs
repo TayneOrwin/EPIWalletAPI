@@ -24,10 +24,11 @@ namespace EPIWalletAPI.Controllers
             
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
-
-        public TopUpRequestController(ITopUpRequestRepository topUpRequestRepository)
+        private readonly IEmployeeRepository _employeeRepository;
+        public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository)
         {
             _topUpRequestRepository = topUpRequestRepository;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet]
@@ -78,7 +79,6 @@ namespace EPIWalletAPI.Controllers
         [Route("SendForApproval")]
         public async Task<ActionResult> SendForApproval(TopUpRequestViewModel evm)
         {
-
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress("tayne.orwin@gmail.com", "Top Up Request");
