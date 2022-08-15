@@ -17,7 +17,7 @@ namespace EPIWalletAPI.Models.Employee
         Task<Titles[]> getTitlesAsync();
         Task<string[]> getTitleByID(int id);
         Task<int> getIdByTitle(string title);
-        Task<string> GetEmployeeByID(int id);
+        Task<string[]> getEmployeeByID(int id);
 
     }
 }

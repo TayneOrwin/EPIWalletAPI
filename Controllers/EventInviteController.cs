@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
 using EPIWalletAPI.Models;
-using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
 
 namespace EPIWalletAPI.Controllers
@@ -50,7 +49,8 @@ namespace EPIWalletAPI.Controllers
                 string body = "Please read the following information about the event: \n \n" + "The name of the event : " 
                 + existingEvent.name + "\n \n" + "A short description of the event : " 
                 + existingEvent.description + "\n \n" + "This event will take place on the following data and time : " 
-                + existingEvent.date.ToString() + "\n \n"  
+                + existingEvent.date.ToString() + "\n \n" 
+                + "Please rsvp by replying to this email and also state wether a spouse will be attending. \n \n"
                 + "We hope to see you there! \n" + "Kind Regards \n" + "The EPI Team";
             
             var smtp = new SmtpClient
