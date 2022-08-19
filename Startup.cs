@@ -2,6 +2,7 @@ using AutoMapper;
 using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.AccessRole;
 using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -146,6 +147,8 @@ namespace EPIWalletAPI
             services.AddScoped<IEventInviteRepository, EventInviteRepository>();
             services.AddScoped<IAccessRoleRepository, AccessRoleRepository>();
             services.AddScoped<ITopUpRequestRepository, TopUpRequestRepository>();
+            services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
+            services.AddScoped<IExpenseLineRepository, ExpenseLineRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

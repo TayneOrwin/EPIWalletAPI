@@ -15,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 //using EPIWalletAPI.Models.ExpenseRequest;
 using Microsoft.Data.SqlClient;
 using EPIWalletAPI.Models.ExpenseType;
+using EPIWalletAPI.Models.Identity;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -30,15 +31,17 @@ namespace EPIWalletAPI.Controllers
         private readonly IVendorRepository _vendorRepository;
         private readonly IExpenseTypeRepository _expenseTypeRepository;
         private readonly IConfiguration _configuration;
+        private readonly IApplicationUserRepository _applicationUserRepository;
 
         public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,
-            IConfiguration configuration)
+            IConfiguration configuration, IApplicationUserRepository applicationUserRepository)
         {
             _ExpenseRequestRepository = expenserequestRepository;
             _employeeRepository = employeeRepository;
             _vendorRepository = vendorRepository;
             _expenseTypeRepository = expenseTypeRepository;
             _configuration = configuration;
+            _applicationUserRepository = applicationUserRepository;
 
         }
 
@@ -325,7 +328,7 @@ namespace EPIWalletAPI.Controllers
 
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
-            var toAddress = new MailAddress("tayne.orwin@gmail.com", "Expense Request Approval");
+         
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
@@ -341,31 +344,383 @@ namespace EPIWalletAPI.Controllers
                 + expenseType + "\n \n"
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                Timeout = 20000
-            };
-
-            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            {
-                smtp.Send(message);
 
 
-                return Ok("success");
+            //Send to All Managers
+            var managers = await _applicationUserRepository.getAllManagers();
+
+
+            for (int i = 0; i < managers.Length; i++)
+            {
+                var toAddress = new MailAddress(managers[i].Email, "Expense Request Approval");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+                   
+
+
+                }
+
+            }
+
+
+
+            return Ok("success");
+
+
+
+
+
+        }
+
+
+
+
+
+        [HttpPost]
+        [Route("Approve")]
+        public async Task<ActionResult> Approve(int id,ExpenseRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to approved
+
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+               
+     
+            
+                existingExpenseRequest.ApprovalID = 2;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+                
+                }
 
 
             }
+
+
+
+
+            catch (Exception)
+            {
+            
+            }
+
+      
+
+
+
+
+            //step 2: send an email to all creditors notfying them that funds are requested
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+      
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+            const string subject = "New Expense Request Requiring Funds!";
+            string body = "Please read the following information about the Expense Request: \n \n" + "Approved By : "
+            + employee + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
+            + "Please open the app to mark funds as loaded! \n" + "Kind Regards \n" + "The EPI Team";
+
+
+
+            //Send to All Creditors
+            var creditors = await _applicationUserRepository.getAllCreditors();
+
+
+            for (int i = 0; i < creditors.Length; i++)
+            {
+                var toAddress = new MailAddress(creditors[i].Email, "Expense Request Approval");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+
+
+
+                }
+
+            }
+
+
+
+
+            //step 3: Notify the employee that expense has been approved and is now awaiting payment
+            const string subject1 = "Expense Has Been Approved!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"+
+                 "The Creditor Has Been Notified \n"
+            + "The Expense is now awaiting funds from the creditor! \n" + "Kind Regards \n" + "The EPI Team";      
+           //     var toAddress1 = new MailAddress(, "Expense Request Approved!");
+
+
+            //    var smtp = new SmtpClient
+            //    {
+            //        Host = "smtp.gmail.com",
+            //        Port = 587,
+            //        EnableSsl = true,
+            //        DeliveryMethod = SmtpDeliveryMethod.Network,
+            //        UseDefaultCredentials = false,
+            //        Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+            //        Timeout = 20000
+            //    };
+
+            //    using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            //    {
+            //        Subject = subject1,
+            //        Body = body1
+            //    })
+            //    {
+            //        smtp.Send(message);
+
+
+
+
+
+      
+
+            //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+            return Ok("success");
+
         }
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("Reject")]
+        public async Task<ActionResult> Reject(ExpenseRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to rejected
+
+
+
+
+
+            
+
+
+
+
+            //step 3: Notify the employee that expense was rejected
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            return Ok("success");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("MarkAsPaid")]
+        public async Task<ActionResult> MarkAsPaid(int id,ExpenseRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to paid and set approval to paid
+
+       
+
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.ApprovalID = 3;
+                existingExpenseRequest.PaymentStatusID = 2;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+            ///notify the employee via email that his expense has been paid
+
+
+
+
+
+
+
+
+
+
+
+
+
+            return Ok("success");
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         [Route("GetRequests")]
