@@ -52,7 +52,15 @@ namespace EPIWalletAPI.Models.Identity
 
 
 
+        public async Task<string> getEmailByID(int id)
+        {
+            IQueryable<ApplicationUser> query = _appDbContext.ApplicationUsers.Where(zz => zz.EmployeeID == id);
+            var results = query.Select(zz => zz.Email);
+                return await results.FirstOrDefaultAsync();
+        }
 
+
+     
 
 
 

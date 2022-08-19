@@ -171,6 +171,28 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("GetUserRejectedExpenseRequests")]
+        public async Task<ActionResult> GetUserRejectedExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserRejectedExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
 
 
 
@@ -331,6 +353,8 @@ namespace EPIWalletAPI.Controllers
          
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
            
@@ -398,7 +422,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("Approve")]
-        public async Task<ActionResult> Approve(int id,ExpenseRequestViewModel evm)
+        public async Task<ActionResult> Approve(int id, ExpenseRequestViewModel evm)
         {
             //step 1: set the status of the expense to approved
 
@@ -408,16 +432,16 @@ namespace EPIWalletAPI.Controllers
 
                 if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
 
-               
-     
-            
+
+
+
                 existingExpenseRequest.ApprovalID = 2;
 
 
 
                 if (await _ExpenseRequestRepository.SaveChangesAsync())
                 {
-                
+
                 }
 
 
@@ -428,10 +452,10 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-            
+
             }
 
-      
+
 
 
 
@@ -443,7 +467,7 @@ namespace EPIWalletAPI.Controllers
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
 
-      
+
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
 
@@ -498,48 +522,49 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+
+
             //step 3: Notify the employee that expense has been approved and is now awaiting payment
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
             const string subject1 = "Expense Has Been Approved!";
             string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"
                   + "Expense Type: "
-                + expenseType + "\n \n"+
+                + expenseType + "\n \n" +
                  "The Creditor Has Been Notified \n"
-            + "The Expense is now awaiting funds from the creditor! \n" + "Kind Regards \n" + "The EPI Team";      
-           //     var toAddress1 = new MailAddress(, "Expense Request Approved!");
+            + "The Expense is now awaiting funds from the creditor! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Approved!");
 
 
-            //    var smtp = new SmtpClient
-            //    {
-            //        Host = "smtp.gmail.com",
-            //        Port = 587,
-            //        EnableSsl = true,
-            //        DeliveryMethod = SmtpDeliveryMethod.Network,
-            //        UseDefaultCredentials = false,
-            //        Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-            //        Timeout = 20000
-            //    };
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
 
-            //    using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
-            //    {
-            //        Subject = subject1,
-            //        Body = body1
-            //    })
-            //    {
-            //        smtp.Send(message);
-
-
-
-
-
-      
-
-            //}
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
 
 
 
+
+
+
+
+         
 
 
 
@@ -550,8 +575,12 @@ namespace EPIWalletAPI.Controllers
 
 
 
-            return Ok("success");
 
+
+
+                return Ok("success");
+
+            }
         }
 
 
@@ -565,21 +594,111 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("Reject")]
-        public async Task<ActionResult> Reject(ExpenseRequestViewModel evm)
+        public async Task<ActionResult> Reject(int id,ExpenseRequestViewModel evm,string reason)
         {
             //step 1: set the status of the expense to rejected
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.ApprovalID = 4;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+            //step 3: Notify the employee that expense was rejected and the reason it was rejected
+            //get the email associatced with the request sent through
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
 
 
 
 
 
-            
+
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
+            const string subject1 = "Expense Has Been Rejected!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n" +
+                "Reason For Rejection: " + reason+ "\n \n" +
+                 "Please attempt to resubmit the expense! \n"
+            + " \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Rejected!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
 
 
 
 
-            //step 3: Notify the employee that expense was rejected
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                return Ok("success");
+
+            }
 
 
 
@@ -676,20 +795,59 @@ namespace EPIWalletAPI.Controllers
             }
 
             ///notify the employee via email that his expense has been paid
+            ///    var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+
+            //step 3: Notify the employee that expense has been approved and is now awaiting payment
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
+            const string subject1 = "Expense Has Been Paid!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n" +
+          
+            "Funds for the expense have now been loaded by the creditor! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Paid!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
 
 
 
 
+                return Ok("success");
+
+            }
 
 
 
 
-
-
-
-
-
-            return Ok("success");
 
         }
 
