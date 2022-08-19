@@ -29,9 +29,10 @@ namespace EPIWalletAPI.Controllers
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
 
-        public TopUpRequestController(ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration)
+        
         private readonly IEmployeeRepository _employeeRepository;
-        public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository)
+        //public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository)
+        public TopUpRequestController(IEmployeeRepository employeeRepository, ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration)
         {
             _topUpRequestRepository = topUpRequestRepository;
             _appDbContext = appDbContext;
