@@ -28,15 +28,17 @@ namespace EPIWalletAPI.Controllers
         private readonly IConfiguration _configuration;
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
+        private readonly IApplicationUserRepository _applicationUserRepository;
 
       
         private readonly IEmployeeRepository _employeeRepository;
-        public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository, IConfiguration configuration, AppDbContext appDbContext)
+        public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository, IConfiguration configuration, AppDbContext appDbContext, IApplicationUserRepository applicationUserRepository)
         {
             _topUpRequestRepository = topUpRequestRepository;
             _appDbContext = appDbContext;
             _configuration = configuration;
             _employeeRepository = employeeRepository;
+            _applicationUserRepository = applicationUserRepository;
         }
 
         [HttpGet]
@@ -89,7 +91,7 @@ namespace EPIWalletAPI.Controllers
         {
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
-            var toAddress = new MailAddress("tayne.orwin@gmail.com", "Top Up Request");
+      
             const string fromPassword = "vokbgidjiuxonyfl";
 
 
@@ -103,30 +105,43 @@ namespace EPIWalletAPI.Controllers
                 + evm.reason + "\n \n"
             + "Please open the app to respond to request! \n" + "Kind Regards \n" + "The EPI Team";
 
-            var smtp = new SmtpClient
+            //Send to All Managers
+            var creditors = await _applicationUserRepository.getAllCreditors();
+
+
+            for (int i = 0; i < creditors.Length; i++)
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                Timeout = 20000
-            };
-
-            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            {
-                smtp.Send(message);
+                var toAddress = new MailAddress(creditors[i].Email, "Top Up Request");
 
 
-                return Ok("success");
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
 
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+
+
+
+                }
 
             }
+            return Ok("Success");
+
         }
 
 
