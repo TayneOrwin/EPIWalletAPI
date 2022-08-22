@@ -47,9 +47,9 @@ namespace EPIWalletAPI.Models.Employee
             
         }
 
-        public async Task<Employees> getEmployeeAsync(string name)
+        public async Task<Employees> getEmployeeAsync(int id)
         {
-            IQueryable<Employees> query = _appDbContext.Employees.Where(zz => zz.Name == name);
+            IQueryable<Employees> query = _appDbContext.Employees.Where(zz => zz.EmployeeID == id);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -86,13 +86,24 @@ namespace EPIWalletAPI.Models.Employee
             return await results.FirstOrDefaultAsync();
         }
 
+    
 
-        
+
+
+
 
         public async Task<int> getIdByTitle(string title)
         {
             IQueryable<Titles> query = _appDbContext.Titles.Where(zz => zz.Description == title);
             var results = query.Select(zz => zz.TitlesID);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+        public async Task<int> getIdByFullname(string name, string surname)
+        {
+            IQueryable<Employees> query = _appDbContext.Employees.Where(zz => zz.Name == name && zz.Surname == surname);
+            var results = query.Select(zz => zz.EmployeeID);
 
             return await results.FirstOrDefaultAsync();
         }

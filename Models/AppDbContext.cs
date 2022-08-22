@@ -56,7 +56,8 @@ namespace EPIWalletAPI.Models
         public DbSet<Entities.TopUpRequest> topUpRequests { get; set; }
         public DbSet<ExpenseLine> expenseLines { get; set; }
         public DbSet<PaymentStatus> paymentStatuses { get; set; }
-
+        public DbSet<EmployeeBankingDetails> employeeBankingDetails { get; set; }
+        public DbSet<AccountType> accountType { get; set; }
 
 
 

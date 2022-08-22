@@ -4,35 +4,22 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220818141319_RejectionChanges")]
+    partial class RejectionChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.17")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("EPIWalletAPI.Models.AccountType", b =>
-                {
-                    b.Property<int>("AccountTypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AccountTypeID");
-
-                    b.ToTable("accountType");
-                });
 
             modelBuilder.Entity("EPIWalletAPI.Models.ApplicationUser", b =>
                 {
@@ -126,37 +113,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasIndex("EmployeeID");
 
                     b.ToTable("EmployeeAddress");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeBankingDetails", b =>
-                {
-                    b.Property<int>("BankingDetailsID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AccountNunmber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AccountTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Bank")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Branch")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmployeeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("BankingDetailsID");
-
-                    b.HasIndex("AccountTypeID");
-
-                    b.HasIndex("EmployeeID");
-
-                    b.ToTable("employeeBankingDetails");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.Employees", b =>
@@ -581,25 +537,6 @@ namespace EPIWalletAPI.Migrations
                         .HasForeignKey("EmployeeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeBankingDetails", b =>
-                {
-                    b.HasOne("EPIWalletAPI.Models.AccountType", "AccountType")
-                        .WithMany()
-                        .HasForeignKey("AccountTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EPIWalletAPI.Models.Employee.Employees", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("AccountType");
 
                     b.Navigation("Employee");
                 });

@@ -69,12 +69,12 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateVendorAddress")]
 
-        public async Task<IActionResult> UpdateVendorAddress(string name, VendorAddressViewModel vavm)
+        public async Task<IActionResult> UpdateVendorAddress(int id, VendorAddressViewModel vavm)
         {
-            var results = await _vendorAddressRepository.getVendorAddress(name);
+            var results = await _vendorAddressRepository.getVendorAddress(id);
             try
             {
-                if (results == null) return NotFound("Could not find " + name);
+                if (results == null) return NotFound("Could not find " + id);
 
                 results.Country = vavm.Country;
                 results.Province = vavm.Province;
@@ -100,15 +100,15 @@ namespace EPIWalletAPI.Controllers
         [HttpDelete]
         [Route("DeleteEmployeeAddress")]
 
-        async Task<IActionResult> DeleteEmployeeAddress(string address)
+        public async Task<IActionResult> DeleteEmployeeAddress(int id)
         {
             try
             {
-                var existing = await _vendorAddressRepository.getVendorAddress(address);
+                var existing = await _vendorAddressRepository.getVendorAddress(id);
 
                 if (existing == null) return NotFound("Could not find " + existing);
 
-                _vendorAddressRepository.Delete(address);
+                _vendorAddressRepository.Delete(existing);
 
                 if (await _vendorAddressRepository.SaveChangesAsync())
                 {
