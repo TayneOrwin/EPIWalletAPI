@@ -12,6 +12,6 @@ namespace EPIWalletAPI.Models.Vendor
         Task<IEnumerable<VendorAddress>> Search(string name);
         Task<bool> SaveChangesAsync();
         Task<VendorAddress[]> getAllVendorAddressAsync();
-        Task<VendorAddress> getVendorAddress(string VendorName);
+        Task<VendorAddress> getVendorAddress(int id);
     }
 }

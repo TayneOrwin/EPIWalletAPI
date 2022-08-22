@@ -13,12 +13,12 @@ namespace EPIWalletAPI.Models.Employee
         Task<bool> SaveChangesAsync();
 
         Task<Employees[]> getAllEmployeesAsync();
-        Task<Employees> getEmployeeAsync(string name);
+        Task<Employees> getEmployeeAsync(int id);
         Task<Titles[]> getTitlesAsync();
         Task<string[]> getTitleByID(int id);
         Task<int> getIdByTitle(string title);
         Task<string> GetEmployeeByID(int id);
-
+        Task<int> getIdByFullname(string name, string surname);
 
     }
 }

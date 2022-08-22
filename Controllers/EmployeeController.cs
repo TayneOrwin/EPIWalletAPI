@@ -83,15 +83,15 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateEmployee")]
 
-        public async Task<ActionResult> UpdateEmployee(string name, EmployeeViewModel evm)
+        public async Task<ActionResult> UpdateEmployee(int id, EmployeeViewModel evm)
         {
 
             try
             {
-                var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
+                var existingEmployee = await _employeeRepository.getEmployeeAsync(id);
 
 
-                if (existingEmployee == null) return NotFound("Could not find employee: " + name);
+                if (existingEmployee == null) return NotFound("Could not find employee");
 
                 existingEmployee.Name = evm.Name;
                 existingEmployee.Surname = evm.Surname;
@@ -116,11 +116,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteEmployee")]
-        public async Task<IActionResult> DeleteEmployee(string name)
+        public async Task<IActionResult> DeleteEmployee(int id)
         {
             try
             {
-                var existingEmployee = await _employeeRepository.getEmployeeAsync(name);
+                var existingEmployee = await _employeeRepository.getEmployeeAsync(id);
                 if (existingEmployee == null) return NotFound();
 
 
@@ -244,7 +244,25 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetIdByFullname")]
 
+        public async Task<IActionResult> GetIdByFullname(string name, string surname)
+        {
+
+            var results = await _employeeRepository.getIdByFullname(name,surname);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
 
 
 

@@ -13,6 +13,6 @@ namespace EPIWalletAPI.Models.Employee
         Task<bool> SaveChangesAsync();
 
         Task<EmployeeBankingDetails[]> getAllEmployeeBankingDetailsAsync();
-        Task<EmployeeBankingDetails> getEmployeeBankingDetailsAsync(int id);
+        Task<EmployeeBankingDetails> getEmployeeBankingDetailsAsync(int empid);
     }
 }
