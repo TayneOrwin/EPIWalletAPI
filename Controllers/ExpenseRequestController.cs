@@ -10,6 +10,12 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Vendor;
+using Microsoft.Extensions.Configuration;
+//using EPIWalletAPI.Models.ExpenseRequest;
+using Microsoft.Data.SqlClient;
+using EPIWalletAPI.Models.ExpenseType;
+
 namespace EPIWalletAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -21,11 +27,19 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly IExpenseRequestRepository _ExpenseRequestRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IVendorRepository _vendorRepository;
+        private readonly IExpenseTypeRepository _expenseTypeRepository;
+        private readonly IConfiguration _configuration;
 
-        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository)
+        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,
+            IConfiguration configuration)
         {
             _ExpenseRequestRepository = expenserequestRepository;
             _employeeRepository = employeeRepository;
+            _vendorRepository = vendorRepository;
+            _expenseTypeRepository = expenseTypeRepository;
+            _configuration = configuration;
+
         }
 
 
@@ -51,6 +65,65 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetItemsByID")]
+        public async Task<ActionResult> GetItemsByID(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.GetExpenseItemsByID(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
+
+
+
+
+        [HttpGet]
+        [Route("GetUserPendingExpenseRequests")]
+        public async Task<ActionResult> GetUserPendingExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPendingExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         [Route("GetApprovedExpenseRequests")]
@@ -73,13 +146,50 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+
         [HttpGet]
-        [Route("GetPaidExpenseRequests")]
-        public async Task<ActionResult> GetPaidExpenseRequestsAsync()
+        [Route("GetUserApprovedExpenseRequests")]
+        public async Task<ActionResult> GetUserApprovedExpenseRequestsAsync(int id)
         {
             try
             {
-                var results = await _ExpenseRequestRepository.getPaidExpenseRequestsAsync();
+                var results = await _ExpenseRequestRepository.getUserApprovedExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetPaidExpenseRequests")]
+        public async Task<ActionResult> GetPaidExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPaidExpenseRequestsAsync(id);
                 return Ok(results);
             }
 
@@ -217,17 +327,18 @@ namespace EPIWalletAPI.Controllers
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress("tayne.orwin@gmail.com", "Expense Request Approval");
             const string fromPassword = "vokbgidjiuxonyfl";
-            var employee = _employeeRepository.getEmployeeByID(evm.EmployeeID);
-
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
            
-            const string subject = "Expense Request Approval!";
-            string body = "Please read the following information about the Expense Request: \n \n" + "Request from : "
-            + employee +  "\n \n" + "Total Estimate: "
+            const string subject = "New Expense Request Requiring Approval!";
+            string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
+            + employee +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
-             + "Vendor: "
-                + evm.VendorID + "\n \n"
-                  + "Type: "
-                + evm.TypeID + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
             var smtp = new SmtpClient
@@ -256,18 +367,72 @@ namespace EPIWalletAPI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("GetRequests")]
+
+        public async Task<IActionResult> GetRequests()
+        {
+            
+            try
+            {
+                var results = await _ExpenseRequestRepository.getAllRequests();
+                return Ok(results);
+            }
 
 
 
 
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
 
 
+        [HttpGet]
+        [Route("getExpenseRequestForEmployee")]
+        public async Task<IActionResult> getExpenseRequestForEmployee(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getExpenseRequestForEmployee(id);
+                return Ok(results);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
 
+        [HttpGet]
+        [Route("ExpenseTypeReport")]
+
+        public object ExpenseTypeReport()
+        {
+            var list = new List<ExpenseRequestPerTypeReport>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID Group by ExpenseTypes.Type";
 
 
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
 
+            while (reader.Read())
+            {
+                var report = new ExpenseRequestPerTypeReport
+                {
+                    Type = (string)reader["Type"],
+                    Requests = (int)reader["TotalRequests"]
+                };
 
+                list.Add(report);
+            }
+
+            return list;
+        }
 
 
 

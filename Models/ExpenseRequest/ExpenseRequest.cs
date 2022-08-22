@@ -15,7 +15,7 @@ namespace EPIWalletAPI.Models
     {
         [Key]
         public int ExpenseID { get; set; }
-        public ExpenseType Type { get; set; }
+        public Models.Entities.ExpenseType Type { get; set; }
 
         public int TypeID { get; set; }
 

@@ -11,11 +11,18 @@ namespace EPIWalletAPI.Models
         void Delete<T>(T entity) where T : class;
 
         Task<bool> SaveChangesAsync();
-
+        Task<ExpenseRequest[]> getAllRequests();
         Task<ExpenseRequest[]> getPendingExpenseRequestsAsync();
         Task<ExpenseRequest[]> getApprovedExpenseRequestsAsync();
-        Task<ExpenseRequest[]> getPaidExpenseRequestsAsync();
+        Task<ExpenseRequest[]> getUserPaidExpenseRequestsAsync(int id);
         Task<ExpenseRequest> getExpenseRequestAsync(int ExpenseID);
+        Task<ExpenseRequest[]> getExpenseRequestForEmployee(int EmployeeID);
+
+        Task<ExpenseRequest[]> getUserPendingExpenseRequestsAsync(int id);
+
+        Task<ExpenseRequest[]> getUserApprovedExpenseRequestsAsync(int id);
+
+        Task<ExpenseItem[]> GetExpenseItemsByID(int id);
 
 
     }

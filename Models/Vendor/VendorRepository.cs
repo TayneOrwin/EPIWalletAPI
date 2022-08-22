@@ -60,5 +60,27 @@ namespace EPIWalletAPI.Models.Vendor
 
             return await results.FirstOrDefaultAsync();
         }
+
+
+
+        public async Task<string> GetNameByID(int id)
+        {
+            IQueryable<Vendors> query = _appDbContext.Vendors
+            .Where(zz => zz.VendorID == id);
+
+            var results = query.Select(zz => zz.Name);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }

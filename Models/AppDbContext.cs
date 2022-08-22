@@ -35,7 +35,7 @@ namespace EPIWalletAPI.Models
 
        public DbSet<EventInvite> EventInvites { get; set; } 
 
-        public DbSet<ExpenseType> ExpenseTypes { get; set; }
+        public DbSet<Models.Entities.ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
         
         public DbSet<Titles> Titles { get; set; }
@@ -53,7 +53,7 @@ namespace EPIWalletAPI.Models
        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
         public DbSet<Entities.AccessRole> accessRoles { get;set; }
-        public DbSet<TopUpRequest> topUpRequests { get; set; }
+        public DbSet<Entities.TopUpRequest> topUpRequests { get; set; }
         public DbSet<ExpenseLine> expenseLines { get; set; }
         public DbSet<PaymentStatus> paymentStatuses { get; set; }
 
