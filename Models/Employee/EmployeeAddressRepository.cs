@@ -42,9 +42,9 @@ namespace EPIWalletAPI.Models.Employee
             return await query.ToArrayAsync();
         }
 
-        public async Task<EmployeeAddress> getEmployeeAddress(string name)
+        public async Task<EmployeeAddress> getEmployeeAddress(int id)
         {
-            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.Province == name);
+            IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.EmployeeID == id);
             return await query.FirstOrDefaultAsync();
         }
 

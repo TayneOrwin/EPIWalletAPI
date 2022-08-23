@@ -30,9 +30,9 @@ namespace EPIWalletAPI.Models.Vendor
             return await query.ToArrayAsync();
         }
 
-        public async Task<VendorAddress> getVendorAddress(string Name)
+        public async Task<VendorAddress> getVendorAddress(int id)
         {
-            IQueryable<VendorAddress> query = _appDbContext.VendorAddress.Where(zz => zz.Province == Name);
+            IQueryable<VendorAddress> query = _appDbContext.VendorAddress.Where(zz => zz.VendorID == id);
             return await query.FirstOrDefaultAsync();
         }
 

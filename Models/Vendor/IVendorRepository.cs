@@ -12,9 +12,11 @@ namespace EPIWalletAPI.Models.Vendor
         Task<IEnumerable<Vendors>> Search(string name);
         Task<bool> SaveChangesAsync();
         Task<Vendors[]> getAllVendorsAsync();
-        Task<Vendors> getVendorAsync(string VendorName);
+        Task<Vendors> getVendorAsync(int id);
         Task<int> getIdByName(string name);
 
-        Task<string> GetNameByID(int id);
+        Task<string[]> GetNameByID(int id);
+
+        Task<int> getIdByNameDescription(string name, string description);
     }
 }

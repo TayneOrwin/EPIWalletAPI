@@ -32,9 +32,9 @@ namespace EPIWalletAPI.Models.Employee
             return await query.ToArrayAsync();
         }
 
-        public async Task<EmployeeBankingDetails> getEmployeeBankingDetailsAsync(int id)
+        public async Task<EmployeeBankingDetails> getEmployeeBankingDetailsAsync(int empid)
         {
-            IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails.Where(zz => zz.BankingDetailsID == id);
+            IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails.Where(zz => zz.EmployeeID == empid);
             return await query.FirstOrDefaultAsync();
         }
 

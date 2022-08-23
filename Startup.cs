@@ -150,6 +150,7 @@ namespace EPIWalletAPI
             services.AddScoped<IApplicationUserRepository, ApplicationUserRepository>();
             services.AddScoped<IExpenseLineRepository, ExpenseLineRepository>();
             services.AddScoped<IEmployeeBankingDetailsRepository, EmployeeBankingDetailsRepository>();
+            services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
             services.AddScoped<IReasonForRejectionRepository, ReasonForRejectionRepository>();
             services.AddScoped<IReceiptRepository,ReceiptRepository >();
         }
