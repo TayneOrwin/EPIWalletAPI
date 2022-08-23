@@ -58,6 +58,8 @@ namespace EPIWalletAPI.Models
         public DbSet<PaymentStatus> paymentStatuses { get; set; }
         public DbSet<EmployeeBankingDetails> employeeBankingDetails { get; set; }
         public DbSet<AccountType> accountType { get; set; }
+      public DbSet<Entities.Receipt> receipts { get; set; }
+
 
 
 
