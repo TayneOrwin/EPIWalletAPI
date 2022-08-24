@@ -1,4 +1,5 @@
 ﻿using EPIWalletAPI.Models;
+using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -19,15 +20,18 @@ namespace EPIWalletAPI.Controllers
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _singInManager;
         private readonly ApplicatonSettings _appSettings;
+        private readonly IApplicationUserRepository _applicationuserRepository;
 
         public UsersController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, 
-            IOptions<ApplicatonSettings> appSettings)
+            IOptions<ApplicatonSettings> appSettings,
+            IApplicationUserRepository applicationuserRepository)
         {
             _userManager = userManager;
             _singInManager = signInManager;
             _appSettings = appSettings.Value;
+            _applicationuserRepository = applicationuserRepository;
         }
         //
 
@@ -110,7 +114,9 @@ namespace EPIWalletAPI.Controllers
         public  async Task<IActionResult> Login(Login model)
         {
             var user = await _userManager.FindByNameAsync(model.UserName);
+
             var PasswordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
+
             try
             {
 
@@ -194,12 +200,72 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpPost]
+        [Route("UpdatePassword")]
+        public async Task<ActionResult> UpdatePassword(ApplicationUserViewModel avm)
+        {
+
+            var User = await _userManager.FindByEmailAsync(avm.UserName);
+            var PasswordCheck = await _userManager.CheckPasswordAsync(User, avm.CurrentPassword);
+
+
+            try
+            {
+
+
+                if (PasswordCheck != false && User != null)
+                {
+                    await _userManager.ChangePasswordAsync(User, avm.CurrentPassword, avm.NewPassword);
+                    return Ok(new { code = 200, message = "Password Updated Successfully" });
+                }
+                else 
+                {
+                    var ErrorMessage = "";
+
+                    if (User == null)
+                    {
+                        ErrorMessage = "unable to Find User";
+                    }
+                    if (PasswordCheck == false)
+                    {
+                        ErrorMessage = "unable to Match User Info";
+                    }
+                    return Ok(new { code = 401, message = ErrorMessage });
+                }
+            }
+
+            
+
+            catch (Exception)
+            {
+                return BadRequest("Error");
+            }
 
 
 
-   
+        }
 
 
+        [HttpPut]
+        [Route("ResetPassword")]
+        public async Task<ActionResult> ResetPassword(ApplicationUserViewModel avm)
+        {
 
-    }
+            var User = await _userManager.FindByEmailAsync(avm.UserName);
+
+            try
+            {
+                string token = await _userManager.GeneratePasswordResetTokenAsync(User);
+                await _userManager.ResetPasswordAsync(User, token, avm.NewPassword);
+                return Ok("Password Reset Successfully");
+            }
+            catch
+            {
+                return BadRequest("Unsuccessful");
+            }
+        
+
+        }
+
+ }
 }

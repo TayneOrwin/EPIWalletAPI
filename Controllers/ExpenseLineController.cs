@@ -12,7 +12,7 @@ namespace EPIWalletAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpenseLineController: ControllerBase
+    public class ExpenseLineController : ControllerBase
     {
         private readonly IExpenseLineRepository _expenseLineRepository;
         //return data from the database
@@ -52,7 +52,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<ActionResult> AddExpenseLine(ExpenseLineViewModel evm)
         {
 
-            var expenseLine = new ExpenseLine { ExpenseRequestID=evm.ExpenseRequestID };
+            var expenseLine = new ExpenseLine { ExpenseRequestID = evm.ExpenseRequestID };
 
             try
             {
@@ -66,6 +66,28 @@ namespace EPIWalletAPI.Controllers
             }
 
             return Ok("Success");
+        }
+
+
+
+        [HttpGet]
+        [Route("GetExpenseLineByRequestId")]
+
+        public async Task<IActionResult> GetExpenseLineByRequestId(int id)
+        {
+
+            var results = await _expenseLineRepository.getExpenseLineByExpenseRequest(id);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
         }
 
 
