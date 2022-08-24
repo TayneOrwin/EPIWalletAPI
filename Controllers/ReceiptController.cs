@@ -120,7 +120,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("Upload")]
-        public async Task<IActionResult> Post()
+        public async Task<IActionResult> Post(int id,double amount)
         {
 
             var file = HttpContext.Request.Form.Files[0];
@@ -132,7 +132,7 @@ namespace EPIWalletAPI.Controllers
 
 
 
-                var Tevent = new Models.Entities.Receipt { amount = 300, File = wallpaperImage, ExpenseLineID = 10 };
+                var Tevent = new Models.Entities.Receipt { amount = amount, File = wallpaperImage, ExpenseLineID = id };
 
                 try
                 {
