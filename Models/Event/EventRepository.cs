@@ -52,6 +52,14 @@ namespace EPIWalletAPI.Models
             return await results.FirstOrDefaultAsync();
         }
 
+        public async Task<string[]> getNameById(int id)
+        {
+            IQueryable<Event> query = _appDbContext.Events.Where(zz => zz.EventID == id);
+            var results = query.Select(zz => zz.name);
+
+            return await results.ToArrayAsync();
+        }
+
         public async Task<int> getTypeIdByEventId(int EventId)
         {
             IQueryable<Event> query = _appDbContext.Events.Where(zz => zz.EventID == EventId);

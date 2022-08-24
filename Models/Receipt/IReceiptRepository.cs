@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models
 {
-    public interface IExpenseLineRepository
+    public interface IReceiptRepository
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-
+  
         Task<bool> SaveChangesAsync();
 
+        Task<Receipt[]> getAllReceiptsAsync();
+        Task<Receipt> getReceiptAsync(int id);
 
-        Task<Entities.ExpenseLine[]> getAllExpenseLinesAsync();
-        Task<ExpenseLine> getExpenseLineAsync(int id);
 
-        Task<ExpenseLine> getExpenseLineByExpenseRequest(int id);
+
 
 
     }
