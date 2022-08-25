@@ -11,6 +11,5 @@ namespace EPIWalletAPI.ViewModels
         public double amount { get; set; }
         public string reason { get; set; }
 
-        public string user { get; set; }
     }
 }

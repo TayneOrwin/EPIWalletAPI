@@ -15,6 +15,7 @@ using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
+
 namespace EPIWalletAPI.Controllers
 {
     [Route("api/[controller]")]
@@ -29,16 +30,19 @@ namespace EPIWalletAPI.Controllers
         private readonly ITopUpRequestRepository _topUpRequestRepository;
         private readonly AppDbContext _appDbContext = new AppDbContext();
         private readonly IApplicationUserRepository _applicationUserRepository;
+        private readonly IExpenseRequestRepository _expenseRequestRepository;
 
-      
+
         private readonly IEmployeeRepository _employeeRepository;
-        public TopUpRequestController(IEmployeeRepository employeeRepository,ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration, IApplicationUserRepository applicationUserRepository)
+        public TopUpRequestController(IEmployeeRepository employeeRepository, ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration, IApplicationUserRepository applicationUserRepository, IExpenseRequestRepository expenseRequestRepository)
         {
             _topUpRequestRepository = topUpRequestRepository;
             _appDbContext = appDbContext;
             _configuration = configuration;
             _employeeRepository = employeeRepository;
             _applicationUserRepository = applicationUserRepository;
+            _expenseRequestRepository = expenseRequestRepository;
+
         }
 
         [HttpGet]
@@ -59,7 +63,628 @@ namespace EPIWalletAPI.Controllers
             }
         }
 
- 
+
+
+
+
+
+        [HttpGet]
+        [Route("GetAllPending")]
+        public async Task<ActionResult> GetPendingRequestsAsync()
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getPendingRequestsAsync();
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+        [HttpGet]
+        [Route("GetAllApproved")]
+        public async Task<ActionResult> GetApprovedRequestsAsync()
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getApprovedRequestsAsync();
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+        [HttpGet]
+        [Route("GetAllPaid")]
+        public async Task<ActionResult> GetPaidRequestsAsync()
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getPaidRequestsAsync();
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetUserPaidRequests")]
+        public async Task<ActionResult> getUserPaidRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getUserPaidRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetUserPending")]
+        public async Task<ActionResult> getUserPendingRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getUserPendingRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetUserApproved")]
+        public async Task<ActionResult> getUserApprovedRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getUserApprovedRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetUserRejected")]
+        public async Task<ActionResult> getUserRejectedRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _topUpRequestRepository.getUserRejectedRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("Approve")]
+        public async Task<ActionResult> Approve(int id, TopUpRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to approved
+
+            try
+            {
+                var existingTopUp = await _topUpRequestRepository.getTopUpRequestAsync(id);
+
+                if (existingTopUp == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+               existingTopUp.ApprovalStatusID = 2;
+
+
+
+                if (await _topUpRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+
+
+
+
+
+            //step 2: send an email to all creditors notfying them that funds are requested
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+
+
+
+           
+
+            const string subject = "New Top Up Request Requiring Funds!";
+            string body = "Please read the following information about the Top Up Request: \n \n" +
+           "Expense Line ID: "
+            + evm.ExpenseLineID + "\n \n"
+             + "Amount Requested: "
+                + evm.amount + "\n \n"
+                  + "Reason: "
+                + evm.reason + "\n \n"
+            + "Please open the app to mark funds as loaded! \n" + "Kind Regards \n" + "The EPI Team";
+
+
+
+            //Send to All Creditors
+            var creditors = await _applicationUserRepository.getAllCreditors();
+
+
+            for (int i = 0; i < creditors.Length; i++)
+            {
+                var toAddress = new MailAddress(creditors[i].Email, "Top Up Request Requiring Funds");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+
+
+
+                }
+
+            }
+
+
+
+
+
+
+
+            //get the employee that made that request and send him an email 
+            ExpenseLine[] expenseLine = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
+            int expenseRequestID = expenseLine[0].ExpenseRequestID;
+            //get the request
+            ExpenseRequest request = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
+
+
+            //step 3: Notify the employee that request has been paid
+            string email = await _applicationUserRepository.getEmailByID(request.EmployeeID);
+            const string subject1 = "Top Up Request Approved!";
+            string body1 = "Please read the following information about the Top Up Request: \n \n" + "Amount Requested: R"
+            + evm.amount + "\n \n"
+             + "Reason: "
+                + evm.reason + "\n \n" +
+
+            "The Top Up Request has been sent to Creditors! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Top Up Request Approved!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+                return Ok("success");
+
+            }
+        }
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("Reject")]
+        public async Task<ActionResult> Reject(int id, TopUpRequestViewModel evm, string reason)
+        {
+            try
+            {
+                var existingTopUp = await _topUpRequestRepository.getTopUpRequestAsync(id);
+
+                if (existingTopUp == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingTopUp.ApprovalStatusID = 4;
+
+
+
+                if (await _topUpRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+
+
+
+
+
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+
+            //get the employee that made that request that it was rejected 
+            ExpenseLine[] expenseLine = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
+            int expenseRequestID = expenseLine[0].ExpenseRequestID;
+            //get the request
+            ExpenseRequest request = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
+
+
+            //step 3: Notify the employee that request has been paid
+            string email = await _applicationUserRepository.getEmailByID(request.EmployeeID);
+            const string subject1 = "Top Up Request Rejected!";
+            string body1 = "Please read the following information about the Top Up Request: \n \n" + "Amount Requested: R"
+            + evm.amount + "\n \n"
+             + "Reason: "
+                + evm.reason + "\n \n" +
+                "Reason For Rejection: "
+                + reason + "\n \n" +
+
+            "Please Resubmit the request! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Top Up Request Rejected!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+                return Ok("success");
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("MarkAsPaid")]
+        public async Task<ActionResult> MarkAsPaid(int id, TopUpRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to paid and set approval to paid
+
+
+
+            try
+            {
+                var existingTopUpRequest = await _topUpRequestRepository.getTopUpRequestAsync(id);
+
+                if (existingTopUpRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingTopUpRequest.ApprovalStatusID = 3;
+               
+
+
+
+                if (await _topUpRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+
+
+            //get the employee that made that request and send him an email 
+            ExpenseLine[] expenseLine = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
+            int expenseRequestID = expenseLine[0].ExpenseRequestID;
+            //get the request
+            ExpenseRequest request = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
+         
+
+            //step 3: Notify the employee that request has been paid
+            string email = await _applicationUserRepository.getEmailByID(request.EmployeeID);
+            const string subject1 = "Top Up Request Paid!";
+            string body1 = "Please read the following information about the Top Up Request: \n \n" +  "Amount Requested: R"
+            + evm.amount + "\n \n"
+             + "Reason: "
+                + evm.reason + "\n \n"+
+             
+            "Funds for the top up have now been loaded by the creditor! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Paid!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+                return Ok("success");
+
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         [HttpPost]
@@ -87,7 +712,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("SendForApproval")]
-        public async Task<ActionResult> SendForApproval(TopUpRequestViewModel evm)
+        public async Task<ActionResult> SendForApproval(TopUpRequestViewModel evm,string email)
         {
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
@@ -95,15 +720,14 @@ namespace EPIWalletAPI.Controllers
             const string fromPassword = "vokbgidjiuxonyfl";
 
 
-
             const string subject = "Top Up Request!";
             string body = "Please read the following information about the TopUp: \n \n" + "Request from : "
-            + evm.user + "\n \n" + "Expense Line ID : "
+            + email + "\n \n" + "Expense Line ID : "
             + evm.ExpenseLineID + "\n \n" + "Top Up Amount: "
             + evm.amount + "\n \n"
              + "Reason: "
                 + evm.reason + "\n \n"
-            + "Please open the app to respond to request! \n" + "Kind Regards \n" + "The EPI Team";
+            + "Please open the app to approve or reject the request! \n" + "Kind Regards \n" + "The EPI Team";
 
             //Send to All Managers
             var managers = await _applicationUserRepository.getAllManagers();
@@ -141,6 +765,24 @@ namespace EPIWalletAPI.Controllers
 
             }
             return Ok("Success");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         }
 
