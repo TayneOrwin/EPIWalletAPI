@@ -25,11 +25,7 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-       // public async Task<EventInvite[]> getAllEventInvitesAsync()
-       // {
-           // IQueryable<EventInvite> query = _appDbContext.EventInvites;
-          //  return await query.ToArrayAsync();
-       // }
+       
 
         public async Task<bool> SaveChangesAsync()
         {

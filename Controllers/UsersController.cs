@@ -2,6 +2,7 @@
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -228,7 +229,7 @@ namespace EPIWalletAPI.Controllers
                     }
                     if (PasswordCheck == false)
                     {
-                        ErrorMessage = "unable to Match User Info";
+                        ErrorMessage = "Password Incorrect";
                     }
                     return Ok(new { code = 401, message = ErrorMessage });
                 }
@@ -246,26 +247,34 @@ namespace EPIWalletAPI.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPost]
         [Route("ResetPassword")]
-        public async Task<ActionResult> ResetPassword(ApplicationUserViewModel avm)
+        public async Task<IActionResult> ResetPassword(ApplicationUserViewModel avm)
         {
 
             var User = await _userManager.FindByEmailAsync(avm.UserName);
 
-            try
-            {
-                string token = await _userManager.GeneratePasswordResetTokenAsync(User);
-                await _userManager.ResetPasswordAsync(User, token, avm.NewPassword);
-                return Ok("Password Reset Successfully");
-            }
-            catch
-            {
-                return BadRequest("Unsuccessful");
-            }
-        
+
+            
+                try
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(User);
+                    var passwordReset = Url.Action("ResetPassword", "Account", new { email = avm.UserName, token = token }, Request.Scheme);
+                    //await _userManager.ResetPasswordAsync(User, token, avm.NewPassword);
+                     
+                    return Ok(new {code = 200, message = "Password Reset Successfully" });
+                }
+                catch
+                {
+                    return BadRequest("Unsuccessful");
+                }
+                
+                
+           
 
         }
+
+        
 
  }
 }
