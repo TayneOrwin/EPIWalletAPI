@@ -14,7 +14,41 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<Entities.TopUpRequest[]> getAllTopUpRequestsAsync();
-        Task<Entities.TopUpRequest> getTopUpRequestAsync(string description);
+        Task<Entities.TopUpRequest> getTopUpRequestAsync(int id);
+
+
+
+
+        Task<Entities.TopUpRequest[]> getPendingRequestsAsync();
+        Task<Entities.TopUpRequest[]> getApprovedRequestsAsync();
+        Task<Entities.TopUpRequest[]> getPaidRequestsAsync();
+
+
+
+
+
+
+        Task<Entities.TopUpRequest[]> getUserPaidRequestsAsync(int id);
+ 
+        Task<Entities.TopUpRequest[]> getUserPendingRequestsAsync(int id);
+        Task<Entities.TopUpRequest[]> getUserApprovedRequestsAsync(int id);
+        Task<Entities.TopUpRequest[]> getUserRejectedRequestsAsync(int id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

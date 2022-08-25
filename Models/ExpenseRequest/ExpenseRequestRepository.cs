@@ -56,6 +56,13 @@ namespace EPIWalletAPI.Models
 
         }
 
+        public async Task<ExpenseRequest[]> getAllPaidExpenseRequestsAsync()
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.ApprovalID == 3);
+            return await query.ToArrayAsync();
+
+        }
+
 
 
 
@@ -101,6 +108,15 @@ namespace EPIWalletAPI.Models
 
 
 
+        public async Task<ExpenseLine[]> getExpenseLineByTopUp(int id)
+        {
+            IQueryable<ExpenseLine> query = _appDbContext.expenseLines.Where(c =>c.ExpenseLineID  == id);
+            return await query.ToArrayAsync();
+        }
+
+
+
+
 
 
 
@@ -126,6 +142,41 @@ namespace EPIWalletAPI.Models
         {
             IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.EmployeeID == EmployeeID && c.ApprovalID == 2);
             return await query.ToArrayAsync();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

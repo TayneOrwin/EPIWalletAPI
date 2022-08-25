@@ -49,11 +49,102 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<Entities.TopUpRequest> getTopUpRequestAsync(string description)
+        public async Task<Entities.TopUpRequest> getTopUpRequestAsync(int id)
         {
-            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.Reason == description);
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.TopUpRequestID == id);
             return await query.FirstOrDefaultAsync();
         }
+
+
+
+
+
+        public async Task<Entities.TopUpRequest[]> getPendingRequestsAsync()
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 1);
+            return await query.ToArrayAsync();
+
+        }
+
+
+
+        public async Task<Entities.TopUpRequest[]> getApprovedRequestsAsync()
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 2);
+            return await query.ToArrayAsync();
+
+        }
+
+        public async Task<Entities.TopUpRequest[]> getPaidRequestsAsync()
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 3);
+            return await query.ToArrayAsync();
+
+        }
+
+
+
+
+        public async Task<Entities.TopUpRequest[]> getUserApprovedRequestsAsync(int id)
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 2);
+            //query = query.Where(c => c.EmployeeID == id);
+            return await query.ToArrayAsync();
+        }
+
+
+
+
+
+        //return all thhe paid expense requests for that user
+        public async Task<Entities.TopUpRequest[]> getUserPaidRequestsAsync(int id)
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 3);
+           // query = query.Where(c => c.EmployeeID == id);
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Entities.TopUpRequest[]> getUserRejectedRequestsAsync(int id)
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 4);
+          //  query = query.Where(c => c.EmployeeID == id);
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Entities.TopUpRequest[]> getUserPendingRequestsAsync(int id)
+        {
+            IQueryable<Entities.TopUpRequest> query = _appDbContext.topUpRequests.Where(c => c.ApprovalStatusID == 1);
+           // query = query.Where(c => c.EmployeeID == id);
+            return await query.ToArrayAsync();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         public async Task<bool> SaveChangesAsync()
         {
