@@ -49,10 +49,10 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<ExpenseLine> getExpenseLineByExpenseRequest(int id)
+        public async Task<ExpenseLine[]> getExpenseLineByExpenseRequest(int id)
         {
             IQueryable<ExpenseLine> query = _appDbContext.expenseLines.Where(zz => zz.ExpenseRequestID == id);
-            return await query.FirstOrDefaultAsync();
+            return await query.ToArrayAsync();
         }
 
 

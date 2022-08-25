@@ -106,12 +106,12 @@ namespace EPIWalletAPI.Controllers
             + "Please open the app to respond to request! \n" + "Kind Regards \n" + "The EPI Team";
 
             //Send to All Managers
-            var creditors = await _applicationUserRepository.getAllCreditors();
+            var managers = await _applicationUserRepository.getAllManagers();
 
 
-            for (int i = 0; i < creditors.Length; i++)
+            for (int i = 0; i < managers.Length; i++)
             {
-                var toAddress = new MailAddress(creditors[i].Email, "Top Up Request");
+                var toAddress = new MailAddress(managers[i].Email, "Top Up Request");
 
 
                 var smtp = new SmtpClient
