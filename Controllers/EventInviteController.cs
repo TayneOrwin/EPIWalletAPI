@@ -42,15 +42,18 @@ namespace EPIWalletAPI.Controllers
 
             
                 var existingEvent = await _eventRepository.getEventAsync(evm.name);
-                var TInvite = new EventInvite {name = evm.name, description = evm.description, date = evm.date, address = evm.address};
+                var TInvite = new EventInvite {EventID = existingEvent.EventID, name = evm.name, description = evm.description, date = evm.date, address = evm.address};
+
+                _eventInviteRepository.Add(TInvite);
+                await _eventInviteRepository.SaveChangesAsync();
 
 
-                const string subject = "You've been invited!";
+            const string subject = "You've been invited!";
                 string body = "Please read the following information about the event: \n \n" + "The name of the event : " 
                 + existingEvent.name + "\n \n" + "A short description of the event : " 
                 + existingEvent.description + "\n \n" + "This event will take place on the following data and time : " 
                 + existingEvent.date.ToString() + "\n \n" 
-                + "Please rsvp by replying to this email and also state wether a spouse will be attending. \n \n"
+                + "Please rsvp by replying to this email and also state whether a spouse will be attending. \n \n"
                 + "We hope to see you there! \n" + "Kind Regards \n" + "The EPI Team";
             
             var smtp = new SmtpClient
@@ -71,8 +74,7 @@ namespace EPIWalletAPI.Controllers
             })
             {
                 smtp.Send(message);
-                _eventInviteRepository.Add(TInvite);
-                await _eventInviteRepository.SaveChangesAsync();
+                
 
                 return Ok("success");
 
