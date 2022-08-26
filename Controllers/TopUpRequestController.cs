@@ -149,27 +149,35 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpGet]
-        [Route("GetUserPaidRequests")]
-        public async Task<ActionResult> getUserPaidRequestsAsync(int id)
+        [Route("GetUserPaid")]
+        public object getUserPaidRequestsAsync(int id)
         {
-            try
+         
+            var list = new List<TopUpRequestReturnModel>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "Select TopUpRequestID, topUpRequests.expenseLineID,Reason,Amount from topUpRequests INNER JOIN expenseLines on topUpRequests.expenseLineID = expenseLines.expenseLineID INNER JOIN expenseRequests on ExpenseRequests.expenseID = expenseLines.expenseRequestID WHERE employeeID = " + id + " AND topUpRequests.ApprovalStatusID = 3";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                var results = await _topUpRequestRepository.getUserPaidRequestsAsync(id);
-                return Ok(results);
+                var report = new TopUpRequestReturnModel()
+                {
+                    reason = (string)reader["Reason"],
+                    amount = (double)reader["Amount"],
+                    TopUpRequestID = (int)reader["TopUpRequestID"],
+                    ExpenseLineID = (int)reader["ExpenseLineID"],
+                 
+                };
+
+                list.Add(report);
             }
 
-
-
-
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
-            }
-
-
-
-
-
+            return list;
 
         }
 
@@ -185,25 +193,33 @@ namespace EPIWalletAPI.Controllers
 
         [HttpGet]
         [Route("GetUserPending")]
-        public async Task<ActionResult> getUserPendingRequestsAsync(int id)
+        public object getUserPendingRequestsAsync(int id)
         {
-            try
+            var list = new List<TopUpRequestReturnModel>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "Select TopUpRequestID, topUpRequests.expenseLineID,Reason,Amount from topUpRequests INNER JOIN expenseLines on topUpRequests.expenseLineID = expenseLines.expenseLineID INNER JOIN expenseRequests on ExpenseRequests.expenseID = expenseLines.expenseRequestID WHERE employeeID = " + id + " AND topUpRequests.ApprovalStatusID = 1";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                var results = await _topUpRequestRepository.getUserPendingRequestsAsync(id);
-                return Ok(results);
+                var report = new TopUpRequestReturnModel()
+                {
+                    reason = (string)reader["Reason"],
+                    amount = (double)reader["Amount"],
+                    TopUpRequestID = (int)reader["TopUpRequestID"],
+                    ExpenseLineID = (int)reader["ExpenseLineID"],
+
+                };
+
+                list.Add(report);
             }
 
-
-
-
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
-            }
-
-
-
-
+            return list;
 
 
         }
@@ -216,24 +232,33 @@ namespace EPIWalletAPI.Controllers
 
         [HttpGet]
         [Route("GetUserApproved")]
-        public async Task<ActionResult> getUserApprovedRequestsAsync(int id)
+        public object getUserApprovedRequestsAsync(int id)
         {
-            try
+            var list = new List<TopUpRequestReturnModel>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "Select TopUpRequestID, topUpRequests.expenseLineID,Reason,Amount from topUpRequests INNER JOIN expenseLines on topUpRequests.expenseLineID = expenseLines.expenseLineID INNER JOIN expenseRequests on ExpenseRequests.expenseID = expenseLines.expenseRequestID WHERE employeeID = " + id + " AND topUpRequests.ApprovalStatusID = 2";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                var results = await _topUpRequestRepository.getUserApprovedRequestsAsync(id);
-                return Ok(results);
+                var report = new TopUpRequestReturnModel()
+                {
+                    reason = (string)reader["Reason"],
+                    amount = (double)reader["Amount"],
+                    TopUpRequestID = (int)reader["TopUpRequestID"],
+                    ExpenseLineID = (int)reader["ExpenseLineID"],
+
+                };
+
+                list.Add(report);
             }
 
-
-
-
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
-            }
-
-
-
+            return list;
 
 
 
@@ -252,24 +277,33 @@ namespace EPIWalletAPI.Controllers
 
         [HttpGet]
         [Route("GetUserRejected")]
-        public async Task<ActionResult> getUserRejectedRequestsAsync(int id)
+        public object getUserRejectedRequestsAsync(int id)
         {
-            try
+            var list = new List<TopUpRequestReturnModel>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "Select TopUpRequestID, topUpRequests.expenseLineID,Reason,Amount from topUpRequests INNER JOIN expenseLines on topUpRequests.expenseLineID = expenseLines.expenseLineID INNER JOIN expenseRequests on ExpenseRequests.expenseID = expenseLines.expenseRequestID WHERE employeeID = " + id + " AND topUpRequests.ApprovalStatusID =4";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
             {
-                var results = await _topUpRequestRepository.getUserRejectedRequestsAsync(id);
-                return Ok(results);
+                var report = new TopUpRequestReturnModel()
+                {
+                    reason = (string)reader["Reason"],
+                    amount = (double)reader["Amount"],
+                    TopUpRequestID = (int)reader["TopUpRequestID"],
+                    ExpenseLineID = (int)reader["ExpenseLineID"],
+
+                };
+
+                list.Add(report);
             }
 
-
-
-
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
-            }
-
-
-
+            return list;
 
 
 
