@@ -65,7 +65,7 @@ namespace EPIWalletAPI.Models
         public DbSet<Entities.GuestInvite> guestInvite { get; set; }
         public DbSet<Entities.EmployeeExpenseLine> employeeExpenseLine { get; set; }
         public DbSet<Entities.ExpenseLineRequest> expenseLineRequest { get; set; }
-
+        public DbSet<Entities.Reconciliation> Reconciliations { get; set; }
 
 
 
