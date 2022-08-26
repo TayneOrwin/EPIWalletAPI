@@ -158,6 +158,8 @@ namespace EPIWalletAPI
             services.AddScoped<IQuotationRepository, QuotationRepository>();
             services.AddScoped<IProofOfPaymentRepository, ProofOfPaymentRepository>();
             services.AddScoped<IReconciliationRepository, ReconciliationRepository>();
+            services.AddScoped<IReimbursementRepository, ReimbursementRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
