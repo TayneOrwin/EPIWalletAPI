@@ -78,16 +78,16 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateVendor")]
 
-        public async Task<ActionResult> UpdateVendor(string name, VendorViewModel vvm)
+        public async Task<ActionResult> UpdateVendor(int id, VendorViewModel vvm)
         {
 
 
 
             try
             {
-                var existingVendor = await _vendorRepository.getVendorAsync(name);
+                var existingVendor = await _vendorRepository.getVendorAsync(id);
 
-                if (existingVendor == null) return NotFound("Could not find vendor: " + name);
+                if (existingVendor == null) return NotFound("Could not find vendor: " + id);
 
                 existingVendor.Name = vvm.Name;
                 existingVendor.Description = vvm.Description;
@@ -125,11 +125,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteVendor")]
-        public async Task<IActionResult> DeleteVendor(string name)
+        public async Task<IActionResult> DeleteVendor(int id)
         {
             try
             {
-                var existingVendor = await _vendorRepository.getVendorAsync(name);
+                var existingVendor = await _vendorRepository.getVendorAsync(id);
                 if (existingVendor == null) return NotFound();
 
 
@@ -173,10 +173,67 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetIdByName")]
+
+        public async Task<IActionResult> GetIdByTitle(string name)
+        {
+
+            var results = await _vendorRepository.getIdByName(name);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
 
 
+        }
 
 
+        [HttpGet]
+        [Route("GetIdByNameDesc")]
+
+        public async Task<IActionResult> GetIdByNameDesc(string name, string description)
+        {
+
+            var results = await  _vendorRepository.getIdByNameDescription(name, description);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
+
+
+        [HttpGet]
+        [Route("GetNameByID")]
+
+        public async Task<IActionResult> GetNameByID(int id)
+        {
+
+            var results = await _vendorRepository.GetNameByID(id);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
 
     }
 }

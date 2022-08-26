@@ -13,6 +13,6 @@ namespace EPIWalletAPI.Models.Employee
         Task<IEnumerable<EmployeeAddress>> Search(string name);
         Task<bool> SaveChangesAsync();
         Task<EmployeeAddress[]> getAllEmployeeAddress();
-        Task<EmployeeAddress> getEmployeeAddress(string name);
+        Task<EmployeeAddress> getEmployeeAddress(int id);
     }
 }

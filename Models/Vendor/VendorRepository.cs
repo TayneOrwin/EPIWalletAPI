@@ -31,9 +31,9 @@ namespace EPIWalletAPI.Models.Vendor
             return await query.ToArrayAsync();
         }
 
-        public async Task<Vendors> getVendorAsync(string VendorName)
+        public async Task<Vendors> getVendorAsync(int id)
         {
-            IQueryable<Vendors> query = _appDbContext.Vendors.Where(zz => zz.Name == VendorName);
+            IQueryable<Vendors> query = _appDbContext.Vendors.Where(zz => zz.VendorID == id);
             return await query.FirstOrDefaultAsync();
         }
 
@@ -52,5 +52,42 @@ namespace EPIWalletAPI.Models.Vendor
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<int> getIdByName(string name)
+        {
+            IQueryable<Vendors> query = _appDbContext.Vendors.Where(zz => zz.Name == name);
+            var results = query.Select(zz => zz.VendorID);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
+        public async Task<string> GetNameByID(int id)
+        {
+            IQueryable<Vendors> query = _appDbContext.Vendors
+            .Where(zz => zz.VendorID == id);
+
+            var results = query.Select(zz => zz.Name);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+        public async Task<int> getIdByNameDescription(string name, string description)
+        {
+            IQueryable<Vendors> query = _appDbContext.Vendors.Where(zz => zz.Name == name && zz.Description == description);
+            var results = query.Select(zz => zz.VendorID);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
+
+
+
+
+
+
     }
 }

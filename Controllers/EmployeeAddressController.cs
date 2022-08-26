@@ -62,12 +62,12 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateEmployeeAddress")]
 
-        public async Task<IActionResult> UpdateEmployeeAddress(string name, EmployeeAddressViewModel eavm)
+        public async Task<IActionResult> UpdateEmployeeAddress(int id, EmployeeAddressViewModel eavm)
         {
-            var results = await _employeeAddressRepository.getEmployeeAddress(name);
+            var results = await _employeeAddressRepository.getEmployeeAddress(id);
             try
             {
-                if (results == null) return NotFound("Could not finf " + name);
+                if (results == null) return NotFound("Could not fin ");
 
                 results.Country = eavm.Country;
                 results.Province = eavm.Province;
@@ -93,15 +93,15 @@ namespace EPIWalletAPI.Controllers
         [HttpDelete]
         [Route("DeleteEmployeeAddress")]
 
-        async Task<IActionResult> DeleteEmployeeAddress(string address)
+        public async Task<IActionResult> DeleteEmployeeAddress(int id)
         {
             try
             {
-                var existing = await _employeeAddressRepository.getEmployeeAddress(address);
+                var existing = await _employeeAddressRepository.getEmployeeAddress(id);
 
                 if (existing == null) return NotFound("Could not find " + existing);
 
-                _employeeAddressRepository.Delete(address);
+                _employeeAddressRepository.Delete(existing);
 
                 if (await _employeeAddressRepository.SaveChangesAsync())
                 {

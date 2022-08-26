@@ -6,7 +6,16 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
+using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Vendor;
+using Microsoft.Extensions.Configuration;
+//using EPIWalletAPI.Models.ExpenseRequest;
+using Microsoft.Data.SqlClient;
+using EPIWalletAPI.Models.ExpenseType;
+using EPIWalletAPI.Models.Identity;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -18,10 +27,22 @@ namespace EPIWalletAPI.Controllers
     public class ExpenseRequestController : ControllerBase
     {
         private readonly IExpenseRequestRepository _ExpenseRequestRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IVendorRepository _vendorRepository;
+        private readonly IExpenseTypeRepository _expenseTypeRepository;
+        private readonly IConfiguration _configuration;
+        private readonly IApplicationUserRepository _applicationUserRepository;
 
-        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository)
+        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,
+            IConfiguration configuration, IApplicationUserRepository applicationUserRepository)
         {
             _ExpenseRequestRepository = expenserequestRepository;
+            _employeeRepository = employeeRepository;
+            _vendorRepository = vendorRepository;
+            _expenseTypeRepository = expenseTypeRepository;
+            _configuration = configuration;
+            _applicationUserRepository = applicationUserRepository;
+
         }
 
 
@@ -47,6 +68,65 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetItemsByID")]
+        public async Task<ActionResult> GetItemsByID(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.GetExpenseItemsByID(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
+
+
+
+
+        [HttpGet]
+        [Route("GetUserPendingExpenseRequests")]
+        public async Task<ActionResult> GetUserPendingExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPendingExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         [Route("GetApprovedExpenseRequests")]
@@ -69,13 +149,14 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+
         [HttpGet]
-        [Route("GetPaidExpenseRequests")]
-        public async Task<ActionResult> GetPaidExpenseRequestsAsync()
+        [Route("GetUserApprovedExpenseRequests")]
+        public async Task<ActionResult> GetUserApprovedExpenseRequestsAsync(int id)
         {
             try
             {
-                var results = await _ExpenseRequestRepository.getPaidExpenseRequestsAsync();
+                var results = await _ExpenseRequestRepository.getUserApprovedExpenseRequestsAsync(id);
                 return Ok(results);
             }
 
@@ -88,6 +169,95 @@ namespace EPIWalletAPI.Controllers
             }
 
         }
+
+
+        [HttpGet]
+        [Route("GetUserRejectedExpenseRequests")]
+        public async Task<ActionResult> GetUserRejectedExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserRejectedExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetPaidExpenseRequests")]
+        public async Task<ActionResult> GetPaidExpenseRequestsAsync(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getUserPaidExpenseRequestsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetAllPaidExpenseRequests")]
+        public async Task<ActionResult> GetAllPaidExpenseRequestsAsync()
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getAllPaidExpenseRequestsAsync();
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
+
+
+
+
+
 
 
 
@@ -127,7 +297,7 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpPut]
-        [Route("UpdateEvent")]
+        [Route("UpdateExpenseRequest")]
 
         public async Task<ActionResult> UpdateExpenseRequest(int id, ExpenseRequestViewModel evm)
         {
@@ -204,6 +374,228 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpPost]
+        [Route("SendForApproval")]
+        public async Task<ActionResult> SendForApproval(ExpenseRequestViewModel evm)
+        {
+
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+         
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+           
+            const string subject = "New Expense Request Requiring Approval!";
+            string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
+            + employee +  "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
+            + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
+
+
+
+            //Send to All Managers
+            var managers = await _applicationUserRepository.getAllManagers();
+
+
+            for (int i = 0; i < managers.Length; i++)
+            {
+                var toAddress = new MailAddress(managers[i].Email, "Expense Request Approval");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+                   
+
+
+                }
+
+            }
+
+
+
+            return Ok("success");
+
+
+
+
+
+        }
+
+
+
+
+
+        [HttpPost]
+        [Route("Approve")]
+        public async Task<ActionResult> Approve(int id, ExpenseRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to approved
+
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.ApprovalID = 2;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+
+
+
+
+
+            //step 2: send an email to all creditors notfying them that funds are requested
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+            const string subject = "New Expense Request Requiring Funds!";
+            string body = "Please read the following information about the Expense Request: \n \n" + "Approved By : "
+            + employee + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
+            + "Please open the app to mark funds as loaded! \n" + "Kind Regards \n" + "The EPI Team";
+
+
+
+            //Send to All Creditors
+            var creditors = await _applicationUserRepository.getAllCreditors();
+
+
+            for (int i = 0; i < creditors.Length; i++)
+            {
+                var toAddress = new MailAddress(creditors[i].Email, "Expense Request Approval");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+
+
+
+                }
+
+            }
+
+
+
+
+
+
+
+            //step 3: Notify the employee that expense has been approved and is now awaiting payment
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
+            const string subject1 = "Expense Has Been Approved!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n" +
+                 "The Creditor Has Been Notified \n"
+            + "The Expense is now awaiting funds from the creditor! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Approved!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+
+
+
+         
 
 
 
@@ -214,6 +606,377 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+
+
+                return Ok("success");
+
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("Reject")]
+        public async Task<ActionResult> Reject(int id,ExpenseRequestViewModel evm,string reason)
+        {
+            //step 1: set the status of the expense to rejected
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.ApprovalID = 4;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+            //step 3: Notify the employee that expense was rejected and the reason it was rejected
+            //get the email associatced with the request sent through
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+
+
+
+
+
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
+            const string subject1 = "Expense Has Been Rejected!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n" +
+                "Reason For Rejection: " + reason+ "\n \n" +
+                 "Please attempt to resubmit the expense! \n"
+            + " \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Rejected!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                return Ok("success");
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("MarkAsPaid")]
+        public async Task<ActionResult> MarkAsPaid(int id,ExpenseRequestViewModel evm)
+        {
+            //step 1: set the status of the expense to paid and set approval to paid
+
+       
+
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.ApprovalID = 3;
+                existingExpenseRequest.PaymentStatusID = 2;
+
+
+
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+            ///notify the employee via email that his expense has been paid
+            ///    var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+
+            //step 3: Notify the employee that expense has been approved and is now awaiting payment
+            string email = await _applicationUserRepository.getEmailByID(evm.EmployeeID);
+            const string subject1 = "Expense Has Been Paid!";
+            string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n" +
+          
+            "Funds for the expense have now been loaded by the creditor! \n" + "Kind Regards \n" + "The EPI Team";
+            var toAddress1 = new MailAddress(email, "Expense Request Paid!");
+
+
+            var smtp1 = new SmtpClient
+            {
+                Host = "smtp.gmail.com",
+                Port = 587,
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                Timeout = 20000
+            };
+
+            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress1)
+            {
+                Subject = subject1,
+                Body = body1
+            })
+            {
+                smtp1.Send(message);
+
+
+
+
+                return Ok("success");
+
+            }
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetRequests")]
+
+        public async Task<IActionResult> GetRequests()
+        {
+            
+            try
+            {
+                var results = await _ExpenseRequestRepository.getAllRequests();
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+        }
+
+
+        [HttpGet]
+        [Route("getExpenseRequestForEmployee")]
+        public async Task<IActionResult> getExpenseRequestForEmployee(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getExpenseRequestForEmployee(id);
+                return Ok(results);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        [HttpGet]
+        [Route("ExpenseTypeReport")]
+
+        public object ExpenseTypeReport()
+        {
+            var list = new List<ExpenseRequestPerTypeReport>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID Group by ExpenseTypes.Type";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var report = new ExpenseRequestPerTypeReport
+                {
+                    Type = (string)reader["Type"],
+                    Requests = (int)reader["TotalRequests"]
+                };
+
+                list.Add(report);
+            }
+
+            return list;
+        }
 
 
 

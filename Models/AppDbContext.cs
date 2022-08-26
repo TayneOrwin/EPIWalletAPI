@@ -35,7 +35,7 @@ namespace EPIWalletAPI.Models
 
        public DbSet<EventInvite> EventInvites { get; set; } 
 
-        public DbSet<ExpenseType> ExpenseTypes { get; set; }
+        public DbSet<Models.Entities.ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
         
         public DbSet<Titles> Titles { get; set; }
@@ -53,10 +53,18 @@ namespace EPIWalletAPI.Models
        public DbSet<ExpenseRequest> ExpenseRequests { get; set; }
         public DbSet<ApprovalStatus> approvalStatuses{ get; set; }
         public DbSet<Entities.AccessRole> accessRoles { get;set; }
-        public DbSet<TopUpRequest> topUpRequests { get; set; }
+        public DbSet<Entities.TopUpRequest> topUpRequests { get; set; }
         public DbSet<ExpenseLine> expenseLines { get; set; }
         public DbSet<PaymentStatus> paymentStatuses { get; set; }
-
+        public DbSet<EmployeeBankingDetails> employeeBankingDetails { get; set; }
+        public DbSet<AccountType> accountType { get; set; }
+        public DbSet<Entities.Receipt> receipts { get; set; }
+        public DbSet<Entities.Quotation> quotation { get; set; }
+        public DbSet<Entities.ProofOfPayment>proofOfPayment { get; set; }
+        public DbSet<Entities.EventSponsor> eventSponsor { get; set; }
+        public DbSet<Entities.GuestInvite> guestInvite { get; set; }
+        public DbSet<Entities.EmployeeExpenseLine> employeeExpenseLine { get; set; }
+        public DbSet<Entities.ExpenseLineRequest> expenseLineRequest { get; set; }
 
 
 

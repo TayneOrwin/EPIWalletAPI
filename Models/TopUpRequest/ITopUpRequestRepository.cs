@@ -10,11 +10,45 @@ namespace EPIWalletAPI.Models
     {
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-        Task<IEnumerable<TopUpRequest>> Search(string description);
+        Task<IEnumerable<Entities.TopUpRequest>> Search(string description);
         Task<bool> SaveChangesAsync();
 
-        Task<TopUpRequest[]> getAllTopUpRequestsAsync();
-        Task<TopUpRequest> getTopUpRequestAsync(string description);
+        Task<Entities.TopUpRequest[]> getAllTopUpRequestsAsync();
+        Task<Entities.TopUpRequest> getTopUpRequestAsync(int id);
+
+
+
+
+        Task<Entities.TopUpRequest[]> getPendingRequestsAsync();
+        Task<Entities.TopUpRequest[]> getApprovedRequestsAsync();
+        Task<Entities.TopUpRequest[]> getPaidRequestsAsync();
+
+
+
+
+
+
+        Task<Entities.TopUpRequest[]> getUserPaidRequestsAsync(int id);
+ 
+        Task<Entities.TopUpRequest[]> getUserPendingRequestsAsync(int id);
+        Task<Entities.TopUpRequest[]> getUserApprovedRequestsAsync(int id);
+        Task<Entities.TopUpRequest[]> getUserRejectedRequestsAsync(int id);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     }
 }

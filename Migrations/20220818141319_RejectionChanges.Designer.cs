@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220808203429_removeemailfromeployee")]
-    partial class removeemailfromeployee
+    [Migration("20220818141319_RejectionChanges")]
+    partial class RejectionChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -194,6 +194,35 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("Events");
                 });
 
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.EventInvite", b =>
+                {
+                    b.Property<int>("EventInviteID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("EventID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("address")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("EventInviteID");
+
+                    b.HasIndex("EventID");
+
+                    b.ToTable("EventInvites");
+                });
+
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
                 {
                     b.Property<int>("ExpenseItemID")
@@ -211,6 +240,9 @@ namespace EPIWalletAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("itemName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("supplier")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ExpenseItemID");
@@ -529,6 +561,17 @@ namespace EPIWalletAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Type");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.EventInvite", b =>
+                {
+                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
+                        .WithMany()
+                        .HasForeignKey("EventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
