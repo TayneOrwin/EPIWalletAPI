@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220825093559_change_name_to_proof")]
+    partial class change_name_to_proof
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -265,28 +267,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasIndex("EventID");
 
                     b.ToTable("EventInvites");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.EventSponsor", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("EventID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SponsorID")
-                        .HasColumnType("int");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("EventID");
-
-                    b.HasIndex("SponsorID");
-
-                    b.ToTable("eventSponsor");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
@@ -720,21 +700,6 @@ namespace EPIWalletAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Event");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.EventSponsor", b =>
-                {
-                    b.HasOne("EPIWalletAPI.Models.Entities.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventID");
-
-                    b.HasOne("EPIWalletAPI.Models.Entities.Sponsor", "Sponsor")
-                        .WithMany()
-                        .HasForeignKey("SponsorID");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Sponsor");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ExpenseItem", b =>
