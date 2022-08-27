@@ -709,43 +709,10 @@ namespace EPIWalletAPI.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 return Ok("success");
 
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 
         }
 
@@ -981,6 +948,25 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetRequest")]
+        public async Task<ActionResult> GetRequest(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
 
 
 
