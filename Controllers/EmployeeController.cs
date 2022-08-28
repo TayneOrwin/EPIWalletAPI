@@ -244,6 +244,14 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+
+
+
+
+
+
+
+
         [HttpGet]
         [Route("GetIdByFullname")]
 

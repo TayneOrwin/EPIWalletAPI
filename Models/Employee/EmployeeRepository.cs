@@ -86,7 +86,15 @@ namespace EPIWalletAPI.Models.Employee
             return await results.FirstOrDefaultAsync();
         }
 
-    
+
+        //public async Task<string> getNameByEmail(string email)
+        //{
+        //    IQueryable<ApplicationUser> query = _appDbContext.ApplicationUsers.Where(zz => zz.Email == email);
+        //    var results = query.Select(zz => zz.EmployeeID);
+
+        //    return await results.FirstOrDefaultAsync();
+        //}
+
 
 
 
@@ -99,6 +107,12 @@ namespace EPIWalletAPI.Models.Employee
 
             return await results.FirstOrDefaultAsync();
         }
+
+
+
+
+
+
 
         public async Task<int> getIdByFullname(string name, string surname)
         {

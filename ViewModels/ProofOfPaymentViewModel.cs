@@ -5,11 +5,9 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.ViewModels
 {
-    public class TopUpRequestViewModel
+    public class ProofOfPaymentViewModel
     {
         public int ExpenseLineID { get; set; }
-        public double amount { get; set; }
-        public string reason { get; set; }
-
+        public byte[] File { get; set; }
     }
 }

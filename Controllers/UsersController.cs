@@ -49,6 +49,8 @@ namespace EPIWalletAPI.Controllers
         //POST : /api/User/Register
         public async Task<object> PostApplicationUser(ApplicationUserModel model)
         {
+
+        
             var checkUser = await _userManager.FindByEmailAsync(model.Email);
             if (checkUser != null)
             {
