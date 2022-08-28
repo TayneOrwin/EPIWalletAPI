@@ -46,7 +46,7 @@ namespace EPIWalletAPI
                        include.AllowAnyOrigin();
                    }));
 
-
+            
 
 
             services.AddControllers();
@@ -153,6 +153,8 @@ namespace EPIWalletAPI
             services.AddScoped<IAccountTypeRepository, AccountTypeRepository>();
             services.AddScoped<IReasonForRejectionRepository, ReasonForRejectionRepository>();
             services.AddScoped<IReceiptRepository,ReceiptRepository >();
+            services.AddScoped<IActiveLoginRepository, ActiveLoginRepository>();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

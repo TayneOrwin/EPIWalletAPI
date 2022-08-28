@@ -1,7 +1,9 @@
 ﻿using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Entities;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -9,6 +11,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace EPIWalletAPI.Controllers
 {
@@ -22,17 +25,22 @@ namespace EPIWalletAPI.Controllers
         private SignInManager<ApplicationUser> _singInManager;
         private readonly ApplicatonSettings _appSettings;
         private readonly IApplicationUserRepository _applicationuserRepository;
+        private readonly IActiveLoginRepository _activeloginRepository;
+      
 
         public UsersController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, 
             IOptions<ApplicatonSettings> appSettings,
-            IApplicationUserRepository applicationuserRepository)
+            IApplicationUserRepository applicationuserRepository,
+            IActiveLoginRepository activeLoginRepository)
         {
             _userManager = userManager;
             _singInManager = signInManager;
             _appSettings = appSettings.Value;
             _applicationuserRepository = applicationuserRepository;
+            _activeloginRepository = activeLoginRepository;
+            
         }
         //
 
@@ -118,25 +126,45 @@ namespace EPIWalletAPI.Controllers
 
             var PasswordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
 
+            var appUser = await _applicationuserRepository.getUserAsync(user.Email);
+            
+            var activeLogin = new ActiveLogin { date = DateTime.Now, ApplicationUserID = appUser.Id};
+
+
+            if (PasswordCheck != false)
+            {
+                _activeloginRepository.Add(activeLogin);
+                await _activeloginRepository.SaveChangesAsync();
+            }
+
+            
+            
             try
             {
 
                 if (user != null && PasswordCheck != false)
                 {
+                    
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
+
                         Expires = DateTime.UtcNow.AddDays(1),
                         SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.JWT_Secret)), SecurityAlgorithms.HmacSha256Signature)
-                    };
+                        
+
+
+                };
+                    
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                     var token = tokenHandler.WriteToken(securityToken);
 
-
+                    
 
                     if (user.AccessRoleID == 1)
                     {
                         return Ok(new { code = 200, token = token,message="Employee Access Granted" });
+
                     }
 
 
@@ -186,6 +214,8 @@ namespace EPIWalletAPI.Controllers
             {
                 return Ok( new { code = 401 , message = ex });
             }
+
+            
 
         }
 
