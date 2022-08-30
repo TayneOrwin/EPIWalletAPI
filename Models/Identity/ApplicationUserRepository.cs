@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -60,7 +61,11 @@ namespace EPIWalletAPI.Models.Identity
         }
 
 
-     
+        public async Task<IdentityUser> getUserAsync(string email)
+        {
+            IQueryable<IdentityUser> query = _appDbContext.ApplicationUsers.Where(c => c.Email==email);
+            return await query.FirstOrDefaultAsync();
+        }
 
 
 

@@ -1,4 +1,6 @@
-﻿namespace EPIWalletAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace EPIWalletAPI.Models
 {
     public class Login
     {
