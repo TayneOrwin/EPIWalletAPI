@@ -128,13 +128,14 @@ namespace EPIWalletAPI.Controllers
 
             var PasswordCheck = await _userManager.CheckPasswordAsync(user, model.Password);
 
-            var appUser = await _applicationuserRepository.getUserAsync(user.Email);
-            
-            var activeLogin = new ActiveLogin { date = DateTime.Now, ApplicationUserID = appUser.Id};
-
-
+          
             if (PasswordCheck != false)
             {
+                var appUser = await _applicationuserRepository.getUserAsync(user.Email);
+
+                var activeLogin = new ActiveLogin { date = DateTime.Now, ApplicationUserID = appUser.Id };
+
+
                 _activeloginRepository.Add(activeLogin);
                 await _activeloginRepository.SaveChangesAsync();
             }
