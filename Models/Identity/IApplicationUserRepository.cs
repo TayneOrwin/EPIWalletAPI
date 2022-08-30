@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,7 @@ namespace EPIWalletAPI.Models
 
         Task<ApplicationUser[]> getAllCreditors();
         Task<string> getEmailByID(int id);
+
+        Task<IdentityUser> getUserAsync(string emial);
     }
 }

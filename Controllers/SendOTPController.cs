@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Net;
 using System.Net.Mail;
-
+using EPIWalletAPI.Models;
+using Microsoft.AspNetCore.Identity;
+using EPIWalletAPI.Migrations;
+using EPIWalletAPI.Models.Entities;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -17,7 +20,16 @@ namespace EPIWalletAPI.Controllers
     public class EmailController : ControllerBase
     {
 
+        private readonly IActiveLoginRepository _activeloginRepository;
+        private readonly IApplicationUserRepository _applicationUserRepository;
+        private UserManager<ApplicationUser> _userManager;
 
+        public EmailController(IActiveLoginRepository activeLoginRepository, IApplicationUserRepository applicationUserRepository, UserManager<ApplicationUser> userManager)
+        {
+            _activeloginRepository = activeLoginRepository;
+            _applicationUserRepository = applicationUserRepository;
+            _userManager = userManager;
+        }
 
 
 
@@ -25,13 +37,18 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("SendOTPEmail")]
-        public int sendEmail(toEmail toEmail)
+        public async Task<int> sendEmailAsync(toEmail toEmail)
         {
+            
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
             var toAddress = new MailAddress(toEmail.address, "EPI Login");
             const string fromPassword = "vokbgidjiuxonyfl";
 
+            //var activeLogin = new ActiveLogin { date = DateTime.Now, ApplicationUserID = toEmail.id};
+
+           // _activeloginRepository.Add(activeLogin);
+            //await _activeloginRepository.SaveChangesAsync();
 
             //generate a new random OTP between 1-10000
             Random rnd = new Random();
@@ -59,12 +76,14 @@ namespace EPIWalletAPI.Controllers
             })
             {
                 smtp.Send(message);
+                
             }
 
 
 
             //return that OTP to the backend
             return otp;
+            
 
         }
 

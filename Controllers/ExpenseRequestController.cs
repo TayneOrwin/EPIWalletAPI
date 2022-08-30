@@ -348,6 +348,11 @@ namespace EPIWalletAPI.Controllers
         [Route("DeleteExpenseRequest")]
         public async Task<IActionResult> DeleteExpenseRequest(int id)
         {
+           
+
+  
+
+
             try
             {
                 var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
@@ -369,8 +374,131 @@ namespace EPIWalletAPI.Controllers
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
 
-            return BadRequest();
+
+
+
+
+
+
+
+
+
+
+            return Ok("success");
+
+
+
+
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [Route("CancelEmail")]
+        public async Task<ActionResult> CancelEmail(ExpenseRequestViewModel evm)
+        {
+
+
+            var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
+
+            const string fromPassword = "vokbgidjiuxonyfl";
+            var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+
+
+            var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
+            var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
+
+            const string subject = "Expense Request Cancelled!";
+            string body = "Please read the following information about the Cancelled Expense Request: \n \n" + "Request from Employee : "
+            + employee + "\n \n" + "Estimate of Request: R"
+            + evm.TotalEstimate + "\n \n"
+             + "Vendor Name: "
+                + vendor + "\n \n"
+                  + "Expense Type: "
+                + expenseType + "\n \n"
+            + " \n" + "Kind Regards \n" + "The EPI Team";
+
+
+
+            //Send to All Managers
+            var managers = await _applicationUserRepository.getAllManagers();
+
+
+            for (int i = 0; i < managers.Length; i++)
+            {
+                var toAddress = new MailAddress(managers[i].Email, "Expense Request Cancelled by Employee");
+
+
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
+
+
+
+
+
+                }
+
+            }
+
+
+
+            return Ok("Success");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -709,43 +837,10 @@ namespace EPIWalletAPI.Controllers
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 return Ok("success");
 
             }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 
         }
 
@@ -981,6 +1076,25 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetRequest")]
+        public async Task<ActionResult> GetRequest(int id)
+        {
+            try
+            {
+                var results = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
 
 
 

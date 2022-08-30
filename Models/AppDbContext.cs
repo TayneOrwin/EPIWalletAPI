@@ -1,7 +1,5 @@
 ﻿using EPIWalletAPI.Models.Employee;
 
-
-
 using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,7 +29,11 @@ namespace EPIWalletAPI.Models
 
        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
+       public DbSet<ApplicationUserModel> ApplicationUserModels { get; set; }
+
        public DbSet<Event> Events { get; set; }
+
+       public DbSet<ActiveLogin> ActiveLogins { get; set; }
 
        public DbSet<EventInvite> EventInvites { get; set; } 
 
@@ -65,8 +67,9 @@ namespace EPIWalletAPI.Models
         public DbSet<Entities.GuestInvite> guestInvite { get; set; }
         public DbSet<Entities.EmployeeExpenseLine> employeeExpenseLine { get; set; }
         public DbSet<Entities.ExpenseLineRequest> expenseLineRequest { get; set; }
+        public DbSet<Entities.Reconciliation> Reconciliations { get; set; }
 
-
+        public DbSet<Entities.Reimbursement> Reimbursements { get; set; }
 
 
 
