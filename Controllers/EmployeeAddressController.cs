@@ -44,7 +44,7 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<IActionResult> AddEmployeeAddress(EmployeeAddressViewModel eavm)
         {
-            var address = new EmployeeAddress { Country = eavm.Country, Province = eavm.Province, Suburb = eavm.Suburb, EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
+            var address = new EmployeeAddress { Country = eavm.Country, ProvinceID = eavm.ProvinceID, Suburb = eavm.Suburb, EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
 
             try
             {
@@ -70,7 +70,7 @@ namespace EPIWalletAPI.Controllers
                 if (results == null) return NotFound("Could not fin ");
 
                 results.Country = eavm.Country;
-                results.Province = eavm.Province;
+                results.ProvinceID = eavm.ProvinceID;
                 results.Suburb = eavm.Suburb;
                 results.EmployeeID = eavm.EmployeeID;
                 results.AddressLine1 = eavm.AddressLine1;

@@ -5,12 +5,8 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.ViewModels
 {
-    public class ReconViewModel
+    public class VendorTypeViewModel
     {
-        
-        public int ExpenseLineID { get; set; }
-
-        public double Balance { get; set; }
-
+        public string Type { get; set; }
     }
 }
