@@ -116,10 +116,6 @@ namespace EPIWalletAPI.Controllers
 
             return Ok("Success");
 
-
-
-
-
         }
 
 
