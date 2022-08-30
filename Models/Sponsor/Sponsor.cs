@@ -20,6 +20,9 @@ namespace EPIWalletAPI.Models.Entities
         public string Company { get; set; }
         public string Email { get; set; }
 
+        public SponsorType SponsorType { get; set; }
+        public int SponsorTypeID { get; set; }
+
 
 
     }

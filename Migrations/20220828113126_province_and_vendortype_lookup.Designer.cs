@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220828113126_province_and_vendortype_lookup")]
+    partial class province_and_vendortype_lookup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -620,9 +622,6 @@ namespace EPIWalletAPI.Migrations
                     b.Property<int>("EventID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SponsorTypeID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
@@ -633,24 +632,7 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasIndex("EventID");
 
-                    b.HasIndex("SponsorTypeID");
-
                     b.ToTable("Sponsors");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.SponsorType", b =>
-                {
-                    b.Property<int>("SponsorTypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SponsorTypeID");
-
-                    b.ToTable("SponsorType");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.TopUpRequest", b =>
@@ -1054,15 +1036,7 @@ namespace EPIWalletAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EPIWalletAPI.Models.Entities.SponsorType", "SponsorType")
-                        .WithMany()
-                        .HasForeignKey("SponsorTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
-
-                    b.Navigation("SponsorType");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.TopUpRequest", b =>
