@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 namespace EPIWalletAPI.ViewModels
 {
     public class ReconViewModel
-    {
-        public int ReconID { get; set; }
+    { 
 
         public int ExpenseLineID { get; set; }
 
