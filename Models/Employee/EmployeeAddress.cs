@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPIWalletAPI.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,12 +12,14 @@ namespace EPIWalletAPI.Models.Employee
         [Key]
         public int AddressID { get; set; }
         public string Country { get; set; }
-        public string Province { get; set; }
+        public Province Province { get; set; }
+        public int ProvinceID { get; set; }
         public string Suburb { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public int EmployeeID { get; set; }
         public virtual Employees Employee { get; set; }
 
+        
     }
 }

@@ -4,14 +4,16 @@ using EPIWalletAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace EPIWalletAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220828113126_province_and_vendortype_lookup")]
+    partial class province_and_vendortype_lookup
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,30 +96,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasIndex("EmployeeID");
 
                     b.ToTable("ApplicationUsers");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.ApplicationUserModel", b =>
-                {
-                    b.Property<int>("ApplicationUserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("accessRole")
-                        .HasColumnType("int");
-
-                    b.Property<int>("employeeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUserID");
-
-                    b.ToTable("ApplicationUserModels");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeAddress", b =>
@@ -223,24 +201,6 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("accessRoles");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ActiveLogin", b =>
-                {
-                    b.Property<int>("ActiveLoginID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ActiveLoginID");
-
-                    b.ToTable("ActiveLogins");
-                });
-
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ApprovalStatus", b =>
                 {
                     b.Property<int>("ApprovalID")
@@ -254,32 +214,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("ApprovalID");
 
                     b.ToTable("approvalStatuses");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.Company", b =>
-                {
-                    b.Property<int>("CompanyID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ProjectCodeID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("projectcodes")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CompanyID");
-
-                    b.HasIndex("ProjectCodeID");
-
-                    b.ToTable("Companies");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.EmployeeExpenseLine", b =>
@@ -522,21 +456,6 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("paymentStatuses");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ProjectCode", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("code")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("ProjectCodes");
-                });
-
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ProofOfPayment", b =>
                 {
                     b.Property<int>("ProofOfPaymentID")
@@ -703,9 +622,6 @@ namespace EPIWalletAPI.Migrations
                     b.Property<int>("EventID")
                         .HasColumnType("int");
 
-                    b.Property<int>("SponsorTypeID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Surname")
                         .HasColumnType("nvarchar(max)");
 
@@ -716,24 +632,7 @@ namespace EPIWalletAPI.Migrations
 
                     b.HasIndex("EventID");
 
-                    b.HasIndex("SponsorTypeID");
-
                     b.ToTable("Sponsors");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.SponsorType", b =>
-                {
-                    b.Property<int>("SponsorTypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("SponsorTypeID");
-
-                    b.ToTable("SponsorType");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.TopUpRequest", b =>
@@ -963,15 +862,6 @@ namespace EPIWalletAPI.Migrations
                     b.Navigation("Titles");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.Company", b =>
-                {
-                    b.HasOne("EPIWalletAPI.Models.Entities.ProjectCode", "ProjectCode")
-                        .WithMany()
-                        .HasForeignKey("ProjectCodeID");
-
-                    b.Navigation("ProjectCode");
-                });
-
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.EmployeeExpenseLine", b =>
                 {
                     b.HasOne("EPIWalletAPI.Models.Employee.Employees", "Employee")
@@ -1146,15 +1036,7 @@ namespace EPIWalletAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EPIWalletAPI.Models.Entities.SponsorType", "SponsorType")
-                        .WithMany()
-                        .HasForeignKey("SponsorTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Event");
-
-                    b.Navigation("SponsorType");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.TopUpRequest", b =>

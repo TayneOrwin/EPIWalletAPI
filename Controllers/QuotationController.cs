@@ -115,7 +115,7 @@ namespace EPIWalletAPI.Controllers
 
 
 
-                var Tevent = new Models.Entities.Quotation{File = wallpaperImage, ExpenseItemID = id };
+                var Tevent = new Models.Entities.Quotation{QuotationID =1,File = wallpaperImage, ExpenseItemID = id };
 
                 try
                 {

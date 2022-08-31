@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EPIWalletAPI.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace EPIWalletAPI.Models.Vendor
         public string Description { get; set; }
 
         public Boolean Availability { get; set; }
+        public Entities.VendorType VendorType { get; set; }
+        public string VendorTypeID { get; set; }
 
     }
 }

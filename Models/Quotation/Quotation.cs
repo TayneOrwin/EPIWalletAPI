@@ -10,7 +10,6 @@ namespace EPIWalletAPI.Models.Entities
     public class Quotation
     {
         [Key]
-
         public int QuotationID { get; set; }
         public ExpenseItem ExpenseItem { get; set; }
         public int ExpenseItemID { get; set; }
