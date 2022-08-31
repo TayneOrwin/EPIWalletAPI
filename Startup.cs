@@ -159,6 +159,9 @@ namespace EPIWalletAPI
             services.AddScoped<IProofOfPaymentRepository, ProofOfPaymentRepository>();
             services.AddScoped<IReconciliationRepository, ReconciliationRepository>();
             services.AddScoped<IReimbursementRepository, ReimbursementRepository>();
+            services.AddScoped<IActiveLoginRepository, ActiveLoginRepository>();
+            services.AddScoped<IProjectCodeRepository, ProjectCodeRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
 
         }
 
