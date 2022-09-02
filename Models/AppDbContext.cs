@@ -70,9 +70,9 @@ namespace EPIWalletAPI.Models
         public DbSet<Entities.Reconciliation> Reconciliations { get; set; }
 
         public DbSet<Entities.Reimbursement> Reimbursements { get; set; }
-        public DbSet<Province> Province { get; set; }
+        public DbSet<Entities.Province> Province { get; set; }
         public DbSet<Entities.VendorType> VendorType { get; set; }
-        public DbSet<SponsorType> SponsorType { get; set; }
+        public DbSet<Entities.SponsorType> SponsorType { get; set; }
 
 
 

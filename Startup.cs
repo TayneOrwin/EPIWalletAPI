@@ -5,6 +5,7 @@ using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.ProofOfPayment;
 using EPIWalletAPI.Models.Quotation;
+using EPIWalletAPI.Models.SponsorType;
 using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -159,6 +160,8 @@ namespace EPIWalletAPI
             services.AddScoped<IProofOfPaymentRepository, ProofOfPaymentRepository>();
             services.AddScoped<IReconciliationRepository, ReconciliationRepository>();
             services.AddScoped<IReimbursementRepository, ReimbursementRepository>();
+            services.AddScoped<IActiveLoginRepository, ActiveLoginRepository>();
+            services.AddScoped<ISponsorTypeRepository, SponsorTypeRepository>();
 
         }
 

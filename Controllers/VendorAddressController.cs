@@ -146,5 +146,29 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("GetVendorAddress")]
+
+        public async Task<ActionResult<IEnumerable<VendorAddress>>> GetVendorAddress(int id)
+        {
+            try
+            {
+                var results = await _vendorAddressRepository.getVendorAddress(id);
+
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested Vendor");
+            }
+
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
+
     }
 }

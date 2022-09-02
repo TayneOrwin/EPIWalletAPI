@@ -16,7 +16,7 @@ namespace EPIWalletAPI.Models
 
         Task<Sponsor[]> getAllSponsorsAsync();
         Task<Sponsor> getSponsorAsync(string name);
-
+   
 
 
 

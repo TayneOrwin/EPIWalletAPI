@@ -96,30 +96,6 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("ApplicationUsers");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.ApplicationUserModel", b =>
-                {
-                    b.Property<int>("ApplicationUserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("accessRole")
-                        .HasColumnType("int");
-
-                    b.Property<int>("employeeID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ApplicationUserID");
-
-                    b.ToTable("ApplicationUserModels");
-                });
-
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.EmployeeAddress", b =>
                 {
                     b.Property<int>("AddressID")
@@ -221,24 +197,6 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("AccessRoleID");
 
                     b.ToTable("accessRoles");
-                });
-
-            modelBuilder.Entity("EPIWalletAPI.Models.Entities.ActiveLogin", b =>
-                {
-                    b.Property<int>("ActiveLoginID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ApplicationUserID")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("date")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ActiveLoginID");
-
-                    b.ToTable("ActiveLogins");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ApprovalStatus", b =>
