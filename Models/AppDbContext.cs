@@ -37,6 +37,10 @@ namespace EPIWalletAPI.Models
 
        public DbSet<EventInvite> EventInvites { get; set; } 
 
+        public DbSet<ProjectCode> ProjectCodes { get; set; }
+
+        public DbSet<Company> Companies { get; set; }
+    
         public DbSet<Models.Entities.ExpenseType> ExpenseTypes { get; set; }
         public DbSet<Sponsor> Sponsors { get; set; }
         

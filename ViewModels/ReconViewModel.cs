@@ -8,6 +8,8 @@ namespace EPIWalletAPI.ViewModels
     public class ReconViewModel
     {
         
+    
+
         public int ExpenseLineID { get; set; }
 
         public double Balance { get; set; }

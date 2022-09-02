@@ -900,7 +900,6 @@ namespace EPIWalletAPI.Controllers
 
 
                 existingExpenseRequest.ApprovalID = 3;
-                existingExpenseRequest.PaymentStatusID = 2;
 
 
 
@@ -973,6 +972,55 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+
+        }
+
+
+
+
+
+
+        [HttpPost]
+        [Route("MarkCleaned")]
+        public async Task<ActionResult> MarkCleaned(int id)
+        {
+            //step 1: set the status of the expense to paid and set approval to paid
+
+
+
+            try
+            {
+                var existingExpenseRequest = await _ExpenseRequestRepository.getExpenseRequestAsync(id);
+
+                if (existingExpenseRequest == null) return NotFound("Could not find expense request with id: " + id);
+
+
+
+
+                existingExpenseRequest.PaymentStatusID = 2;
+
+
+     
+                if (await _ExpenseRequestRepository.SaveChangesAsync())
+                {
+
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+
+            }
+
+
+
+            return Ok("Success");
 
 
         }
