@@ -52,7 +52,7 @@ namespace EPIWalletAPI.Controllers
 
             //generate a new random OTP between 1-10000
             Random rnd = new Random();
-            int otp = rnd.Next(1, 10000);
+            int otp = rnd.Next(1000, 10000);
 
 
 
