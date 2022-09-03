@@ -16,5 +16,7 @@ namespace EPIWalletAPI.Models
         Task<Guest[]> getAllGuestsAsync();
         Task<Guest> getGuestAsync(string name);
 
+        Task<Guest> getGuestByEmailAsync(string email);
+
     }
 }

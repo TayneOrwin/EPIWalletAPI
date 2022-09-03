@@ -18,11 +18,18 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly IEventRepository _eventRepository;
         private readonly IEventInviteRepository _eventInviteRepository;
+        private readonly IGuestRepository _guestRepository;
+        private readonly IGuestListRepository _guestListRepository;
 
-        public EventInviteController(IEventRepository eventRepository, IEventInviteRepository eventInviteRepository)
+        public EventInviteController(IEventRepository eventRepository, 
+                                     IEventInviteRepository eventInviteRepository,
+                                     IGuestRepository guestRepository,
+                                     IGuestListRepository guestListRepository)
         {
             _eventRepository = eventRepository;
             _eventInviteRepository = eventInviteRepository;
+            _guestRepository = guestRepository;
+            _guestListRepository = guestListRepository;
         }
 
 
@@ -43,9 +50,14 @@ namespace EPIWalletAPI.Controllers
             
                 var existingEvent = await _eventRepository.getEventAsync(evm.name);
                 var TInvite = new EventInvite {EventID = existingEvent.EventID, name = evm.name, description = evm.description, date = evm.date, address = evm.address};
-
+                var existingGuest = await _guestRepository.getGuestByEmailAsync(evm.address);
+                var TGuestList = new GuestList {Event = evm.name, Name = existingGuest.Name, Surname = existingGuest.Surname };
+                
                 _eventInviteRepository.Add(TInvite);
                 await _eventInviteRepository.SaveChangesAsync();
+
+                _guestListRepository.Add(TGuestList);
+                await _guestListRepository.SaveChangesAsync();
 
 
             const string subject = "You've been invited!";
