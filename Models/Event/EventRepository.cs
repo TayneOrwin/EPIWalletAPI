@@ -68,6 +68,12 @@ namespace EPIWalletAPI.Models
             return await results.FirstOrDefaultAsync();
         }
 
+        public async Task<Event> getEventByCodeAsync(string code)
+        {
+            IQueryable<Event> query = _appDbContext.Events.Where(c => c.projectcodes == code);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;

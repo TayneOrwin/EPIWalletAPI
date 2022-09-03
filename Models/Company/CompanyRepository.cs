@@ -39,6 +39,12 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<Company> getCompanyByCodeAsync(string code)
+        {
+            IQueryable<Company> query = _appDbContext.Companies.Where(c => c.projectcodes == code);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;

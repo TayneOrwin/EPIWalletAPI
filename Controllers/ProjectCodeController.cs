@@ -16,11 +16,15 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly IProjectCodeRepository _projectCodeRepository;
         private readonly ICompanyRepository _companyRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public ProjectCodeController(IProjectCodeRepository projectCodeRepository, ICompanyRepository companyRepository)
+        public ProjectCodeController(IProjectCodeRepository projectCodeRepository, 
+                                     ICompanyRepository companyRepository, 
+                                     IEventRepository eventRepository)
         {
             _projectCodeRepository = projectCodeRepository;
             _companyRepository = companyRepository;
+            _eventRepository = eventRepository;
         }
 
 
@@ -124,8 +128,12 @@ namespace EPIWalletAPI.Controllers
                 var existingProjectCode = await _projectCodeRepository.getProjectCodeAsync(projectcode);
                 if (existingProjectCode == null) return NotFound();
 
+                var existingCompany = await _companyRepository.getCompanyByCodeAsync(projectcode);
+                var existingEvent = await _eventRepository.getEventByCodeAsync(projectcode);
 
+                _companyRepository.Delete(existingCompany);
                 _projectCodeRepository.Delete(existingProjectCode);
+                _eventRepository.Delete(existingEvent);
 
                 if (await _projectCodeRepository.SaveChangesAsync())
                 {

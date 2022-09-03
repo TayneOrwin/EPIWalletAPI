@@ -18,5 +18,7 @@ namespace EPIWalletAPI.Models
         Task<Company[]> getAllCompaniesAsync();
 
         Task<Company> getCompanyAsync(string name);
+
+        Task<Company> getCompanyByCodeAsync(string code);
     }
 }

@@ -37,7 +37,7 @@ namespace EPIWalletAPI.Controllers
             
 
             var fromAddress = new MailAddress("epiwalletsystem@gmail.com", "EPI Wallet");
-            var toAddress = new MailAddress(evm.address, "Invite");
+            MailAddress toAddress = new MailAddress(evm.address, "Invite");
             const string fromPassword = "vokbgidjiuxonyfl";
 
             

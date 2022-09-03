@@ -18,8 +18,8 @@ namespace EPIWalletAPI.Models.Entities
 
         public DateTime date { get; set; }
 
-        
-      
+        public string projectcodes { get; set; }
+
 
 
 

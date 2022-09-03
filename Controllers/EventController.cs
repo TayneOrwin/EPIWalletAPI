@@ -51,8 +51,8 @@ namespace EPIWalletAPI.Controllers
         [Route("AddEvent")]
         public async Task<IActionResult> AddEvent(EventViewModel evm)
         {
-            var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
-            var Tevent = new Event { TypeID = existingType.TypeID, name = evm.name, description = evm.description, date = evm.date };
+            ExpenseType existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
+            Event Tevent = new Event { TypeID = existingType.TypeID, name = evm.name, description = evm.description, date = evm.date, projectcodes = evm.projectcodes };
 
             try
             {
