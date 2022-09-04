@@ -979,6 +979,54 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("SearchRequest")]
+        public async Task<ActionResult<IEnumerable<ExpenseRequest>>> Search(int id,int approvalstatus,int employee) 
+        {
+            try
+            {
+                var result = await _ExpenseRequestRepository.Search(id,approvalstatus,employee);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound("Could not find the requested expense request");
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
+
+
+        [HttpGet]
+        [Route("SearchRequests")]
+        public async Task<ActionResult<IEnumerable<ExpenseRequest>>> Search2(int id, int approvalstatus)
+        {
+            try
+            {
+                var result = await _ExpenseRequestRepository.Search2(id, approvalstatus);
+
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound("Could not find the requested expense request");
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+        }
+
+
+
+
+
+
 
 
         [HttpPost]

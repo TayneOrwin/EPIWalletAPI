@@ -1,4 +1,5 @@
-﻿using EPIWalletAPI.Models.Entities;
+﻿using EPIWalletAPI.Models.Employee;
+using EPIWalletAPI.Models.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,9 @@ namespace EPIWalletAPI.Models
         Task<ExpenseRequest[]> getUserApprovedExpenseRequestsAsync(int id);
 
         Task<ExpenseRequest[]> getUserRejectedExpenseRequestsAsync(int id);
+        Task<IEnumerable<ExpenseRequest>> Search(int id,int approvalstatus,int employee);
+        Task<IEnumerable<ExpenseRequest>> Search2(int id,int approvalstatus);
+
 
         Task<ExpenseItem[]> GetExpenseItemsByID(int id);
         Task<ExpenseLine[]> getExpenseLineByTopUp(int id);
