@@ -27,13 +27,13 @@ namespace EPIWalletAPI.Models.Province
             _appDbContext.Remove(entity);
         }
 
-        public async Task<Entities.Province[]> getAllSponsorsAsync()
+        public async Task<Entities.Province[]> getAllProvinceAsync()
         {
             IQueryable<Entities.Province> query = _appDbContext.Province;
             return await query.ToArrayAsync();
         }
 
-        public async Task<Entities.Province> getSponsorAsync(string name)
+        public async Task<Entities.Province> getProvinceAsync(string name)
         {
             IQueryable<Entities.Province> query = _appDbContext.Province.Where(c => c.ProvinceDesctiption == name);
             return await query.FirstOrDefaultAsync();
@@ -44,9 +44,24 @@ namespace EPIWalletAPI.Models.Province
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
+        public async Task<string[]> getNameByID(int id)
+        {
+            IQueryable<Entities.Province> query = _appDbContext.Province.Where(zz => zz.ProvinceID == id);
+            var results = query.Select(zz => zz.ProvinceDesctiption);
+
+            return await results.ToArrayAsync();
+        }
         public async Task<IEnumerable<Entities.Province>> Search(string name)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<int[]> getIDByName(string name)
+        {
+            IQueryable<Entities.Province> query = _appDbContext.Province.Where(p => p.ProvinceDesctiption == name);
+            var results = query.Select(z => z.ProvinceID);
+
+            return await results.ToArrayAsync();
         }
     }
 }

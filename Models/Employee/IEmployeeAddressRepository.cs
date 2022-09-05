@@ -14,5 +14,6 @@ namespace EPIWalletAPI.Models.Employee
         Task<bool> SaveChangesAsync();
         Task<EmployeeAddress[]> getAllEmployeeAddress();
         Task<EmployeeAddress> getEmployeeAddress(int id);
+
     }
 }

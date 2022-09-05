@@ -47,6 +47,11 @@ namespace EPIWalletAPI.Models.Employee
             IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.EmployeeID == id);
             return await query.FirstOrDefaultAsync();
         }
+        //public async Task<EmployeeAddress> getEmployeeAddress(int id)
+        //{
+        //    IQueryable<EmployeeAddress> query = _appDbContext.EmployeeAddress.Where(zz => zz.EmployeeID == id);
+        //    return await query.FirstOrDefaultAsync();
+        //}
 
         public async Task<bool> SaveChangesAsync()
         {

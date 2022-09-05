@@ -12,7 +12,9 @@ namespace EPIWalletAPI.Models.Province
         Task<IEnumerable<Entities.Province>> Search(string name);
         Task<bool> SaveChangesAsync();
 
-        Task<Entities.Province[]> getAllSponsorsAsync();
-        Task<Entities.Province> getSponsorAsync(string name);
+        Task<Entities.Province[]> getAllProvinceAsync();
+        Task<Entities.Province> getProvinceAsync(string name);
+        Task<string[]> getNameByID(int id);
+        Task<int[]> getIDByName(string name);
     }
 }

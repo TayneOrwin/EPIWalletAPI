@@ -4,6 +4,7 @@ using EPIWalletAPI.Models.AccessRole;
 using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.ProofOfPayment;
+using EPIWalletAPI.Models.Province;
 using EPIWalletAPI.Models.Quotation;
 using EPIWalletAPI.Models.SponsorType;
 using EPIWalletAPI.Models.Vendor;
@@ -163,6 +164,7 @@ namespace EPIWalletAPI
             services.AddScoped<IActiveLoginRepository, ActiveLoginRepository>();
             services.AddScoped<IProjectCodeRepository, ProjectCodeRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IProvinceRepository, ProvinceRepository>();
 
         }
 
