@@ -26,4 +26,12 @@
     <PackageReference Include="TwoFactorAuth.Net" Version="1.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Models\City\" />
+    <None Remove="Models\Suburb\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Models\City\" />
+    <Folder Include="Models\Suburb\" />
+  </ItemGroup>
 </Project>

@@ -1031,7 +1031,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("MarkCleaned")]
-        public async Task<ActionResult> MarkCleaned(int id)
+        public async Task<ActionResult> MarkCleaned(int id, ExpenseRequestViewModel evm)
         {
             //step 1: set the status of the expense to paid and set approval to paid
 

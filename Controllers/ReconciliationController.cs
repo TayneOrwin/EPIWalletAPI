@@ -120,7 +120,7 @@ namespace EPIWalletAPI.Controllers
             var list = new List<TopUpRequestViewModel>();
             var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-            var sql = "select expenseLines.ExpenseLineID, sum(topUpRequests.Amount) as [Total topup amount for Specific Line] from expenseLines inner join topUpRequests on expenseLines.ExpenseLineID = topUpRequests.ExpenseLineID where expenseLines.ExpenseLineID = " + id + " group by expenseLines.ExpenseLineID";
+            var sql = "select expenseLines.ExpenseLineID, sum(topUpRequests.Amount) as [Total topup amount for Specific Line] from expenseLines inner join topUpRequests on expenseLines.ExpenseLineID = topUpRequests.ExpenseLineID where expenseLines.ExpenseLineID = " + id +"AND topUpRequests.ApprovalStatusID=3 group by expenseLines.ExpenseLineID";
             connection.Open();
             using SqlCommand command = new SqlCommand(sql, connection);
             using SqlDataReader reader = command.ExecuteReader();
