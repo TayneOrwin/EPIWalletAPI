@@ -56,6 +56,12 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<Guest> getGuestByEmailAsync(string email)
+        {
+            IQueryable<Guest> query = _appDbContext.Guests.Where(c => c.EmailAddress == email);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;

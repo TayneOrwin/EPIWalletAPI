@@ -22,6 +22,8 @@ namespace EPIWalletAPI.Models
         Task<int> getTypeIdByEventId(int EventId);
         Task<string[]> getNameById(int id);
 
+        Task<Event> getEventByCodeAsync(string code);
+
 
 
 

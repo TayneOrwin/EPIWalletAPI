@@ -16,11 +16,15 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly ICompanyRepository _companyRepository;
         private readonly IProjectCodeRepository _projectCodeRepository;
+        private readonly IEventRepository _eventRepository;
 
-        public CompanyController(ICompanyRepository companyRepository, IProjectCodeRepository projectCodeRepository)
+        public CompanyController(ICompanyRepository companyRepository,
+                                 IProjectCodeRepository projectCodeRepository,
+                                 IEventRepository eventRepository)
         {
             _companyRepository = companyRepository;
             _projectCodeRepository = projectCodeRepository;
+            _eventRepository = eventRepository;
         }
 
 
@@ -61,7 +65,6 @@ namespace EPIWalletAPI.Controllers
 
             string code = firstcode + "-" + secondcode;
 
-            //var existingProjectCode = await _projectCodeRepository.getProjectCodeAsync(cvm.projectcode);
             var Tcompany = new Company { name = cvm.name, description = cvm.description, projectcodes = code};
             var Tcode = new ProjectCode { code = code };
             try
@@ -142,12 +145,18 @@ namespace EPIWalletAPI.Controllers
                 var existingCompany = await _companyRepository.getCompanyAsync(name);
                 if (existingCompany == null) return NotFound();
 
+                var existingCode = await _projectCodeRepository.getProjectCodeAsync(existingCompany.projectcodes);
+                var existingEvent = await _eventRepository.getEventByCodeAsync(existingCompany.projectcodes);
+
 
                 _companyRepository.Delete(existingCompany);
+                _projectCodeRepository.Delete(existingCode);
+                _eventRepository.Delete(existingEvent);
 
                 if (await _companyRepository.SaveChangesAsync())
                 {
                     return Ok("Company deleted successfully");
+                    
                 }
 
 
