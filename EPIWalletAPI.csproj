@@ -5,6 +5,11 @@
     <UserSecretsId>d1fc8e08-e220-42f2-bb8d-1b3918c44933</UserSecretsId>
   </PropertyGroup>
 
+
+  <PropertyGroup>
+  <NoWarn>$(NoWarn);NU1701</NoWarn>
+</PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.Totp" Version="2.3.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="5.0.1" />

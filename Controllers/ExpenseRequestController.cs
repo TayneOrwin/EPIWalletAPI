@@ -1172,32 +1172,32 @@ namespace EPIWalletAPI.Controllers
 
         //for adjustable criteria
 
-        [HttpGet]
-        [Route("ExpenseSpecificTypeReport")]
+        //[HttpGet]
+        //[Route("ExpenseSpecificTypeReport")]
 
-        public object ExpenseSpecificTypeReport(string type)
-        {
-            var list = new List<ExpenseRequestPerTypeReport>();
-            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+        //public object ExpenseSpecificTypeReport(string type)
+        //{
+        //    var list = new List<ExpenseRequestPerTypeReport>();
+        //    var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
 
-            var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID where ExpenseTypes.Type = '"+type+"' Group by ExpenseTypes.Type";
-            connection.Open();
-            using SqlCommand command = new SqlCommand(sql, connection);
-            using SqlDataReader reader = command.ExecuteReader();
+        //    var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID where ExpenseTypes.Type = '"+type+"' Group by ExpenseTypes.Type";
+        //    connection.Open();
+        //    using SqlCommand command = new SqlCommand(sql, connection);
+        //    using SqlDataReader reader = command.ExecuteReader();
 
-            while (reader.Read())
-            {
-                var report = new ExpenseRequestPerTypeReport
-                {
-                    Type = (string)reader["Type"],
-                    Requests = (int)reader["TotalRequests"]
-                };
+        //    while (reader.Read())
+        //    {
+        //        var report = new ExpenseRequestPerTypeReport
+        //        {
+        //            Type = (string)reader["Type"],
+        //            Requests = (int)reader["TotalRequests"]
+        //        };
 
-                list.Add(report);
-            }
+        //        list.Add(report);
+        //    }
 
-            return list;
-        }
+        //    return list;
+        //}
 
         [HttpGet]
         [Route("ExpenseSpecificTypeReport")]
