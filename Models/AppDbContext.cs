@@ -93,16 +93,7 @@ namespace EPIWalletAPI.Models
         {
             base.OnModelCreating(modelBuilder);
 
-         
-
-
-
- 
-
-
-
-
-
+       
 
 
 
