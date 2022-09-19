@@ -77,7 +77,7 @@ namespace EPIWalletAPI.Controllers
                 return Ok(err); ;
             }
 
-            return Ok("Success");
+            return Ok();
         }
 
         [HttpPut]
