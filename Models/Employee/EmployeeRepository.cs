@@ -58,16 +58,16 @@ namespace EPIWalletAPI.Models.Employee
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
-        public async Task<Titles[]> getTitlesAsync()
+        public async Task<Title[]> getTitlesAsync()
         {
-            IQueryable<Titles> query = _appDbContext.Titles;
+            IQueryable<Title> query = _appDbContext.Titles;
             return await query.ToArrayAsync();
         }
 
 
         public async Task<string[]> getTitleByID(int id)
         {
-            IQueryable<Titles> query = _appDbContext.Titles
+            IQueryable<Title> query = _appDbContext.Titles
                 .Where(zz => zz.TitlesID == id);
 
             var results = query.Select(zz => zz.Description);
@@ -102,7 +102,7 @@ namespace EPIWalletAPI.Models.Employee
 
         public async Task<int> getIdByTitle(string title)
         {
-            IQueryable<Titles> query = _appDbContext.Titles.Where(zz => zz.Description == title);
+            IQueryable<Title> query = _appDbContext.Titles.Where(zz => zz.Description == title);
             var results = query.Select(zz => zz.TitlesID);
 
             return await results.FirstOrDefaultAsync();

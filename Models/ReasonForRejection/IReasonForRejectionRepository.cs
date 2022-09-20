@@ -17,6 +17,7 @@ namespace EPIWalletAPI.Models
 
         Task<ReasonForRejection[]> getAllReasonsForRejectionAsync();
         Task<ReasonForRejection> getReasonForRejectionAsync(int id);
+        Task<IEnumerable<ReasonForRejection>> Search(string name);
 
     }
 }

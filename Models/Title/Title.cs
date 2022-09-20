@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models
 {
-    public class Titles
+    public class Title
     {
         [Key]
         public int TitlesID { get; set; }

@@ -72,13 +72,106 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpPut]
+        [Route("UpdateReason")]
+
+        public async Task<object> UpdateReasonType(int id, ReasonForRejectionViewModel rvm)
+        {
+
+
+
+            try
+            {
+                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(id);
+
+                if (existingReason == null) return NotFound("Could not find Reason ID: " + id);
+
+                existingReason.Reason = rvm.Reason;
+
+
+                if (await _rejectionRepository.SaveChangesAsync())
+                {
+                    return Ok("Reason updated successfully");
+                }
+
+
+            }
 
 
 
 
+            catch (Exception)
+            {
+                return Ok(new { code = 401 });
+            }
+
+            return Ok(new { code = 200 });
 
 
-  
+        }
+
+        [HttpDelete]
+        [Route("DeleteReason")]
+        public async Task<IActionResult> DeleteReason(int id)
+        {
+            try
+            {
+                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(id);
+                if (existingReason == null) return NotFound();
+
+
+                _rejectionRepository.Delete(existingReason);
+
+                if (await _rejectionRepository.SaveChangesAsync())
+                {
+                    return Ok("Reason updated successfully");
+                }
+
+
+            }
+            catch (Exception)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+            return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("SearchReason")]
+
+        public async Task<ActionResult<IEnumerable<ReasonForRejection>>> Search(string name)
+        {
+            try
+            {
+                var results = await _rejectionRepository.Search(name);
+
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested Reason");
+            }
+
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
+
+        }
+
 
     }
+
+
+
+
+
+
+
+
+
+
 }

@@ -45,9 +45,15 @@ namespace EPIWalletAPI.Models
             return await _appDbContext.SaveChangesAsync() > 0;
         }
 
-        public Task<IEnumerable<AccountType>> Search(string name)
+        public async Task<IEnumerable<AccountType>> Search(string description)
         {
-            throw new NotImplementedException();
+            IQueryable<AccountType> query = _appDbContext.accountType;
+
+            if (!string.IsNullOrEmpty(description))
+            {
+                query = query.Where(t => t.Description.Contains(description));
+            }
+            return await query.ToListAsync();
         }
     }
 }

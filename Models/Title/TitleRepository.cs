@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models
 {
-    public class ReasonForRejectionRepository: IReasonForRejectionRepository
+    public class TitleRepository : ITitleRepository
     {
         private readonly AppDbContext _appDbContext;
 
 
-        public ReasonForRejectionRepository(AppDbContext appDbContext)
+        public TitleRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -29,28 +29,28 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-    
 
-        public async Task<ReasonForRejection[]> getAllReasonsForRejectionAsync()
+
+        public async Task<Title[]> getAllTitleAsync()
         {
-            IQueryable<ReasonForRejection> query = _appDbContext.ReasonForRejections;
+            IQueryable<Title> query = _appDbContext.Titles;
             return await query.ToArrayAsync();
         }
 
 
-        public async Task<ReasonForRejection> getReasonForRejectionAsync(int id)
+        public async Task<Title> getTitleAsync(int id)
         {
-            IQueryable<ReasonForRejection> query = _appDbContext.ReasonForRejections.Where(c => c.ReasonForRejectionID == id);
+            IQueryable<Title> query = _appDbContext.Titles.Where(c => c.TitlesID == id);
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<ReasonForRejection>> Search(string name)
+        public async Task<IEnumerable<Title>> Search(string description)
         {
-            IQueryable<ReasonForRejection> query = _appDbContext.ReasonForRejections;
+            IQueryable<Title> query = _appDbContext.Titles;
 
-            if (!string.IsNullOrEmpty(name))
+            if (!string.IsNullOrEmpty(description))
             {
-                query = query.Where(t => t.Reason.Contains(name));
+                query = query.Where(t => t.Description.Contains(description));
             }
             return await query.ToListAsync();
         }
@@ -59,9 +59,7 @@ namespace EPIWalletAPI.Models
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+
     }
-
-
-
 }
-
