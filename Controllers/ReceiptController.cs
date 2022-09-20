@@ -52,23 +52,14 @@ namespace EPIWalletAPI.Controllers
 
 
 
-
-
-
-
-
-
-        [HttpPost]
-        [Route("AddReceipt")]
-        public async Task<IActionResult> AddReceipt(ReceiptViewModel avm)
+        [HttpGet]
+        [Route("GetReceipt")]
+        public async Task<ActionResult> GetReceipt(int id)
         {
-
-            var Tevent = new Models.Entities.Receipt { amount = avm.amount, File = avm.file, ExpenseLineID = avm.ExpenseLineID};
-
             try
             {
-                _receiptRepository.Add(Tevent);
-                await _receiptRepository.SaveChangesAsync();
+                var results = await _receiptRepository.getReceiptAsync(id);
+                return Ok(results);
             }
 
 
@@ -76,18 +67,25 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
             }
-
-            return Ok("Success");
-
-
 
         }
 
 
 
-     
+
+
+
+
+
+
+
+
+
+
+
+
 
         [HttpDelete]
         [Route("DeleteReceipt")]
@@ -154,22 +152,7 @@ namespace EPIWalletAPI.Controllers
 
 
 
-        // GET api/values/2
-        [HttpGet]
-            [Route("GetImage")]
-           public async Task<HttpResponseMessage> Get(int id)
-            {
-                Receipt currentReceipt = await _receiptRepository.getReceiptAsync(id);
-
-                HttpResponseMessage Response = new HttpResponseMessage(HttpStatusCode.OK);
-
-                Response.Content = new StreamContent(new MemoryStream(currentReceipt.File));
-                Response.Content.Headers.ContentType =
-        new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpg");
-                return Response;
-
-        }
-
+   
 
 
 
