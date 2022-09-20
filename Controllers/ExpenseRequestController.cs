@@ -515,6 +515,7 @@ namespace EPIWalletAPI.Controllers
          
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+         
 
           
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
@@ -526,7 +527,7 @@ namespace EPIWalletAPI.Controllers
           
             const string subject = "New Expense Request Requiring Approval!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
-            + employee +  "\n \n" + "Estimate of Request: R"
+            + employee[0] +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"
@@ -539,10 +540,6 @@ namespace EPIWalletAPI.Controllers
                 + currentEvent.date + "\n \n"
              + "Event Description: "
                 + currentEvent.description + "\n \n"
-
-
-
-
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
 
@@ -650,7 +647,7 @@ namespace EPIWalletAPI.Controllers
 
             const string subject = "New Expense Request Requiring Funds!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Submitted By : "
-            + employee + "\n \n" + "Estimate of Request: R"
+            + employee[0] + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"
