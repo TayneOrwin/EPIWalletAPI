@@ -241,13 +241,45 @@ namespace EPIWalletAPI.Controllers
 
             var User = await _userManager.FindByEmailAsync(avm.UserName);
             var PasswordCheck = await _userManager.CheckPasswordAsync(User, avm.CurrentPassword);
+            
 
-
+            static bool ValidatePassword(string pass)
+            {
+                int validConditions = 0;
+                foreach (char c in pass)
+                {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                foreach (char c in pass)
+                {
+                    if (c >= 'A' && c <= 'Z')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                if (validConditions == 0) return false;
+                foreach (char c in pass)
+                {
+                    if (c >= '0' && c <= '9')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                if (validConditions != 3 || pass.Length < 8) return false;
+                
+                return true;
+            }
             try
             {
 
 
-                if (PasswordCheck != false && User != null)
+                if (PasswordCheck != false && User != null && ValidatePassword(avm.NewPassword) == true)
                 {
                     await _userManager.ChangePasswordAsync(User, avm.CurrentPassword, avm.NewPassword);
                     return Ok(new { code = 200, message = "Password Updated Successfully" });
@@ -259,12 +291,22 @@ namespace EPIWalletAPI.Controllers
                     if (User == null)
                     {
                         ErrorMessage = "unable to Find User";
+                        return Ok(new { code = 401, message = ErrorMessage });
                     }
-                    if (PasswordCheck == false)
+                    else if (PasswordCheck == false)
                     {
                         ErrorMessage = "Password Incorrect";
+                        return Ok(new { code = 401, message = ErrorMessage });
                     }
-                    return Ok(new { code = 401, message = ErrorMessage });
+                    else if (ValidatePassword(avm.NewPassword) == false)
+                    {
+                        ErrorMessage = "Password Incorrect Format";
+                        return Ok(new { code = 402, message = ErrorMessage });
+                    }
+                        return Ok();
+                   
+                    
+
                 }
             }
 

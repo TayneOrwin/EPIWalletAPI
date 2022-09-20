@@ -163,6 +163,8 @@ namespace EPIWalletAPI
             services.AddScoped<IProjectCodeRepository, ProjectCodeRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IGuestListRepository, GuestListRepository>();
+            services.AddScoped<ISponsorTypeRepository, SponsorTypeRepository>();
+            services.AddScoped<IVendorTypeRepository, VendorTypeRepository>();
 
         }
 

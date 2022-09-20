@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Entities;
 
-namespace EPIWalletAPI.Models.Entities
+namespace EPIWalletAPI.Models
 {
     public interface IVendorTypeRepository
     {
