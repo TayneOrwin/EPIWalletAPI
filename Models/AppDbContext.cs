@@ -88,6 +88,8 @@ namespace EPIWalletAPI.Models
         public DbSet<Suburb> Suburb { get; set; }
        // public DbSet<Entities.SponsorType> SponsorType { get; set; }
 
+        public DbSet<AdminTimer> AdminTimer { get; set; }
+
 
 
 
