@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models.SponsorType;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,13 +17,15 @@ namespace EPIWalletAPI.Controllers
     {
         private readonly ISponsorRepository _sponsorRepository;
         private readonly IEventRepository _eventRepository;
+        private readonly ISponsorTypeRepository _sponsorTypeRepository;
         //return data from the database
 
         //dependency injection
-        public SponsorController(ISponsorRepository sponsorRepository, IEventRepository eventRepository)
+        public SponsorController(ISponsorRepository sponsorRepository, IEventRepository eventRepository, ISponsorTypeRepository sponsorTypeRepository)
         {
            _sponsorRepository = sponsorRepository;
             _eventRepository = eventRepository;
+            _sponsorTypeRepository = sponsorTypeRepository;
         }
 
 
@@ -51,8 +54,10 @@ namespace EPIWalletAPI.Controllers
         [Route("AddSponsor")]
         public async Task<IActionResult> AddSponsor(SponsorViewModel svm)
         {
+
+            var existingtype = await _sponsorTypeRepository.getSponsorTypesByNameAsync(svm.Type);
             var existingEvent = await _eventRepository.getEventAsync(svm.Event);
-            var TSponsor = new Sponsor { EventID = existingEvent.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email };
+            var TSponsor = new Sponsor { EventID = existingEvent.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email, SponsorTypeID = existingtype.SponsorTypeID };
 
             try
             {
@@ -86,9 +91,11 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
+                var existingType = await _sponsorTypeRepository.getSponsorTypesByNameAsync(svm.Type);
                 var existingEvent = await _eventRepository.getEventAsync(svm.Event);
                 var existingSponsor = await _sponsorRepository.getSponsorAsync(name);
                 var evntID = existingEvent.EventID;
+                var typeID = existingType.SponsorTypeID;
 
                 if (existingSponsor == null) return NotFound("Could not find sponsor: " + name);
 
@@ -98,6 +105,7 @@ namespace EPIWalletAPI.Controllers
                 existingSponsor.Amount = svm.Amount;
                 existingSponsor.Company = svm.Company;
                 existingSponsor.Email = svm.Email;
+                existingSponsor.SponsorTypeID = typeID;
 
 
                 if (await _sponsorRepository.SaveChangesAsync())

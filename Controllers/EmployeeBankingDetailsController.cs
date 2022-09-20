@@ -134,6 +134,25 @@ namespace EPIWalletAPI.Controllers
             return BadRequest();
         }
 
+        [HttpGet]
+        [Route("GetBankingDetails")]
+        public async Task<ActionResult> GetBankingDetails(int id)
+        {
+            try
+            {
+                var results = await _bankingDetailsRepository.getEmployeeBankingDetailsAsync(id);
+                return Ok(results);
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Service Error");
+            }
+
+        }
 
 
     }

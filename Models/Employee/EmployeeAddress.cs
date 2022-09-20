@@ -12,7 +12,7 @@ namespace EPIWalletAPI.Models.Employee
         [Key]
         public int AddressID { get; set; }
         public string Country { get; set; }
-        public Province Province { get; set; }
+        public Entities.Province Province { get; set; }
         public int ProvinceID { get; set; }
         public string Suburb { get; set; }
         public string AddressLine1 { get; set; }

@@ -38,8 +38,9 @@ namespace EPIWalletAPI.Models
 
             if (id!=0) // if there is anything
             {
-                query = query.Where((e => e.VendorID.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.totalEstimate.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.TypeID.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.EmployeeID.Equals(id)&&e.ApprovalID.Equals(approvalstatus)));
+                query = query.Where((e => e.VendorID.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.totalEstimate.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.TypeID.Equals(id) && e.ApprovalID.Equals(approvalstatus) || e.EmployeeID.Equals(id)&&e.ApprovalID.Equals(approvalstatus) || e.ExpenseID.Equals(id) && e.ApprovalID.Equals(approvalstatus)));
                 query = query.Where(e => e.EmployeeID.Equals(employee));
+                
             }
 
             return await query.ToListAsync();

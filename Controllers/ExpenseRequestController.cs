@@ -32,8 +32,9 @@ namespace EPIWalletAPI.Controllers
         private readonly IExpenseTypeRepository _expenseTypeRepository;
         private readonly IConfiguration _configuration;
         private readonly IApplicationUserRepository _applicationUserRepository;
-
-        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,
+        private readonly IEmployeeBankingDetailsRepository _bankingDetailsRepository;
+        private readonly IEventRepository _eventRepository;
+        public ExpenseRequestController(IExpenseRequestRepository expenserequestRepository, IEmployeeRepository employeeRepository, IVendorRepository vendorRepository, IExpenseTypeRepository expenseTypeRepository,IEmployeeBankingDetailsRepository employeeBankingDetailsRepository,IEventRepository eventRepository,
             IConfiguration configuration, IApplicationUserRepository applicationUserRepository)
         {
             _ExpenseRequestRepository = expenserequestRepository;
@@ -42,6 +43,8 @@ namespace EPIWalletAPI.Controllers
             _expenseTypeRepository = expenseTypeRepository;
             _configuration = configuration;
             _applicationUserRepository = applicationUserRepository;
+            _bankingDetailsRepository = employeeBankingDetailsRepository;
+            _eventRepository = eventRepository;
 
         }
 
@@ -513,10 +516,11 @@ namespace EPIWalletAPI.Controllers
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
 
-
+          
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
-           
+          
+          
             const string subject = "New Expense Request Requiring Approval!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
             + employee +  "\n \n" + "Estimate of Request: R"
@@ -525,6 +529,16 @@ namespace EPIWalletAPI.Controllers
                 + vendor + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
+                     + "Details Regarding The Event: "
+                          + "Event Name: "
+                + expenseType + "\n \n"
+                     + "Event Date: "
+                + expenseType + "\n \n"
+
+
+
+
+
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
 
@@ -625,19 +639,33 @@ namespace EPIWalletAPI.Controllers
 
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
-
+            var banking = await _bankingDetailsRepository.getEmployeeBankingDetailsAsync(evm.EmployeeID);
 
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
 
             const string subject = "New Expense Request Requiring Funds!";
-            string body = "Please read the following information about the Expense Request: \n \n" + "Approved By : "
+            string body = "Please read the following information about the Expense Request: \n \n" + "Submitted By : "
             + employee + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
+                + "\n \n" +
+                "Employee banking details:"
+                + " \n \nAccount Number: "+
+                banking.AccountNunmber
+                         + " \n \nBranch: " +
+                banking.Branch
+                 + " \n \nBank: " +
+                banking.Bank
+                 + " \n \n:"
+       
+
+
+
+
             + "Please open the app to mark funds as loaded! \n" + "Kind Regards \n" + "The EPI Team";
 
 
@@ -1031,7 +1059,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("MarkCleaned")]
-        public async Task<ActionResult> MarkCleaned(int id)
+        public async Task<ActionResult> MarkCleaned(int id, ExpenseRequestViewModel evm)
         {
             //step 1: set the status of the expense to paid and set approval to paid
 
@@ -1170,6 +1198,65 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        //for adjustable criteria
+
+        //[HttpGet]
+        //[Route("ExpenseSpecificTypeReport")]
+
+        //public object ExpenseSpecificTypeReport(string type)
+        //{
+        //    var list = new List<ExpenseRequestPerTypeReport>();
+        //    var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+        //    var sql = "select ExpenseTypes.Type, count(*) as TotalRequests from ExpenseTypes inner join ExpenseRequests on ExpenseRequests.TypeID = ExpenseTypes.TypeID where ExpenseTypes.Type = '"+type+"' Group by ExpenseTypes.Type";
+        //    connection.Open();
+        //    using SqlCommand command = new SqlCommand(sql, connection);
+        //    using SqlDataReader reader = command.ExecuteReader();
+
+        //    while (reader.Read())
+        //    {
+        //        var report = new ExpenseRequestPerTypeReport
+        //        {
+        //            Type = (string)reader["Type"],
+        //            Requests = (int)reader["TotalRequests"]
+        //        };
+
+        //        list.Add(report);
+        //    }
+
+        //    return list;
+        //}
+
+        [HttpGet]
+        [Route("ExpenseSpecificTypeReport")]
+
+        public object GetOriginalAmount(string type)
+        {
+            var list = new List<ExpenseRequestPerTypeReport>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "select receipts.ReceiptID from receipts inner join expenseLines on expenseLines.ExpenseLineID = receipts.ExpenseLineID inner join ExpenseRequests on ExpenseRequests.ExpenseID = expenseLines.ExpenseRequestID";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var report = new ExpenseRequestPerTypeReport
+                {
+                    Type = (string)reader["Type"],
+                    Requests = (int)reader["TotalRequests"]
+                };
+
+                list.Add(report);
+            }
+
+            return list;
+        }
+
+
+        
 
 
         [HttpGet]

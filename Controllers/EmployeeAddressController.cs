@@ -44,7 +44,7 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<IActionResult> AddEmployeeAddress(EmployeeAddressViewModel eavm)
         {
-            var address = new EmployeeAddress { Country = eavm.Country, ProvinceID = eavm.ProvinceID, Suburb = eavm.Suburb, EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
+            var address = new EmployeeAddress {Country ="South Africa", ProvinceID = eavm.ProvinceID, Suburb = eavm.Suburb, EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
 
             try
             {
@@ -69,10 +69,10 @@ namespace EPIWalletAPI.Controllers
             {
                 if (results == null) return NotFound("Could not fin ");
 
-                results.Country = eavm.Country;
+                results.Country = "South Africa";
                 results.ProvinceID = eavm.ProvinceID;
                 results.Suburb = eavm.Suburb;
-                results.EmployeeID = eavm.EmployeeID;
+                //results.EmployeeID = eavm.EmployeeID;
                 results.AddressLine1 = eavm.AddressLine1;
                 results.AddressLine2 = eavm.AddressLine2;
 
@@ -135,6 +135,29 @@ namespace EPIWalletAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database" + err);
             }
+        }
+
+        [HttpGet]
+        [Route("GetEmployeesAddress")]
+
+        public async Task<ActionResult<IEnumerable<EmployeeAddress>>> GetEmployeesAddress(int id)
+        {
+            try
+            {
+                var results = await _employeeAddressRepository.getEmployeeAddress(id);
+
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested Employee");
+            }
+
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
         }
 
     }

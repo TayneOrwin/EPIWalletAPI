@@ -9,6 +9,7 @@ namespace EPIWalletAPI.Models
 {
     public class SponsorTypeRepository : ISponsorTypeRepository
     {
+
         private readonly AppDbContext _appDbContext;
 
         public SponsorTypeRepository(AppDbContext appDbContext)
@@ -31,11 +32,15 @@ namespace EPIWalletAPI.Models
             IQueryable<Models.Entities.SponsorType> query = _appDbContext.SponsorTypes;
 
             if (!string.IsNullOrEmpty(description))
-            {
+        {
                 query = query.Where(t => t.Description.Contains(description));
-            }
+        }
             return await query.ToListAsync();
 
+        public async Task<Entities.SponsorType> getSponsorTypesByNameAsync(string name)
+        {
+            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.Description == name);
+            return await query.FirstOrDefaultAsync();
         }
 
         public async Task<Models.Entities.SponsorType[]> getAllSponsorTypesAsync()
@@ -54,5 +59,7 @@ namespace EPIWalletAPI.Models
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+       
     }
 }

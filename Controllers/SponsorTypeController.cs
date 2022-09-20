@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.Models.SponsorType;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ namespace EPIWalletAPI.Controllers
         {
             _sponsorTypeRepository = sponsorTypeRepository;
         }
+
 
         [HttpGet]
         [Route("GetAllSponsorTypes")]
@@ -98,6 +100,7 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
             catch (Exception)
             {
                 return Ok(new { code = 401 });
@@ -142,13 +145,13 @@ namespace EPIWalletAPI.Controllers
         public async Task<ActionResult<IEnumerable<SponsorType>>> Search(string description)
         {
             try
-            {
+        {
                 var results = await _sponsorTypeRepository.Search(description);
 
                 if (results != null)
-                {
-                    return Ok(results);
-                }
+            {
+                return Ok(results);
+            }
                 return NotFound("Could not find the requested Sponsor Type");
             }
 
@@ -157,6 +160,9 @@ namespace EPIWalletAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
             }
 
+
         }
+
+
     }
 }

@@ -4,7 +4,9 @@ using EPIWalletAPI.Models.AccessRole;
 using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.ProofOfPayment;
+using EPIWalletAPI.Models.Province;
 using EPIWalletAPI.Models.Quotation;
+using EPIWalletAPI.Models.SponsorType;
 using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -56,6 +58,8 @@ namespace EPIWalletAPI
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "EPIWalletAPI", Version = "v1" });
             });
+
+
 
 
             services.AddDbContext<AppDbContext>(options =>

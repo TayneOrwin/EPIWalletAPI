@@ -31,10 +31,11 @@ namespace EPIWalletAPI.Controllers
         private readonly AppDbContext _appDbContext = new AppDbContext();
         private readonly IApplicationUserRepository _applicationUserRepository;
         private readonly IExpenseRequestRepository _expenseRequestRepository;
+        private readonly IEmployeeBankingDetailsRepository _employeeBankingDetailsRepository;
 
 
         private readonly IEmployeeRepository _employeeRepository;
-        public TopUpRequestController(IEmployeeRepository employeeRepository, ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration, IApplicationUserRepository applicationUserRepository, IExpenseRequestRepository expenseRequestRepository)
+        public TopUpRequestController(IEmployeeRepository employeeRepository, ITopUpRequestRepository topUpRequestRepository, AppDbContext appDbContext, IConfiguration configuration, IApplicationUserRepository applicationUserRepository, IExpenseRequestRepository expenseRequestRepository, IEmployeeBankingDetailsRepository employeeBankingDetailsRepository)
         {
             _topUpRequestRepository = topUpRequestRepository;
             _appDbContext = appDbContext;
@@ -42,6 +43,7 @@ namespace EPIWalletAPI.Controllers
             _employeeRepository = employeeRepository;
             _applicationUserRepository = applicationUserRepository;
             _expenseRequestRepository = expenseRequestRepository;
+            _employeeBankingDetailsRepository = employeeBankingDetailsRepository;
 
         }
 
@@ -503,8 +505,14 @@ namespace EPIWalletAPI.Controllers
             const string fromPassword = "vokbgidjiuxonyfl";
 
 
+            ExpenseLine[] expenseLine = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
+            int expenseRequestID = expenseLine[0].ExpenseRequestID;
+            //get the request
+            ExpenseRequest request = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
 
-           
+            var employee = await _employeeRepository.GetEmployeeByID(request.EmployeeID);
+
+            var banking = await _employeeBankingDetailsRepository.getEmployeeBankingDetailsAsync(request.EmployeeID);
 
             const string subject = "New Top Up Request Requiring Funds!";
             string body = "Please read the following information about the Top Up Request: \n \n" +
@@ -514,6 +522,21 @@ namespace EPIWalletAPI.Controllers
                 + evm.amount + "\n \n"
                   + "Reason: "
                 + evm.reason + "\n \n"
+
+                         + "\n \n" +
+                "Employee banking details:"
+                + " \n \nAccount Number: " +
+                banking.AccountNunmber
+                         + " \n \nBranch: " +
+                banking.Branch
+                 + " \n \nBank: " +
+                banking.Bank
+                 + " \n \n:"
+
+
+
+
+
             + "Please open the app to mark funds as loaded! \n" + "Kind Regards \n" + "The EPI Team";
 
 
@@ -561,10 +584,10 @@ namespace EPIWalletAPI.Controllers
 
 
             //get the employee that made that request and send him an email 
-            ExpenseLine[] expenseLine = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
-            int expenseRequestID = expenseLine[0].ExpenseRequestID;
+            ExpenseLine[] expenseLine1 = await _expenseRequestRepository.getExpenseLineByTopUp(evm.ExpenseLineID);
+            int expenseRequestID1 = expenseLine[0].ExpenseRequestID;
             //get the request
-            ExpenseRequest request = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
+            ExpenseRequest request1 = await _expenseRequestRepository.getExpenseRequestAsync(expenseRequestID);
 
 
             //step 3: Notify the employee that request has been paid

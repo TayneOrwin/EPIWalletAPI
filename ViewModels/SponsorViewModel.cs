@@ -18,5 +18,7 @@ namespace EPIWalletAPI.ViewModels
         public double Amount { get; set; }
         public string Company { get; set; }
         public string Email { get; set; }
+        public int TypeID { get; set; }
+        public string Type { get; set;  }
     }
 }
