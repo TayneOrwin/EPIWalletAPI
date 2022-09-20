@@ -519,7 +519,10 @@ namespace EPIWalletAPI.Controllers
           
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
-          
+            int currentEventID = await _eventRepository.getEventIdByTypeID(evm.TypeID);
+            var currentEvent = await _eventRepository.getEventByIdAsync(currentEventID);
+
+
           
             const string subject = "New Expense Request Requiring Approval!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
@@ -529,12 +532,13 @@ namespace EPIWalletAPI.Controllers
                 + vendor + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
-                     + "Details Regarding The Event: "
+                     + "Details Regarding The Event: " + "\n \n"
                           + "Event Name: "
-                + expenseType + "\n \n"
+                + currentEvent.name + "\n \n"
                      + "Event Date: "
-                + expenseType + "\n \n"
-
+                + currentEvent.date + "\n \n"
+             + "Event Description: "
+                + currentEvent.description + "\n \n"
 
 
 

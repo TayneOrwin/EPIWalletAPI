@@ -17,13 +17,13 @@ namespace EPIWalletAPI.Models
 
         Task<Event[]> getAllEventsAsync();
         Task<Event> getEventAsync(string name);
-
+        Task<Event> getEventByIdAsync(int id);
         Task<int> getIdByName(string EventName);
         Task<int> getTypeIdByEventId(int EventId);
         Task<string[]> getNameById(int id);
 
         Task<Event> getEventByCodeAsync(string code);
-
+        Task<int> getEventIdByTypeID(int typeID);
 
 
 
