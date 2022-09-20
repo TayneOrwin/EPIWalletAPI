@@ -1,5 +1,6 @@
-﻿using EPIWalletAPI.Models.Entities;
-using EPIWalletAPI.Models.SponsorType;
+﻿using EPIWalletAPI.Models;
+using EPIWalletAPI.Models.Entities;
+
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -43,16 +44,17 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+
         [HttpPost]
         [Route("AddSponsorType")]
-        public async Task<IActionResult> AddEvent(SponsorTypeViewModel stm)
+        public async Task<object> AddSponsorType(SponsorTypeViewModel stvm)
         {
-            //var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
-            var Tevent = new SponsorType { Description = stm.Type };
+
+            var description = new SponsorType { Description = stvm.Description };
 
             try
             {
-                _sponsorTypeRepository.Add(Tevent);
+                _sponsorTypeRepository.Add(description);
                 await _sponsorTypeRepository.SaveChangesAsync();
             }
 
@@ -61,37 +63,36 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            return Ok(new { code = 200 });
 
 
 
         }
 
+
         [HttpPut]
         [Route("UpdateSponsorType")]
 
-        public async Task<ActionResult> UpdateSponsor(int id, SponsorTypeViewModel stm)
+        public async Task<object> UpdateSponsorType(string description, SponsorTypeViewModel stvm)
         {
 
 
 
             try
             {
-                //var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
-                var existing = await _sponsorTypeRepository.getSponsorTypesAsync(id);
-                //var tpyID = existingType.TypeID;
+                var existingSponsorType = await _sponsorTypeRepository.getSponsorType(description);
 
-                if (existing == null) return NotFound("Could not find");
+                if (existingSponsorType == null) return NotFound("Could not find type: " + description);
 
-                existing.Description = stm.Type;
+                existingSponsorType.Description = stvm.Description;
 
 
                 if (await _sponsorTypeRepository.SaveChangesAsync())
                 {
-                    return Ok("Type updated successfully");
+                    return Ok("expense type updated successfully");
                 }
 
 
@@ -102,28 +103,29 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            return Ok(new { code = 200 });
+
 
         }
 
         [HttpDelete]
         [Route("DeleteSponsorType")]
-        public async Task<IActionResult> DeleteSponsorType(int id)
+        public async Task<IActionResult> DeleteSponsorType(string Description)
         {
             try
             {
-                var existing = await _sponsorTypeRepository.getSponsorTypesAsync(id);
-                if (existing == null) return NotFound();
+                var existingSponsorType = await _sponsorTypeRepository.getSponsorType(Description);
+                if (existingSponsorType == null) return NotFound();
 
 
-                _sponsorTypeRepository.Delete(existing);
+                _sponsorTypeRepository.Delete(existingSponsorType);
 
                 if (await _sponsorTypeRepository.SaveChangesAsync())
                 {
-                    return Ok("event deleted successfully");
+                    return Ok("sponsor type updated successfully");
                 }
 
 
@@ -138,20 +140,24 @@ namespace EPIWalletAPI.Controllers
         }
 
         [HttpGet]
-        [Route("GetNameByID")]
+        [Route("SearchSponsorTypes")]
 
-        public async Task<IActionResult> GetNameByID(int id)
+        public async Task<ActionResult<IEnumerable<SponsorType>>> Search(string description)
         {
-
-            var results = await _sponsorTypeRepository.getNameById(id);
-
             try
+        {
+                var results = await _sponsorTypeRepository.Search(description);
+
+                if (results != null)
             {
                 return Ok(results);
             }
+                return NotFound("Could not find the requested Sponsor Type");
+            }
+
             catch (Exception err)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
             }
 
 

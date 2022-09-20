@@ -515,30 +515,31 @@ namespace EPIWalletAPI.Controllers
          
             const string fromPassword = "vokbgidjiuxonyfl";
             var employee = await _employeeRepository.GetEmployeeByID(evm.EmployeeID);
+         
 
           
             var vendor = await _vendorRepository.GetNameByID(evm.VendorID);
             var expenseType = await _expenseTypeRepository.getExpenseTypeByID(evm.TypeID);
-          
+            int currentEventID = await _eventRepository.getEventIdByTypeID(evm.TypeID);
+            var currentEvent = await _eventRepository.getEventByIdAsync(currentEventID);
+
+
           
             const string subject = "New Expense Request Requiring Approval!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Request from Employee : "
-            + employee +  "\n \n" + "Estimate of Request: R"
+            + employee[0] +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
-                     + "Details Regarding The Event: "
+                     + "Details Regarding The Event: " + "\n \n"
                           + "Event Name: "
-                + expenseType + "\n \n"
+                + currentEvent.name + "\n \n"
                      + "Event Date: "
-                + expenseType + "\n \n"
-
-
-
-
-
+                + currentEvent.date + "\n \n"
+             + "Event Description: "
+                + currentEvent.description + "\n \n"
             + "Please open the app to approve request! \n" + "Kind Regards \n" + "The EPI Team";
 
 
@@ -646,7 +647,7 @@ namespace EPIWalletAPI.Controllers
 
             const string subject = "New Expense Request Requiring Funds!";
             string body = "Please read the following information about the Expense Request: \n \n" + "Submitted By : "
-            + employee + "\n \n" + "Estimate of Request: R"
+            + employee[0] + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
                 + vendor + "\n \n"

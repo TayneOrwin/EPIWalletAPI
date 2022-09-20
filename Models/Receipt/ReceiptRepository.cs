@@ -41,7 +41,7 @@ namespace EPIWalletAPI.Models
 
         public async Task<Receipt> getReceiptAsync(int id)
         {
-            IQueryable<Receipt> query = _appDbContext.receipts.Where(c => c.ReceiptID == id);
+            IQueryable<Receipt> query = _appDbContext.receipts.Where(c => c.ExpenseLineID == id);
             return await query.FirstOrDefaultAsync();
         }
 

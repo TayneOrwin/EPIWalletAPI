@@ -7,6 +7,6 @@ namespace EPIWalletAPI.ViewModels
 {
     public class SponsorTypeViewModel
     {
-        public string Type { get; set; }
+        public string Description { get; set; }
     }
 }

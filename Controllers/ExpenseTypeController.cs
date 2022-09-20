@@ -55,10 +55,20 @@ namespace EPIWalletAPI.Controllers
 
             var type = new ExpenseType { Type = etvm.Type };
 
-            try
+            var CheckType = await _expenseTypeRepository.getExpenseType(etvm.Type);
+            if (CheckType != null)
             {
-                _expenseTypeRepository.Add(type);
-                await _expenseTypeRepository.SaveChangesAsync();
+                return Ok(new { code = 401, message = "Type Already Exists !!!!!" });
+            }
+
+
+
+
+            try 
+            {
+                    _expenseTypeRepository.Add(type);
+                    await _expenseTypeRepository.SaveChangesAsync();
+                    return Ok(new { code = 200 });      
             }
 
 
@@ -69,7 +79,7 @@ namespace EPIWalletAPI.Controllers
                 return Ok(new { code = 401 });
             }
 
-            return Ok(new { code = 200 });
+            
 
 
 

@@ -1,19 +1,23 @@
-﻿using System;
+﻿using EPIWalletAPI.Models.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models.SponsorType
+namespace EPIWalletAPI.Models
 {
     public interface ISponsorTypeRepository
     {
+
         void Add<T>(T entity) where T : class;
         void Delete<T>(T entity) where T : class;
-        Task<IEnumerable<Entities.SponsorType>> Search(string name);
+        Task<IEnumerable<Models.Entities.SponsorType>> Search(string description);
         Task<bool> SaveChangesAsync();
-        Task<Entities.SponsorType[]> getAllSponsorTypesAsync();
-        Task<Entities.SponsorType> getSponsorTypesAsync(int id);
-        Task<Entities.SponsorType> getSponsorTypesByNameAsync(string name);
-        Task<string[]> getNameById(int id);
+        Task<Models.Entities.SponsorType[]> getAllSponsorTypesAsync();
+        Task<Models.Entities.SponsorType> getSponsorType(string SponsorTypeDescription);
+
+        Task<SponsorType> getSponsorTypesByNameAsync(string name);
+
+
     }
 }

@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -44,6 +45,13 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
+
+        public async Task<Event> getEventByIdAsync(int id)
+        {
+            IQueryable<Event> query = _appDbContext.Events.Where(c => c.EventID == id);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<int> getIdByName(string EventName)
         {
             IQueryable<Event> query = _appDbContext.Events.Where(zz => zz.name == EventName);
@@ -67,6 +75,20 @@ namespace EPIWalletAPI.Models
 
             return await results.FirstOrDefaultAsync();
         }
+
+
+
+
+        public async Task<int> getEventIdByTypeID(int TypeID)
+        {
+            IQueryable<Event> query = _appDbContext.Events.Where(zz => zz.TypeID == TypeID);
+            var results = query.Select(zz => zz.EventID);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
 
         public async Task<Event> getEventByCodeAsync(string code)
         {

@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EPIWalletAPI.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EPIWalletAPI.Models.SponsorType
+namespace EPIWalletAPI.Models
 {
     public class SponsorTypeRepository : ISponsorTypeRepository
     {
@@ -26,41 +27,37 @@ namespace EPIWalletAPI.Models.SponsorType
             _appDbContext.Remove(entity);
         }
 
-        public async Task<Entities.SponsorType[]> getAllSponsorTypesAsync()
+        public async Task<IEnumerable<Models.Entities.SponsorType>> Search(string description)
         {
-            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType;
-            return await query.ToArrayAsync();
-        }
+            IQueryable<Models.Entities.SponsorType> query = _appDbContext.SponsorTypes;
 
-        public async Task<Entities.SponsorType> getSponsorTypesAsync(int id)
-        {
-            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.SponsorTypeID == id);
-            return await query.FirstOrDefaultAsync();
+            if (!string.IsNullOrEmpty(description))
+            {
+                query = query.Where(t => t.Description.Contains(description));
+            }
+            return await query.ToListAsync();
         }
-
         public async Task<Entities.SponsorType> getSponsorTypesByNameAsync(string name)
         {
             IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.Description == name);
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<Models.Entities.SponsorType[]> getAllSponsorTypesAsync()
+        {
+            IQueryable<Models.Entities.SponsorType> query = _appDbContext.SponsorTypes;
+            return await query.ToArrayAsync();
+        }
+
+        public async Task<Models.Entities.SponsorType> getSponsorType(string SponsorTypeDescription)
+        {
+            IQueryable<Models.Entities.SponsorType> query = _appDbContext.SponsorTypes.Where(c => c.Description == SponsorTypeDescription);
+            return await query.FirstOrDefaultAsync();
+        }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
-        }
-
-        public async Task<IEnumerable<Entities.SponsorType>> Search(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<string[]> getNameById(int id)
-        {
-            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.SponsorTypeID == id);
-            var results = query.Select(zz => zz.Description);
-
-            return await results.ToArrayAsync();
         }
 
        

@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EPIWalletAPI.Models;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -132,6 +133,29 @@ namespace EPIWalletAPI.Controllers
             }
 
             return BadRequest();
+        }
+
+        [HttpGet]
+        [Route("SearchVendorType")]
+
+        public async Task<ActionResult<IEnumerable<VendorType>>> Search(string name)
+        {
+            try
+            {
+                var results = await _vendorTypeRepository.Search(name);
+
+                if (results != null)
+                {
+                    return Ok(results);
+                }
+                return NotFound("Could not find the requested Vendor Type");
+            }
+
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
+            }
+
         }
 
     }
