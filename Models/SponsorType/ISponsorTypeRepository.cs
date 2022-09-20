@@ -16,6 +16,8 @@ namespace EPIWalletAPI.Models
         Task<Models.Entities.SponsorType[]> getAllSponsorTypesAsync();
         Task<Models.Entities.SponsorType> getSponsorType(string SponsorTypeDescription);
 
-  
+        Task<SponsorType> getSponsorTypesByNameAsync(string name);
+
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
-using EPIWalletAPI.Models.SponsorType;
+
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
