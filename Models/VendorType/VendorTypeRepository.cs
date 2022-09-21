@@ -38,6 +38,12 @@ namespace EPIWalletAPI.Models
             return await query.FirstOrDefaultAsync();
         }
 
+        public async Task<Models.Entities.VendorType> getVendorType(string VendorTypeName)
+        {
+            IQueryable<Models.Entities.VendorType> query = _appDbContext.VendorTypes.Where(c => c.Type == VendorTypeName);
+            return await query.FirstOrDefaultAsync();
+        }
+
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;

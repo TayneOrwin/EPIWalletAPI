@@ -15,6 +15,8 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
         Task<VendorType[]> getAllVendorTypesAsync();
         Task<VendorType> getVendorTypesAsync(int id);
+
+        Task<Models.Entities.VendorType> getVendorType(string VendorTypeName);
         //Task<int> getIdByName(string name);
 
         //Task<string> GetNameByID(int id);

@@ -44,15 +44,22 @@ namespace EPIWalletAPI.Controllers
 
         [HttpPost]
         [Route("AddVendorType")]
-        public async Task<IActionResult> AddEvent(VendorTypeViewModel vtm)
+        public async Task<IActionResult> AddVendorType(VendorTypeViewModel vtm)
         {
             //var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
             var Tevent = new VendorType { Type =vtm.Type };
+            var CheckType = await _vendorTypeRepository.getVendorType(vtm.Type);
+
+            if (CheckType != null)
+            {
+                return Ok(new { code = 401, message = "Type Already Exists !!!!!" });
+            }
 
             try
             {
                 _vendorTypeRepository.Add(Tevent);
                 await _vendorTypeRepository.SaveChangesAsync();
+                return Ok(new { code = 200 });
             }
 
 
@@ -60,10 +67,10 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            
 
 
 
@@ -71,7 +78,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateVendorType")]
 
-        public async Task<ActionResult> UpdateEvent(int id, VendorTypeViewModel vtm)
+        public async Task<ActionResult> UpdateVendor(int id, VendorTypeViewModel vtm)
         {
 
 
