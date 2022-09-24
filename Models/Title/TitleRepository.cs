@@ -38,9 +38,9 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<Title> getTitleAsync(int id)
+        public async Task<Title> getTitleAsync(string title)
         {
-            IQueryable<Title> query = _appDbContext.Titles.Where(c => c.TitlesID == id);
+            IQueryable<Title> query = _appDbContext.Titles.Where(c => c.Description == title);
             return await query.FirstOrDefaultAsync();
         }
 

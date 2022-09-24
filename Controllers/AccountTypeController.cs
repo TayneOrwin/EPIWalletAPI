@@ -45,11 +45,17 @@ namespace EPIWalletAPI.Controllers
         {
 
             var Taccounttype = new AccountType { Description = atvm.Description};
+            var CheckType = await _accountTypeRepository.getAccountTypeAsync(atvm.Description);
 
-           try
+            if (CheckType != null)
+            {
+                return Ok(new { code = 401, message = "Account Type Already Exists !!!!!" });
+            }
+            try
            {
                _accountTypeRepository.Add(Taccounttype);
                 await _accountTypeRepository.SaveChangesAsync();
+                return Ok(new { code = 200 });
             }
 
 
@@ -57,10 +63,10 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-               return BadRequest("Error");
-           }
+                return Ok(new { code = 401 });
+            }
 
-            return Ok("Success");
+            
 
 
 
@@ -69,7 +75,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateAccountType")]
 
-        public async Task<object> UpdateAccountType(int id, AccountTypeViewModel atvm)
+        public async Task<object> UpdateAccountType(string id, AccountTypeViewModel atvm)
         {
 
 
@@ -106,7 +112,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteAccountType")]
-        public async Task<IActionResult> DeleteAccountType(int id)
+        public async Task<IActionResult> DeleteAccountType(string id)
         {
             try
             {

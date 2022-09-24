@@ -78,7 +78,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateVendorType")]
 
-        public async Task<ActionResult> UpdateVendor(int id, VendorTypeViewModel vtm)
+        public async Task<ActionResult> UpdateVendor(string name, VendorTypeViewModel vtm)
         {
 
 
@@ -86,7 +86,7 @@ namespace EPIWalletAPI.Controllers
             try
             {
                 //var existingType = await _expenseTypeRepository.getExpenseType(evm.Type);
-                var existing = await _vendorTypeRepository.getVendorTypesAsync(id);
+                var existing = await _vendorTypeRepository.getVendorType(name);
                 //var tpyID = existingType.TypeID;
 
                 if (existing == null) return NotFound("Could not find" );
@@ -116,11 +116,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteVendorType")]
-        public async Task<IActionResult> DeleteVendorType(int id)
+        public async Task<IActionResult> DeleteVendorType(string name)
         {
             try
             {
-                var existing= await _vendorTypeRepository.getVendorTypesAsync(id);
+                var existing= await _vendorTypeRepository.getVendorType(name);
                 if (existing == null) return NotFound();
 
 

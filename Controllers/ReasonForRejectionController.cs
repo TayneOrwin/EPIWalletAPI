@@ -51,11 +51,17 @@ namespace EPIWalletAPI.Controllers
         {
 
             var Tevent = new ReasonForRejection {ApprovalID=evm.ApprovalID,Reason=evm.Reason };
+            var CheckType = await _rejectionRepository.getReasonForRejectionAsync(evm.Reason);
 
+            if (CheckType != null)
+            {
+                return Ok(new { code = 401, message = "Type Already Exists !!!!!" });
+            }
             try
             {
                 _rejectionRepository.Add(Tevent);
                 await _rejectionRepository.SaveChangesAsync();
+                return Ok(new { code = 200 });
             }
 
 
@@ -63,10 +69,10 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            
 
 
 
@@ -75,16 +81,16 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateReason")]
 
-        public async Task<object> UpdateReasonType(int id, ReasonForRejectionViewModel rvm)
+        public async Task<object> UpdateReasonType(string reason, ReasonForRejectionViewModel rvm)
         {
 
 
 
             try
             {
-                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(id);
+                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(reason);
 
-                if (existingReason == null) return NotFound("Could not find Reason ID: " + id);
+                if (existingReason == null) return NotFound("Could not find Reason ID: " + reason);
 
                 existingReason.Reason = rvm.Reason;
 
@@ -112,11 +118,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteReason")]
-        public async Task<IActionResult> DeleteReason(int id)
+        public async Task<IActionResult> DeleteReason(string reason)
         {
             try
             {
-                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(id);
+                var existingReason = await _rejectionRepository.getReasonForRejectionAsync(reason);
                 if (existingReason == null) return NotFound();
 
 

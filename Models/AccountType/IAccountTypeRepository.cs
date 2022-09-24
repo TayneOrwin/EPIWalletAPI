@@ -13,6 +13,6 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<AccountType[]> getAllAccountTypesAsync();
-        Task<AccountType> getAccountTypeAsync(int id);
+        Task<AccountType> getAccountTypeAsync(string account);
     }
 }

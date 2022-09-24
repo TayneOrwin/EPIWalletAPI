@@ -16,7 +16,7 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<ReasonForRejection[]> getAllReasonsForRejectionAsync();
-        Task<ReasonForRejection> getReasonForRejectionAsync(int id);
+        Task<ReasonForRejection> getReasonForRejectionAsync(string reason);
         Task<IEnumerable<ReasonForRejection>> Search(string name);
 
     }

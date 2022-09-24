@@ -14,7 +14,7 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<Title[]> getAllTitleAsync();
-        Task<Title> getTitleAsync(int id);
+        Task<Title> getTitleAsync(string title);
         Task<IEnumerable<Title>> Search(string description);
     }
 }

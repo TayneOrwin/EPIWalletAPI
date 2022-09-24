@@ -38,9 +38,9 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<ReasonForRejection> getReasonForRejectionAsync(int id)
+        public async Task<ReasonForRejection> getReasonForRejectionAsync(string reason)
         {
-            IQueryable<ReasonForRejection> query = _appDbContext.ReasonForRejections.Where(c => c.ReasonForRejectionID == id);
+            IQueryable<ReasonForRejection> query = _appDbContext.ReasonForRejections.Where(c => c.Reason == reason);
             return await query.FirstOrDefaultAsync();
         }
 

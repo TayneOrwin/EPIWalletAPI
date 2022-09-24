@@ -27,9 +27,9 @@ namespace EPIWalletAPI.Models
             _appDbContext.Remove(entity);
         }
 
-        public async Task<AccountType> getAccountTypeAsync(int id)
+        public async Task<AccountType> getAccountTypeAsync(string account)
         {
-            IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.AccountTypeID  == id);
+            IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.Description  == account);
             return await query.FirstOrDefaultAsync();
         }
 

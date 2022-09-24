@@ -48,11 +48,18 @@ namespace EPIWalletAPI.Controllers
         {
 
             var Ttitle = new Title { Description = tvm.Description};
+            var CheckType = await _titleRepository.getTitleAsync(tvm.Description);
+
+            if (CheckType != null)
+            {
+                return Ok(new { code = 401, message = "Title Already Exists !!!!!" });
+            }
 
             try
             {
                 _titleRepository.Add(Ttitle);
                 await _titleRepository.SaveChangesAsync();
+                return Ok(new { code = 200 });
             }
 
 
@@ -60,10 +67,10 @@ namespace EPIWalletAPI.Controllers
 
             catch (Exception)
             {
-                return BadRequest("Error");
+                return Ok(new { code = 401 });
             }
 
-            return Ok("Success");
+            
 
 
 
@@ -72,7 +79,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateTitle")]
 
-        public async Task<object> UpdateTitle(int id, TitleViewModel tvm)
+        public async Task<object> UpdateTitle(string id, TitleViewModel tvm)
         {
 
 
@@ -109,7 +116,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteTitle")]
-        public async Task<IActionResult> DeleteTitle(int id)
+        public async Task<IActionResult> DeleteTitle(string id)
         {
             try
             {
