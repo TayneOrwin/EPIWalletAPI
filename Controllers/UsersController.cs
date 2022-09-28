@@ -330,26 +330,96 @@ namespace EPIWalletAPI.Controllers
             var User = await _userManager.FindByEmailAsync(avm.UserName);
 
 
-            
-                try
+            static bool ValidatePassword(string pass)
+            {
+                int validConditions = 0;
+                foreach (char c in pass)
                 {
+                    if (c >= 'a' && c <= 'z')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                foreach (char c in pass)
+                {
+                    if (c >= 'A' && c <= 'Z')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                if (validConditions == 0) return false;
+                foreach (char c in pass)
+                {
+                    if (c >= '0' && c <= '9')
+                    {
+                        validConditions++;
+                        break;
+                    }
+                }
+                if (validConditions != 3 || pass.Length < 8) return false;
+
+                return true;
+            }
+
+            try
+            {
+
+                if (User != null && ValidatePassword(avm.NewPassword) == true && avm.NewPassword == avm.ConfirmPassword && avm.NewPassword != null)
+                {
+
+
                     var token = await _userManager.GeneratePasswordResetTokenAsync(User);
                     var passwordReset = Url.Action("ResetPassword", "Account", new { email = avm.UserName, token = token }, Request.Scheme);
-                    //await _userManager.ResetPasswordAsync(User, token, avm.NewPassword);
-                     
-                    return Ok(new {code = 200, message = "Password Reset Successfully" });
+                    await _userManager.ResetPasswordAsync(User, token, avm.NewPassword);
+
+                    return Ok(new { code = 200, message = "Password Reset Successfully" });
                 }
-                catch
+                else
                 {
-                    return BadRequest("Unsuccessful");
+                    var ErrorMessage = "";
+
+                    if (User == null)
+                    {
+                        ErrorMessage = "unable to Find User";
+                        return Ok(new { code = 401, message = ErrorMessage });
+                    }
+                    
+                    else if (ValidatePassword(avm.NewPassword) == false)
+                    {
+                        ErrorMessage = "Password Incorrect Format";
+                        return Ok(new { code = 402, message = ErrorMessage });
+                    }
+                    else if (avm.NewPassword != avm.ConfirmPassword)
+                    {
+                        ErrorMessage = "Passwords dont match";
+                        return Ok(new { code = 403, message = ErrorMessage });
+                    }
+                    else if (avm.NewPassword == null)
+                    {
+                        ErrorMessage = "Please fill out all fields";
+                        return Ok(new { code = 405, message = ErrorMessage });
+                    }
+                    return Ok();
+
+
+
                 }
+            }
+            catch
+            {
+                return BadRequest("Unsuccessful");
+            }
+            
                 
                 
            
 
         }
 
-        
 
- }
+
+
+    }
 }
