@@ -176,23 +176,16 @@ namespace EPIWalletAPI.Models
             return await query.ToArrayAsync();
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         }
 
 
+        public async Task<double[]> getEstimate(int id)
+        {
+            IQueryable<ExpenseRequest> query = _appDbContext.ExpenseRequests.Where(c => c.ExpenseID == id);
+            var results = query.Select(zz => zz.totalEstimate);
 
+            return await results.ToArrayAsync();
+        }
 
 
 

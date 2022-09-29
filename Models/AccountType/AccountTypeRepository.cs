@@ -29,15 +29,17 @@ namespace EPIWalletAPI.Models
 
         public async Task<AccountType> getAccountTypeAsync(string account)
         {
-            IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.Description  == account);
-            return await query.FirstOrDefaultAsync();
+            //IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.Description  == account);
+            //return await query.FirstOrDefaultAsync();
+            throw new NotImplementedException();
+            
         }
 
         public async Task<AccountType[]> getAllAccountTypesAsync()
         {
-            IQueryable<AccountType> query = _appDbContext.accountType;
-            return await query.ToArrayAsync();
-
+            //IQueryable<AccountType> query = _appDbContext.accountType;
+            //return await query.ToArrayAsync();
+            throw new NotImplementedException();
         }
 
         public async Task<bool> SaveChangesAsync()
@@ -47,13 +49,14 @@ namespace EPIWalletAPI.Models
 
         public async Task<IEnumerable<AccountType>> Search(string description)
         {
-            IQueryable<AccountType> query = _appDbContext.accountType;
+            //IQueryable<AccountType> query = _appDbContext.accountType;
 
-            if (!string.IsNullOrEmpty(description))
-            {
-                query = query.Where(t => t.Description.Contains(description));
-            }
-            return await query.ToListAsync();
+            //if (!string.IsNullOrEmpty(description))
+            //{
+            //    query = query.Where(t => t.Description.Contains(description));
+            //}
+            //return await query.ToListAsync();
+            throw new NotImplementedException();
         }
     }
 }

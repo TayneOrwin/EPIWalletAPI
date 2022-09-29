@@ -16,6 +16,7 @@ namespace EPIWalletAPI.Models
         Task<Models.Entities.ExpenseType> getExpenseType(string ExpenseTypeName);
 
         Task<string> getExpenseTypeByID(int id);
+        Task<string[]> getTypeByID(int id);
 
 
     }

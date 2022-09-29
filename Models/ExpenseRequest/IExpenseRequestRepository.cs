@@ -33,7 +33,7 @@ namespace EPIWalletAPI.Models
         Task<ExpenseItem[]> GetExpenseItemsByID(int id);
         Task<ExpenseLine[]> getExpenseLineByTopUp(int id);
 
-
+        Task<double[]> getEstimate(int id);
         
 
 

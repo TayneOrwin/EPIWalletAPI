@@ -133,17 +133,11 @@ namespace EPIWalletAPI.Migrations
                     b.Property<string>("AddressLine2")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("EmployeeID")
                         .HasColumnType("int");
 
                     b.Property<int>("ProvinceID")
                         .HasColumnType("int");
-
-                    b.Property<string>("Suburb")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("AddressID");
 
@@ -239,6 +233,21 @@ namespace EPIWalletAPI.Migrations
                     b.HasKey("ActiveLoginID");
 
                     b.ToTable("ActiveLogins");
+                });
+
+            modelBuilder.Entity("EPIWalletAPI.Models.Entities.AdminTimer", b =>
+                {
+                    b.Property<int>("timerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("value")
+                        .HasColumnType("int");
+
+                    b.HasKey("timerID");
+
+                    b.ToTable("AdminTimer");
                 });
 
             modelBuilder.Entity("EPIWalletAPI.Models.Entities.ApprovalStatus", b =>
@@ -883,7 +892,7 @@ namespace EPIWalletAPI.Migrations
                     b.ToTable("ExpenseRequests");
                 });
 
-            modelBuilder.Entity("EPIWalletAPI.Models.Titles", b =>
+            modelBuilder.Entity("EPIWalletAPI.Models.Title", b =>
                 {
                     b.Property<int>("TitlesID")
                         .ValueGeneratedOnAdd()
@@ -1018,7 +1027,7 @@ namespace EPIWalletAPI.Migrations
 
             modelBuilder.Entity("EPIWalletAPI.Models.Employee.Employees", b =>
                 {
-                    b.HasOne("EPIWalletAPI.Models.Titles", "Titles")
+                    b.HasOne("EPIWalletAPI.Models.Title", "Titles")
                         .WithMany()
                         .HasForeignKey("TitlesID")
                         .OnDelete(DeleteBehavior.Cascade)

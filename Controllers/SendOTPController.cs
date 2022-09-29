@@ -10,7 +10,7 @@ using System.Net;
 using System.Net.Mail;
 using EPIWalletAPI.Models;
 using Microsoft.AspNetCore.Identity;
-using EPIWalletAPI.Migrations;
+//using EPIWalletAPI.Migrations;
 using EPIWalletAPI.Models.Entities;
 
 namespace EPIWalletAPI.Controllers
