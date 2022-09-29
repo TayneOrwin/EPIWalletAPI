@@ -169,6 +169,7 @@ namespace EPIWalletAPI
             services.AddScoped<ISponsorTypeRepository, SponsorTypeRepository>();
             services.AddScoped<IVendorTypeRepository, VendorTypeRepository>();
             services.AddScoped<ITitleRepository, TitleRepository>();
+            services.AddScoped<IAdminTimerRepository, AdminTimerRepository>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
         }
