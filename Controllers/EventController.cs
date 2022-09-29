@@ -212,5 +212,36 @@ namespace EPIWalletAPI.Controllers
 
 
 
+
+        [HttpGet]
+        [Route("GetEventByTypeID")]
+        public async Task<ActionResult> GetEventByTypeID(int typeID)
+        {
+
+            try
+            {
+
+                int currentEventID = await _eventRepository.getEventIdByTypeID(typeID);
+                var results = await _eventRepository.getEventByIdAsync(currentEventID);
+
+
+
+
+                return Ok(results);
+            }
+            catch (Exception er)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error" + er);
+            }
+
+
+
+
+
+
+        }
+
+
+
     }
     }

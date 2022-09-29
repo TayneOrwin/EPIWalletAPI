@@ -6,7 +6,6 @@ using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.ProofOfPayment;
 using EPIWalletAPI.Models.Province;
 using EPIWalletAPI.Models.Quotation;
-
 using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -170,6 +169,8 @@ namespace EPIWalletAPI
             services.AddScoped<ISponsorTypeRepository, SponsorTypeRepository>();
             services.AddScoped<IVendorTypeRepository, VendorTypeRepository>();
             services.AddScoped<ITitleRepository, TitleRepository>();
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+            services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

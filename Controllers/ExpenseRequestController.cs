@@ -1139,7 +1139,7 @@ namespace EPIWalletAPI.Controllers
             
             try
             {
-                var results = await _ExpenseRequestRepository.getAllRequests();
+                ExpenseRequest[] results = await _ExpenseRequestRepository.getAllRequests();
                 return Ok(results);
             }
 
