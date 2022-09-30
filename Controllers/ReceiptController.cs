@@ -58,7 +58,7 @@ namespace EPIWalletAPI.Controllers
         {
             try
             {
-                var results = await _receiptRepository.getReceiptAsync(id);
+                var results = await _receiptRepository.getReceiptsForLineAsync(id);
                 return Ok(results);
             }
 

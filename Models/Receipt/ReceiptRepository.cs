@@ -39,16 +39,24 @@ namespace EPIWalletAPI.Models
         }
 
 
-        public async Task<Receipt> getReceiptAsync(int id)
+        public async Task<Receipt[]> getReceiptsForLineAsync(int id)
         {
             IQueryable<Receipt> query = _appDbContext.receipts.Where(c => c.ExpenseLineID == id);
-            return await query.FirstOrDefaultAsync();
+            return await query.ToArrayAsync();
         }
 
         public async Task<bool> SaveChangesAsync()
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+
+        public async Task<Receipt> getReceiptAsync(int id)
+        {
+            IQueryable<Receipt> query = _appDbContext.receipts.Where(c => c.ReceiptID == id);
+            return await query.FirstOrDefaultAsync();
+        }
+
     }
 
 

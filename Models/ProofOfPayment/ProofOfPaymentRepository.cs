@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EPIWalletAPI.Models.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +37,19 @@ namespace EPIWalletAPI.Models.ProofOfPayment
 
         public async Task<Entities.ProofOfPayment> getPOPAsync(int id)
         {
-            IQueryable<Entities.ProofOfPayment> query = _appDbContext.proofOfPayment.Where(c => c.ExpenseLineID == id);
+            IQueryable<Entities.ProofOfPayment> query = _appDbContext.proofOfPayment.Where(c => c.ProofOfPaymentID == id);
             return await query.FirstOrDefaultAsync();
 
         }
+
+
+        public async Task<Entities.ProofOfPayment[]> getPOPsForLineAsync(int id)
+        {
+            IQueryable<Entities.ProofOfPayment> query = _appDbContext.proofOfPayment.Where(c => c.ExpenseLineID == id);
+            return await query.ToArrayAsync();
+        }
+
+
 
         public async Task<bool> SaveChangesAsync()
         {

@@ -14,10 +14,10 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<Receipt[]> getAllReceiptsAsync();
+        Task<Receipt[]> getReceiptsForLineAsync(int id);
+
+
         Task<Receipt> getReceiptAsync(int id);
-
-
-
 
 
     }
