@@ -28,14 +28,16 @@ namespace EPIWalletAPI.Models.Employee
 
         public async Task<EmployeeBankingDetails[]> getAllEmployeeBankingDetailsAsync()
         {
-            IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails;
-            return await query.ToArrayAsync();
+            //IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails;
+            //return await query.ToArrayAsync();
+            throw new NotImplementedException();
         }
 
         public async Task<EmployeeBankingDetails> getEmployeeBankingDetailsAsync(int empid)
         {
-            IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails.Where(zz => zz.EmployeeID == empid);
-            return await query.FirstOrDefaultAsync();
+            //IQueryable<EmployeeBankingDetails> query = _appDbContext.employeeBankingDetails.Where(zz => zz.EmployeeID == empid);
+            //return await query.FirstOrDefaultAsync();
+            throw new NotImplementedException();
         }
 
         public async Task<bool> SaveChangesAsync()

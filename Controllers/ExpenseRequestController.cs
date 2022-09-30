@@ -316,9 +316,9 @@ namespace EPIWalletAPI.Controllers
                 existingExpenseRequest.TypeID = evm.TypeID;
                 existingExpenseRequest.VendorID = evm.VendorID;
                 existingExpenseRequest.EmployeeID = evm.EmployeeID;
-                existingExpenseRequest.ApprovalID = evm.ApprovalID;
+                existingExpenseRequest.ApprovalID = 1;
                 existingExpenseRequest.totalEstimate = evm.TotalEstimate;
-                existingExpenseRequest.PaymentStatusID = evm.PaymentStatusID;
+                existingExpenseRequest.PaymentStatusID = 1;
 
 
 
@@ -1139,7 +1139,7 @@ namespace EPIWalletAPI.Controllers
             
             try
             {
-                ExpenseRequest[] results = await _ExpenseRequestRepository.getAllRequests();
+                var results = await _ExpenseRequestRepository.getAllRequests();
                 return Ok(results);
             }
 
@@ -1279,6 +1279,291 @@ namespace EPIWalletAPI.Controllers
             }
 
         }
+
+
+
+
+
+
+        [HttpGet]
+        [Route("GetApprovedSpecificDetails")]
+
+        public object GetApprovedSpecificDetails(int EmployeeID)
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = " select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 2 AND ExpenseRequests.EmployeeID = " + EmployeeID + " ";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetAllApprovedExpenseRequestDetails")]
+
+        public object GetAllApprovedExpenseRequestDetails()
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 2";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetViewDetails")]
+
+        public object GetViewDetails(int EmployeeID)
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = " select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 1 AND ExpenseRequests.EmployeeID = " + EmployeeID + " ";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetPaidExpenseRequestsDetails")]
+
+        public object GetPaidExpenseRequestsDetails(int EmployeeID)
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = " select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 3 AND ExpenseRequests.EmployeeID = " + EmployeeID + " ";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetAllPaidExpenseRequestDetails")]
+
+        public object GetAllPaidExpenseRequestDetails()
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 3";
+
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetAllPendingExpenseRequestDetails")]
+
+        public object GetAllPendingExpenseRequestDetails()
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 1";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+
+        [HttpGet]
+        [Route("GetAllRejectedExpenseRequestDetails")]
+
+        public object GetAllRejectedExpenseRequestDetails()
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 4";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetRejectedExpenseRequestsDetails")]
+
+        public object GetRejectedExpenseRequestsDetails(int EmployeeID)
+        {
+            var list = new List<ExpenseRequestDetailsToView>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = " select ExpenseRequests.ApprovalID, ExpenseRequests.ExpenseID, ExpenseRequests.PaymentStatusID, ExpenseRequests.EmployeeID, Employees.Name as EmployeeName, ExpenseRequests.VendorID, Vendors.Name as VendorName, ExpenseRequests.TypeID, ExpenseTypes.Type, ExpenseRequests.totalEstimate from ExpenseRequests inner join Vendors on ExpenseRequests.VendorID = Vendors.VendorID inner join ExpenseTypes on ExpenseRequests.TypeID = ExpenseTypes.TypeID inner join Employees on ExpenseRequests.EmployeeID = Employees.EmployeeID where ExpenseRequests.ApprovalID = 4 AND ExpenseRequests.EmployeeID = " + EmployeeID + " ";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new ExpenseRequestDetailsToView
+                {
+                    ApprovalID = (int)reader["ApprovalID"],
+                    ExpenseID = (int)reader["ExpenseID"],
+                    PaymentStatusID = (int)reader["PaymentStatusID"],
+                    EmployeeID = (int)reader["EmployeeID"],
+                    EmployeeName = (string)reader["EmployeeName"],
+                    VendorID = (int)reader["VendorID"],
+                    VendorName = (string)reader["VendorName"],
+                    TypeID = (int)reader["TypeID"],
+                    TypeName = (string)reader["Type"],
+                    TotalEstimate = (double)reader["totalEstimate"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+
+
+
+
+        [HttpGet]
+        [Route("GetEstimate")]
+        public async Task<IActionResult> GetEstimate(int id)
+        {
+            var results = await _ExpenseRequestRepository.getEstimate(id);
+            return Ok(results);
+        }
+
+
 
 
 

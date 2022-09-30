@@ -191,5 +191,22 @@ namespace EPIWalletAPI.Controllers
 
         }
 
+        [HttpGet]
+        [Route("TypeByID")]
+
+        public async Task<IActionResult> TypeByID(int id)
+        {
+            try
+            {
+                var results = await _expenseTypeRepository.getTypeByID(id);
+                return Ok(results);
+            }
+            catch (Exception er)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error" + er);
+            }
+
+        }
+
     }
 }

@@ -7,9 +7,10 @@ namespace EPIWalletAPI.ViewModels
 {
     public class EmployeeAddressViewModel
     {
-        public string Country { get; set; }
+       // public string Country { get; set; }
+        public int CityID { get; set; }
         public int ProvinceID { get; set; }
-        public string Suburb { get; set; }
+        public int SuburbID { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
 

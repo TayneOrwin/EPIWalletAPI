@@ -57,7 +57,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateTimer")]
 
-        public async Task<object> UpdateTimer(AdminTimerViewModel model)
+        public async Task<ActionResult> UpdateTimer(AdminTimerViewModel model)
         {
 
 

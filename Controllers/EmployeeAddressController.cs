@@ -44,7 +44,7 @@ namespace EPIWalletAPI.Controllers
 
         public async Task<IActionResult> AddEmployeeAddress(EmployeeAddressViewModel eavm)
         {
-            var address = new EmployeeAddress {Country ="South Africa", ProvinceID = eavm.ProvinceID, Suburb = eavm.Suburb, EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
+            var address = new EmployeeAddress {  ProvinceID = eavm.ProvinceID,  EmployeeID = eavm.EmployeeID, AddressLine1 = eavm.AddressLine1, AddressLine2 = eavm.AddressLine2 };
 
             try
             {
@@ -69,10 +69,10 @@ namespace EPIWalletAPI.Controllers
             {
                 if (results == null) return NotFound("Could not fin ");
 
-                results.Country = "South Africa";
+                
                 results.ProvinceID = eavm.ProvinceID;
-                results.Suburb = eavm.Suburb;
-                //results.EmployeeID = eavm.EmployeeID;
+               
+                //results.EmployeeID = eavm.EmployeeID; not able to change assigned employee.
                 results.AddressLine1 = eavm.AddressLine1;
                 results.AddressLine2 = eavm.AddressLine2;
 
@@ -116,26 +116,26 @@ namespace EPIWalletAPI.Controllers
             return BadRequest();
         }
        
-        [HttpGet]
-        [Route("SearchEmployeeAddress")]
-        public async Task<ActionResult<IEnumerable<EmployeeAddress>>> Search(string name)
-        {
-            try
-            {
-                var results = await _employeeAddressRepository.Search(name);
+        //[HttpGet]
+        //[Route("SearchEmployeeAddress")]
+        //public async Task<ActionResult<IEnumerable<EmployeeAddress>>> Search(string name)
+        //{
+        //    try
+        //    {
+        //        var results = await _employeeAddressRepository.Search(name);
 
-                if(results != null)
-                {
-                    return Ok(results);
-                }
-                return NotFound("Could not find the requested address");
+        //        if(results != null)
+        //        {
+        //            return Ok(results);
+        //        }
+        //        return NotFound("Could not find the requested address");
 
-            }
-            catch (Exception err)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database" + err);
-            }
-        }
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database" + err);
+        //    }
+        //}
 
         [HttpGet]
         [Route("GetEmployeesAddress")]

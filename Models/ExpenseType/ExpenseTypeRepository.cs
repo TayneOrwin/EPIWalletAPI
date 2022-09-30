@@ -69,5 +69,15 @@ namespace EPIWalletAPI.Models
         {
             return await _appDbContext.SaveChangesAsync() > 0;
         }
+
+        public async Task<string[]> getTypeByID(int id)
+        {
+            IQueryable<Models.Entities.ExpenseType> query = _appDbContext.ExpenseTypes
+               .Where(zz => zz.TypeID == id);
+
+            var results = query.Select(zz => zz.Type);
+
+            return await results.ToArrayAsync();
+        }
     }
 }
