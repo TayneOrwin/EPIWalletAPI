@@ -79,16 +79,16 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateTitle")]
 
-        public async Task<object> UpdateTitle(string id, TitleViewModel tvm)
+        public async Task<object> UpdateTitle(string name, TitleViewModel tvm)
         {
 
 
 
             try
             {
-                var existingTitle = await _titleRepository.getTitleAsync(id);
+                var existingTitle = await _titleRepository.getTitleAsync(name);
 
-                if (existingTitle == null) return NotFound("Could not find Title ID: " + id);
+                if (existingTitle == null) return NotFound("Could not find Title ID: " + name);
 
                 existingTitle.Description = tvm.Description;
 
@@ -116,11 +116,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteTitle")]
-        public async Task<IActionResult> DeleteTitle(string id)
+        public async Task<IActionResult> DeleteTitle(string name)
         {
             try
             {
-                var existingTitle = await _titleRepository.getTitleAsync(id);
+                var existingTitle = await _titleRepository.getTitleAsync(name);
                 if (existingTitle == null) return NotFound();
 
 
@@ -145,11 +145,11 @@ namespace EPIWalletAPI.Controllers
         [HttpGet]
         [Route("SearchTitle")]
 
-        public async Task<ActionResult<IEnumerable<Title>>> Search(string description)
+        public async Task<ActionResult<IEnumerable<Title>>> Search(string name)
         {
             try
             {
-                var results = await _titleRepository.Search(description);
+                var results = await _titleRepository.Search(name);
 
                 if (results != null)
                 {

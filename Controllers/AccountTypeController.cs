@@ -75,16 +75,16 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateAccountType")]
 
-        public async Task<object> UpdateAccountType(string id, AccountTypeViewModel atvm)
+        public async Task<object> UpdateAccountType(string name, AccountTypeViewModel atvm)
         {
 
 
 
             try
             {
-                var existingAccountType = await _accountTypeRepository.getAccountTypeAsync(id);
+                var existingAccountType = await _accountTypeRepository.getAccountTypeAsync(name);
 
-                if (existingAccountType == null) return NotFound("Could not find AccountType ID: " + id);
+                if (existingAccountType == null) return NotFound("Could not find AccountType ID: " + name);
 
                 existingAccountType.Description = atvm.Description;
 
@@ -112,11 +112,11 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteAccountType")]
-        public async Task<IActionResult> DeleteAccountType(string id)
+        public async Task<IActionResult> DeleteAccountType(string name)
         {
             try
             {
-                var existingAccountType = await _accountTypeRepository.getAccountTypeAsync(id);
+                var existingAccountType = await _accountTypeRepository.getAccountTypeAsync(name);
                 if (existingAccountType == null) return NotFound();
 
 
@@ -141,11 +141,11 @@ namespace EPIWalletAPI.Controllers
         [HttpGet]
         [Route("SearchAccountType")]
 
-        public async Task<ActionResult<IEnumerable<AccountType>>> Search(string description)
+        public async Task<ActionResult<IEnumerable<AccountType>>> Search(string name)
         {
             try
             {
-                var results = await _accountTypeRepository.Search(description);
+                var results = await _accountTypeRepository.Search(name);
 
                 if (results != null)
                 {

@@ -81,7 +81,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateReason")]
 
-        public async Task<object> UpdateReasonType(string reason, ReasonForRejectionViewModel rvm)
+        public async Task<object> UpdateReason(string reason, ReasonForRejectionViewModel rvm)
         {
 
 
@@ -90,7 +90,10 @@ namespace EPIWalletAPI.Controllers
             {
                 var existingReason = await _rejectionRepository.getReasonForRejectionAsync(reason);
 
-                if (existingReason == null) return NotFound("Could not find Reason ID: " + reason);
+                if (existingReason == null)
+                {
+                    return NotFound("Could not find Reason ID: " + reason);
+                }
 
                 existingReason.Reason = rvm.Reason;
 
@@ -147,11 +150,11 @@ namespace EPIWalletAPI.Controllers
         [HttpGet]
         [Route("SearchReason")]
 
-        public async Task<ActionResult<IEnumerable<ReasonForRejection>>> Search(string name)
+        public async Task<ActionResult<IEnumerable<ReasonForRejection>>> Search(string reason)
         {
             try
             {
-                var results = await _rejectionRepository.Search(name);
+                var results = await _rejectionRepository.Search(reason);
 
                 if (results != null)
                 {

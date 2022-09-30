@@ -54,35 +54,42 @@ namespace EPIWalletAPI.Controllers
             Random rnd = new Random();
             int otp = rnd.Next(1000, 10000);
 
-
+            
+            var CheckUser = _userManager.FindByEmailAsync(toEmail.address);
+            
 
             const string subject = "EPI Wallet Requested OTP";
             string body = "Your OTP is \n" + otp.ToString();
+            if (CheckUser != null)
+            {
+                var smtp = new SmtpClient
+                {
+                    Host = "smtp.gmail.com",
+                    Port = 587,
+                    EnableSsl = true,
+                    DeliveryMethod = SmtpDeliveryMethod.Network,
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+                    Timeout = 20000
+                };
+                using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
+                {
+                    Subject = subject,
+                    Body = body
+                })
+                {
+                    smtp.Send(message);
 
-            var smtp = new SmtpClient
-            {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
-                Timeout = 20000
-            };
-            using (var message = new System.Net.Mail.MailMessage(fromAddress, toAddress)
-            {
-                Subject = subject,
-                Body = body
-            })
-            {
-                smtp.Send(message);
-                
+                }
             }
+            if (CheckUser == null) { return 404; }
 
 
 
             //return that OTP to the backend
-            return otp;
+            
+                return otp;
+            
             
 
         }
