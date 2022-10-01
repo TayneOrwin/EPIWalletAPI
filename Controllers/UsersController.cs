@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
@@ -450,6 +451,7 @@ namespace EPIWalletAPI.Controllers
 
         public object getEmailStoredProcedure(int id)
         {
+            var list = new List<Email>();
             var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             SqlCommand cmd = new SqlCommand("GetEmailParameter", connection) { CommandType = CommandType.StoredProcedure };
             cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -458,10 +460,22 @@ namespace EPIWalletAPI.Controllers
 
            while (rdr.Read())
             {
-                return Ok(rdr["Email"]);
+
+
+
+
+                var res = new Email
+                {
+                    email = (string)rdr["Email"]
+                };
+
+            list.Add(res);
+               // return Ok(rdr["Email"]);
             }
 
-            return Ok(rdr["Email"]);
+            //return Ok(rdr["Email"]);
+
+            return list;
 
 
         }
