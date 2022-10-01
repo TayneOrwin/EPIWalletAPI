@@ -103,7 +103,10 @@ namespace EPIWalletAPI.Controllers
             {
                 var existingCompany = await _companyRepository.getCompanyAsync(name);
 
-                if (existingCompany == null) return NotFound("Could not find company: " + name);
+                if (existingCompany == null)
+                {
+                    return NotFound("Could not find company: " + name);
+                }
 
                 existingCompany.name = cvm.name;
                 existingCompany.description = cvm.description;
@@ -143,15 +146,18 @@ namespace EPIWalletAPI.Controllers
             try
             {
                 var existingCompany = await _companyRepository.getCompanyAsync(name);
-                if (existingCompany == null) return NotFound();
+                if (existingCompany == null) return NotFound("not found");
 
                 var existingCode = await _projectCodeRepository.getProjectCodeAsync(existingCompany.projectcodes);
                 var existingEvent = await _eventRepository.getEventByCodeAsync(existingCompany.projectcodes);
 
-
+                if (existingEvent != null) {
+                    _eventRepository.Delete(existingEvent);
+                    await _companyRepository.SaveChangesAsync();
+                }
                 _companyRepository.Delete(existingCompany);
                 _projectCodeRepository.Delete(existingCode);
-                _eventRepository.Delete(existingEvent);
+                
 
                 if (await _companyRepository.SaveChangesAsync())
                 {
