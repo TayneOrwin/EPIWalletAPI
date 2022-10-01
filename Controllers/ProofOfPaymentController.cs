@@ -28,12 +28,12 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpGet]
-        [Route("GetAllPOP")]
-        public async Task<ActionResult> GetAllPOP()
+        [Route("GetPOP")]
+        public async Task<ActionResult> GetAllPOP(int id)
         {
             try
             {
-                var results = await _proofofpaymentRepository.getAllPOPAsync();
+                var results = await _proofofpaymentRepository.getPOPsForLineAsync(id);
                 return Ok(results);
             }
 
@@ -47,32 +47,7 @@ namespace EPIWalletAPI.Controllers
 
         }
 
-        [HttpPost]
-        [Route("AddPOP")]
-        public async Task<IActionResult> AddPOP(ProofOfPaymentViewModel pvm)
-        {
 
-            var Tevent = new Models.Entities.ProofOfPayment { ExpenseLineID = pvm.ExpenseLineID, File = pvm.File };
-
-            try
-            {
-                _proofofpaymentRepository.Add(Tevent);
-                await _proofofpaymentRepository.SaveChangesAsync();
-            }
-
-
-
-
-            catch (Exception)
-            {
-                return BadRequest("Error");
-            }
-
-            return Ok("Success");
-
-
-
-        }
 
         [HttpDelete]
         [Route("DeletePOP")]
@@ -102,6 +77,10 @@ namespace EPIWalletAPI.Controllers
             return BadRequest();
         }
 
+
+
+
+
         [HttpPost]
         [Route("Upload")]
         public async Task<IActionResult> Post(int id)
@@ -119,7 +98,7 @@ namespace EPIWalletAPI.Controllers
                 var Tevent = new Models.Entities.ProofOfPayment { File = wallpaperImage, ExpenseLineID = id };
 
                 try
-                
+
                 {
                     _proofofpaymentRepository.Add(Tevent);
                     await _proofofpaymentRepository.SaveChangesAsync();
@@ -135,23 +114,10 @@ namespace EPIWalletAPI.Controllers
 
 
             }
-        }
-
-        // GET api/values/2
-        [HttpGet]
-        [Route("GetImage")]
-        public async Task<HttpResponseMessage> Get(int id)
-        {
-            ProofOfPayment currentPOP= await _proofofpaymentRepository.getPOPAsync(id);
-
-            HttpResponseMessage Response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            Response.Content = new StreamContent(new MemoryStream(currentPOP.File));
-            Response.Content.Headers.ContentType =
-    new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpg");
-            return Response;
 
         }
-
     }
 }
+    
+
+

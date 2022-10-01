@@ -14,5 +14,7 @@ namespace EPIWalletAPI.Models.ProofOfPayment
 
         Task<Entities.ProofOfPayment[]> getAllPOPAsync();
         Task<Entities.ProofOfPayment> getPOPAsync(int id);
+
+        Task<Entities.ProofOfPayment[]> getPOPsForLineAsync(int id);
     }
 }
