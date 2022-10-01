@@ -171,7 +171,7 @@ namespace EPIWalletAPI.Controllers
         {
             try
             {
-                var results = _sponsorRepository.Search(name);
+                var results = await _sponsorRepository.Search(name);
                 if (results != null)
                 {
                     return Ok(results);
