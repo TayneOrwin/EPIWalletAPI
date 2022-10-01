@@ -3,11 +3,14 @@ using EPIWalletAPI.Models.Entities;
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,20 +29,24 @@ namespace EPIWalletAPI.Controllers
         private readonly ApplicatonSettings _appSettings;
         private readonly IApplicationUserRepository _applicationuserRepository;
         private readonly IActiveLoginRepository _activeloginRepository;
-      
+
+        private readonly IConfiguration _configuration;
+
 
         public UsersController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, 
             IOptions<ApplicatonSettings> appSettings,
             IApplicationUserRepository applicationuserRepository,
-            IActiveLoginRepository activeLoginRepository)
+            IActiveLoginRepository activeLoginRepository,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _singInManager = signInManager;
             _appSettings = appSettings.Value;
             _applicationuserRepository = applicationuserRepository;
             _activeloginRepository = activeLoginRepository;
+            _configuration = configuration;
             
         }
         //
@@ -419,7 +426,47 @@ namespace EPIWalletAPI.Controllers
         }
 
 
+        [HttpGet]
+        [Route("UpdateAccessRoleAndOrEmail")]
+
+        public object UpdateAccessRoleAndOrEmail(int empid, int accid, string email)
+        {
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+
+            var sql = "update ApplicationUsers Set AccessRoleID = " + accid + ",  UserName = '" + email + "',  Email = '" + email + "' where EmployeeID = " + empid + "";
+
+            SqlCommand cmd = new SqlCommand(sql, connection);
+
+            connection.Open();
+            cmd.ExecuteNonQuery();
+            connection.Close();
+
+            return Ok("Success");
+
+        }
+
+        [HttpGet]
+        [Route("getEmailStoredProcedure")]
+
+        public object getEmailStoredProcedure(int id)
+        {
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlCommand cmd = new SqlCommand("GetEmailParameter", connection) { CommandType = CommandType.StoredProcedure };
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            connection.Open();
+           var rdr = cmd.ExecuteReader();
+
+           while (rdr.Read())
+            {
+                return Ok(rdr["Email"]);
+            }
+
+            return Ok(rdr["Email"]);
 
 
+        }
+
+
+
+        }
     }
-}

@@ -1241,6 +1241,7 @@ namespace EPIWalletAPI.Controllers
             connection.Open();
             using SqlCommand command = new SqlCommand(sql, connection);
             using SqlDataReader reader = command.ExecuteReader();
+            
 
             while (reader.Read())
             {
