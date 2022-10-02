@@ -84,7 +84,7 @@ namespace EPIWalletAPI.Models
         public DbSet<Entities.Province> Province { get; set; }
         public DbSet<Entities.VendorType> VendorType { get; set; }
         public DbSet<Entities.SponsorType> SponsorType { get; set; }
-        public DbSet<City> City { get; set; }
+        public DbSet<Entities.City> City { get; set; }
         public DbSet<Suburb> Suburb { get; set; }
         //public DbSet<Entities.SponsorType> SponsorType { get; set; }
 

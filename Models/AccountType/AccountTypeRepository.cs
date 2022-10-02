@@ -29,17 +29,17 @@ namespace EPIWalletAPI.Models
 
         public async Task<AccountType> getAccountTypeAsync(string account)
         {
-            IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.Description  == account);
+            IQueryable<AccountType> query = _appDbContext.accountType.Where(zz => zz.Description == account);
             return await query.FirstOrDefaultAsync();
-            throw new NotImplementedException();
-            
+
+
         }
 
         public async Task<AccountType[]> getAllAccountTypesAsync()
         {
             IQueryable<AccountType> query = _appDbContext.accountType;
             return await query.ToArrayAsync();
-            throw new NotImplementedException();
+
         }
 
         public async Task<bool> SaveChangesAsync()
@@ -56,7 +56,7 @@ namespace EPIWalletAPI.Models
                 query = query.Where(t => t.Description.Contains(description));
             }
             return await query.ToListAsync();
-            throw new NotImplementedException();
+            
         }
     }
 }
