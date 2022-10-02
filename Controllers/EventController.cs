@@ -96,6 +96,7 @@ namespace EPIWalletAPI.Controllers
                 existingEvent.name = evm.name;
                 existingEvent.description = evm.description;
                 existingEvent.date = evm.date;
+              //  existingEvent.projectcodes = evm.projectcodes;
 
 
                 if (await _eventRepository.SaveChangesAsync())
