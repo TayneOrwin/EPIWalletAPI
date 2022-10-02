@@ -83,7 +83,7 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
-                var existingSponsorType = await _sponsorTypeRepository.getSponsorTypesByNameAsync(description);
+                var existingSponsorType = await _sponsorTypeRepository.getSponsorType(description);
 
                 if (existingSponsorType == null) return NotFound("Could not find type: " + description);
 

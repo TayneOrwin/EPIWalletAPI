@@ -54,9 +54,7 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddSponsor(SponsorViewModel svm)
         {
 
-            var existingtype = await _sponsorTypeRepository.getSponsorTypesByNameAsync(svm.Type);
-            var existingEvent = await _eventRepository.getEventAsync(svm.Event);
-            var TSponsor = new Sponsor { EventID = existingEvent.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email, SponsorTypeID = existingtype.SponsorTypeID };
+            var TSponsor = new Sponsor { EventID = svm.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email, SponsorTypeID =svm.TypeID };
 
             try
             {
@@ -90,8 +88,8 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
-                var existingType = await _sponsorTypeRepository.getSponsorTypesByNameAsync(svm.Type);
-                var existingEvent = await _eventRepository.getEventAsync(svm.Event);
+                var existingType = await _sponsorTypeRepository.getSponsorTypesByIDAsync(svm.TypeID);
+                var existingEvent = await _eventRepository.getEventAsync(svm.name);
                 var existingSponsor = await _sponsorRepository.getSponsorAsync(name);
                 var evntID = existingEvent.EventID;
                 var typeID = existingType.SponsorTypeID;
@@ -104,7 +102,7 @@ namespace EPIWalletAPI.Controllers
                 existingSponsor.Amount = svm.Amount;
                 existingSponsor.Company = svm.Company;
                 existingSponsor.Email = svm.Email;
-                existingSponsor.SponsorTypeID = typeID;
+                existingSponsor.SponsorTypeID = svm.TypeID;
 
 
                 if (await _sponsorRepository.SaveChangesAsync())

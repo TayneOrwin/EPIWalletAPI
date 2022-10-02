@@ -11,7 +11,7 @@ namespace EPIWalletAPI.ViewModels
 
         public int EventID { get; set; }
 
-        public string Event { get; set; }
+
         public string name { get; set; }
         public string Surname { get; set; }
 
@@ -19,6 +19,5 @@ namespace EPIWalletAPI.ViewModels
         public string Company { get; set; }
         public string Email { get; set; }
         public int TypeID { get; set; }
-        public string Type { get; set;  }
     }
 }
