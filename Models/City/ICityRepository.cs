@@ -14,5 +14,8 @@ namespace EPIWalletAPI.Models.City
 
         Task<Entities.City[]> getAllCitiesAsync();
         Task<Entities.City> getCityAsync(string account);
+        Task<Entities.City[]> GetCityByProvinceID(int provinceID);
+
+        Task<int[]> getIDByName(string name);
     }
 }

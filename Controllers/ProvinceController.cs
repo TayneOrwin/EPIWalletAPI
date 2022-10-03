@@ -2,6 +2,8 @@
 using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +16,12 @@ namespace EPIWalletAPI.Controllers
     public class ProvinceController : ControllerBase
     {
         private readonly IProvinceRepository _provinceRepository;
+        private readonly IConfiguration _configuration;
 
-        public ProvinceController(IProvinceRepository provinceRepository)
+        public ProvinceController(IProvinceRepository provinceRepository, IConfiguration configuration)
         {
             _provinceRepository = provinceRepository;
+            _configuration = configuration;
         }
 
         [HttpGet]
@@ -179,5 +183,42 @@ namespace EPIWalletAPI.Controllers
 
 
         }
+
+
+
+        [HttpGet]
+        [Route("DataTreeValues")]
+
+        public object DataTreeValues(int ID)
+        {
+            var list = new List<DataTreeViewModel>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select Province.ProvinceID, Province.ProvinceDesctiption, City.CityID, City.CityDesctiption, Suburb.SuburbID, Suburb.SuburbDesctiption from Province Inner join City on Province.ProvinceID = City.ProvinceID Inner join Suburb on City.CityID = Suburb.SuburbID where Province.ProvinceID = "+ID;
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new DataTreeViewModel
+                {
+                    CityID = (int)reader["CityID"],
+                    City = (string)reader["CityDesctiption"],
+                    ProvinceID = (int)reader["ProvinceID"],
+                    Province = (string)reader["ProvinceDesctiption"],
+                    SuburbID = (int)reader["SuburbID"],
+                    Suburb = (string)reader["SuburbDesctiption"]
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+
+
+
+
+        
+
     }
 }
