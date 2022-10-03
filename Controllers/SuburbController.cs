@@ -46,11 +46,11 @@ namespace EPIWalletAPI.Controllers
         {
 
             var Taccounttype = new Suburb { SuburbDesctiption = cvm.Description, CityID= cvm.CityID};
-            var CheckType = await _suburbRepository.getSuburbAsync(cvm.Description);
+            var CheckType = await _suburbRepository.getSuburbAsync(cvm.CityID);
 
             if (CheckType != null)
             {
-                return Ok(new { code = 401, message = "City Already Exists !!!!!" });
+                return Ok(new { code = 401, message = "Suburb Already Exists !!!!!" });
             }
             try
             {
@@ -114,7 +114,7 @@ namespace EPIWalletAPI.Controllers
 
         [HttpDelete]
         [Route("DeleteSuburb")]
-        public async Task<IActionResult> DeleteAccountType(string id)
+        public async Task<IActionResult> DeleteAccountType(int id)
         {
             try
             {
