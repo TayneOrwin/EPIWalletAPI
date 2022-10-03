@@ -423,10 +423,10 @@ namespace EPIWalletAPI.Controllers
 
             const string subject = "Expense Request Cancelled!";
             string body = "Please read the following information about the Cancelled Expense Request: \n \n" + "Request from Employee : "
-            + employee + "\n \n" + "Estimate of Request: R"
+            + employee[0] + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
             + " \n" + "Kind Regards \n" + "The EPI Team";
@@ -530,7 +530,7 @@ namespace EPIWalletAPI.Controllers
             + employee[0] +  "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
                      + "Details Regarding The Event: " + "\n \n"
@@ -650,7 +650,7 @@ namespace EPIWalletAPI.Controllers
             + employee[0] + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n"
                 + "\n \n" +
@@ -719,7 +719,7 @@ namespace EPIWalletAPI.Controllers
             string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n" +
                  "The Creditor Has Been Notified \n"
@@ -836,7 +836,7 @@ namespace EPIWalletAPI.Controllers
             string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n" +
                 "Reason For Rejection: " + reason+ "\n \n" +
@@ -965,7 +965,7 @@ namespace EPIWalletAPI.Controllers
             string body1 = "Please read the following information about the Expense Request: \n \n" + "\n \n" + "Estimate of Request: R"
             + evm.TotalEstimate + "\n \n"
              + "Vendor Name: "
-                + vendor + "\n \n"
+                + vendor[0] + "\n \n"
                   + "Expense Type: "
                 + expenseType + "\n \n" +
           
