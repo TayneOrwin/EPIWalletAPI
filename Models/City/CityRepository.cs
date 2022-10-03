@@ -32,7 +32,18 @@ namespace EPIWalletAPI.Models.City
             return await query.ToArrayAsync();
         }
 
-        public async Task<Entities.City> getCityAsync(string city)
+        public async Task<Entities.City> getCityAsync(int city)
+        {
+            IQueryable<Entities.City> query = _appDbContext.City;
+            var results = query.Where(zz => zz.CityID == city);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
+
+        public async Task<Entities.City> getCityForDeleteAsync(string city)
         {
             IQueryable<Entities.City> query = _appDbContext.City;
             var results = query.Where(zz => zz.CityDesctiption == city);

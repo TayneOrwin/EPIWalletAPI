@@ -46,12 +46,8 @@ namespace EPIWalletAPI.Controllers
         {
 
             var Taccounttype = new City { CityDesctiption = cvm.CityDescription,ProvinceID = cvm.ProvinceID };
-            var CheckType = await _cityRepository.getCityAsync(cvm.CityDescription);
-
-            if (CheckType != null)
-            {
-                return Ok(new { code = 401, message = "City Already Exists !!!!!" });
-            }
+          
+         
             try
             {
                 _cityRepository.Add(Taccounttype);
@@ -76,7 +72,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateCity")]
 
-        public async Task<object> UpdateAccountType(string id, CityViewModel cvm)
+        public async Task<IActionResult> UpdateCity(int id, CityViewModel cvm)
         {
 
 
@@ -118,7 +114,7 @@ namespace EPIWalletAPI.Controllers
         {
             try
             {
-                var existingCity = await _cityRepository.getCityAsync(id);
+                var existingCity = await _cityRepository.getCityForDeleteAsync(id);
                 if (existingCity == null) return NotFound();
 
 
