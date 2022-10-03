@@ -11,8 +11,13 @@ namespace EPIWalletAPI.Models.Entities
         [Key]
         public int SponsorID { get; set; }
 
-        public Event Event { get; set; }
         public int EventID { get; set; }
+
+        public string Event { get; set; }
+
+        public string SponsorType { get; set; }
+
+        public int SponsorTypeID { get; set; }
         public string name { get; set; }
         public string Surname { get; set; }
               
@@ -20,8 +25,6 @@ namespace EPIWalletAPI.Models.Entities
         public string Company { get; set; }
         public string Email { get; set; }
 
-        public SponsorType SponsorType { get; set; }
-        public int SponsorTypeID { get; set; }
 
 
 

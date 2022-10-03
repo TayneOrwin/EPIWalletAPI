@@ -54,12 +54,21 @@ namespace EPIWalletAPI.Controllers
         public async Task<IActionResult> AddSponsor(SponsorViewModel svm)
         {
 
-            var TSponsor = new Sponsor { EventID = svm.EventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email, SponsorTypeID =svm.TypeID };
+            var sponsorType = await _sponsorTypeRepository.getSponsorType(svm.SponsorType);
+            var eventID = await _eventRepository.getIdByName(svm.Event);
+            var TSponsor = new Sponsor { EventID = eventID, name = svm.name, Surname = svm.Surname, Amount = svm.Amount, Company=svm.Company,Email=svm.Email, SponsorTypeID = sponsorType.SponsorTypeID, Event = svm.Event, SponsorType = svm.SponsorType };
 
+            if (svm.SponsorType == null || svm.Event == null || svm.Event == "Events" || svm.SponsorType == "Types")
+            {
+                return Ok(new { code = 401, message = "not found" });
+            }else
             try
             {
-                _sponsorRepository.Add(TSponsor);
-                await _sponsorRepository.SaveChangesAsync();
+                
+                    _sponsorRepository.Add(TSponsor);
+                    await _sponsorRepository.SaveChangesAsync();
+                    return Ok(new { code = 200, message = "Added" });
+                
             }
 
 
@@ -70,7 +79,7 @@ namespace EPIWalletAPI.Controllers
                 return BadRequest("Error");
             }
 
-            return Ok("Success");
+            
 
 
 
@@ -88,26 +97,35 @@ namespace EPIWalletAPI.Controllers
 
             try
             {
-                var existingType = await _sponsorTypeRepository.getSponsorTypesByIDAsync(svm.TypeID);
-                var existingEvent = await _eventRepository.getEventAsync(svm.name);
+               // var existingType = await _sponsorTypeRepository.getSponsorTypesByIDAsync(svm.TypeID);
+                var existingEventID = await _eventRepository.getIdByName(svm.Event);
                 var existingSponsor = await _sponsorRepository.getSponsorAsync(name);
-                var evntID = existingEvent.EventID;
-                var typeID = existingType.SponsorTypeID;
+                var typeID = await _sponsorTypeRepository.getSponsorType(svm.SponsorType);
+                var tID = typeID.SponsorTypeID;
+                //var typeID = existingType.SponsorTypeID;
 
                 if (existingSponsor == null) return NotFound("Could not find sponsor: " + name);
 
-                existingSponsor.EventID = evntID;
-                existingSponsor.name = svm.name;
-                existingSponsor.Surname = svm.Surname;
-                existingSponsor.Amount = svm.Amount;
-                existingSponsor.Company = svm.Company;
-                existingSponsor.Email = svm.Email;
-                existingSponsor.SponsorTypeID = svm.TypeID;
-
-
-                if (await _sponsorRepository.SaveChangesAsync())
+                if (existingSponsor != null || svm.SponsorType != null || svm.Event != null || svm.Event != "Events" || svm.SponsorType != "Types")
                 {
-                    return Ok("sponsor updated successfully");
+                    existingSponsor.EventID = existingEventID;
+                    existingSponsor.Event = svm.Event;
+                    existingSponsor.name = svm.name;
+                    existingSponsor.Surname = svm.Surname;
+                    existingSponsor.Amount = svm.Amount;
+                    existingSponsor.Company = svm.Company;
+                    existingSponsor.Email = svm.Email;
+                    existingSponsor.SponsorType = svm.SponsorType;
+                    existingSponsor.SponsorTypeID = tID;
+
+                    await _sponsorRepository.SaveChangesAsync();
+                    return Ok(new { code = 200, message = "Updated" });
+                }
+
+                else
+                if (existingSponsor == null || svm.SponsorType == null || svm.Event == null || svm.Event == "Events" || svm.SponsorType == "Types")
+                {
+                    return Ok(new {code = 401, message = "sponsor updated successfully" });
                 }
 
 
