@@ -151,19 +151,20 @@ namespace EPIWalletAPI.Controllers
                 var existingCode = await _projectCodeRepository.getProjectCodeAsync(existingCompany.projectcodes);
                 var existingEvent = await _eventRepository.getEventByCodeAsync(existingCompany.projectcodes);
 
-                if (existingEvent != null) {
-                    _eventRepository.Delete(existingEvent);
+                if (existingEvent == null) {
+                    _companyRepository.Delete(existingCompany);
+                    _projectCodeRepository.Delete(existingCode);
                     await _companyRepository.SaveChangesAsync();
+                    return Ok(new {code = 200, message = "Company deleted successfully" });
                 }
-                _companyRepository.Delete(existingCompany);
-                _projectCodeRepository.Delete(existingCode);
+                if (existingEvent != null)
+                {
+                    return Ok(new { code = 400, message = "Company in use by event" });
+                }
+                
                 
 
-                if (await _companyRepository.SaveChangesAsync())
-                {
-                    return Ok("Company deleted successfully");
-                    
-                }
+                
 
 
             }

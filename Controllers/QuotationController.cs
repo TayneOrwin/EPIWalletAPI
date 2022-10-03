@@ -27,7 +27,7 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpGet]
-        [Route("GetAllQuotations")]
+        [Route("GetQuotations")]
         public async Task<ActionResult> GetAllQuotationsAsync()
         {
             try
@@ -46,33 +46,7 @@ namespace EPIWalletAPI.Controllers
 
         }
 
-        [HttpPost]
-        [Route("AddQuotation")]
-        public async Task<IActionResult> AddQuotation(QuotationViewModel qvm)
-        {
-
-            var Tevent = new Models.Entities.Quotation { ExpenseItemID = qvm.ExpenseItemID, File = qvm.file };
-
-            try
-            {
-                _quotationRepository.Add(Tevent);
-                await _quotationRepository.SaveChangesAsync();
-            }
-
-
-
-
-            catch (Exception)
-            {
-                return BadRequest("Error");
-            }
-
-            return Ok("Success");
-
-
-
-        }
-
+       
         [HttpDelete]
         [Route("DeleteQuotation")]
         public async Task<IActionResult> DeleteQuotation(int id)
@@ -100,6 +74,11 @@ namespace EPIWalletAPI.Controllers
 
             return BadRequest();
         }
+
+
+
+
+
 
         [HttpPost]
         [Route("Upload")]
@@ -135,21 +114,7 @@ namespace EPIWalletAPI.Controllers
             }
         }
 
-        // GET api/values/2
-        [HttpGet]
-        [Route("GetImage")]
-        public async Task<HttpResponseMessage> Get(int id)
-        {
-            Quotation currentQuotation = await _quotationRepository.getQuotationAsync(id);
-
-            HttpResponseMessage Response = new HttpResponseMessage(HttpStatusCode.OK);
-
-            Response.Content = new StreamContent(new MemoryStream(currentQuotation.File));
-            Response.Content.Headers.ContentType =
-    new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpg");
-            return Response;
-
-        }
+    
 
     }
 }

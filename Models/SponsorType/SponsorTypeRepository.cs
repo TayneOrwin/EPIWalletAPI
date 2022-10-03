@@ -37,9 +37,9 @@ namespace EPIWalletAPI.Models
             }
             return await query.ToListAsync();
         }
-        public async Task<Entities.SponsorType> getSponsorTypesByNameAsync(string name)
+        public async Task<Entities.SponsorType> getSponsorTypesByIDAsync(int id)
         {
-            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.Description == name);
+            IQueryable<Entities.SponsorType> query = _appDbContext.SponsorType.Where(zz => zz.SponsorTypeID == id);
             return await query.FirstOrDefaultAsync();
         }
 
