@@ -13,5 +13,7 @@ namespace EPIWalletAPI.Models
         Task<bool> SaveChangesAsync();
 
         Task<GuestList[]> getAllGuestListsAsync();
+
+        Task<GuestList> getAttAsync(int id);
     }
 }

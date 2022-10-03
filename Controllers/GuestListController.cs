@@ -1,5 +1,6 @@
 ﻿using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.Entities;
+using EPIWalletAPI.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -59,6 +60,57 @@ namespace EPIWalletAPI.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error in retrieving data from the database");
             }
+        }
+
+        [HttpPut]
+        [Route("UpdateAttendance")]
+
+        public async Task<ActionResult> UpdateSponsor(int name, GuestListViewModel glvm)
+        {
+
+
+
+            try
+            {
+                
+                var existingAtt = await _guestListRepository.getAttAsync(name);
+                
+                //var typeID = existingType.SponsorTypeID;
+
+                if (existingAtt == null) return NotFound("Could not find sponsor: " + name);
+
+                if (existingAtt != null)
+                {
+                    existingAtt.Attendance = glvm.Attendance;
+                    
+
+                    await _guestListRepository.SaveChangesAsync();
+                    return Ok(new { code = 200, message = "Updated" });
+                }
+
+                else
+                if (existingAtt == null)
+                {
+                    return Ok(new { code = 401, message = "sponsor updated successfully" });
+                }
+
+
+            }
+
+
+
+
+            catch (Exception)
+            {
+                return BadRequest("Error");
+            }
+
+            return Ok("Success");
+
+
+
+
+
         }
     }
 }

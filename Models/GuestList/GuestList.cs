@@ -12,5 +12,7 @@ namespace EPIWalletAPI.Models.Entities
         public string Name { get; set; }
 
         public string Surname { get; set; }
+
+        public string Attendance { get; set; }
     }
 }
