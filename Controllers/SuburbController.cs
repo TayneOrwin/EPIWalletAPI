@@ -76,7 +76,7 @@ namespace EPIWalletAPI.Controllers
         [HttpPut]
         [Route("UpdateSuburb")]
 
-        public async Task<object> UpdateSuburb(string id, SuburbViewModel cvm)
+        public async Task<object> UpdateSuburb(int id, SuburbViewModel cvm)
         {
 
 

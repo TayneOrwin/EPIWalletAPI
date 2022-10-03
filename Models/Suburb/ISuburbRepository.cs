@@ -13,7 +13,7 @@ namespace EPIWalletAPI.Models.Suburb
         Task<bool> SaveChangesAsync();
 
         Task<Entities.Suburb[]> getAllSuburbsAsync();
-        Task<Entities.Suburb> getSuburbAsync(string account);
+        Task<Entities.Suburb> getSuburbAsync(int id);
 
         Task<Entities.Suburb[]> GetSuburbByCityID(int id);
     }

@@ -32,10 +32,10 @@ namespace EPIWalletAPI.Models.Suburb
             return await query.ToArrayAsync();
         }
 
-        public async Task<Entities.Suburb> getSuburbAsync(string suburb)
+        public async Task<Entities.Suburb> getSuburbAsync(int suburb)
         {
             IQueryable<Entities.Suburb> query = _appDbContext.Suburb;
-            var results = query.Where(zz => zz.SuburbDesctiption == suburb);
+            var results = query.Where(zz => zz.SuburbID == suburb);
 
             return await results.FirstOrDefaultAsync();
         }
