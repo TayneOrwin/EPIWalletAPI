@@ -1,11 +1,13 @@
 using AutoMapper;
 using EPIWalletAPI.Models;
 using EPIWalletAPI.Models.AccessRole;
+using EPIWalletAPI.Models.City;
 using EPIWalletAPI.Models.Employee;
 using EPIWalletAPI.Models.Identity;
 using EPIWalletAPI.Models.ProofOfPayment;
 using EPIWalletAPI.Models.Province;
 using EPIWalletAPI.Models.Quotation;
+using EPIWalletAPI.Models.Suburb;
 using EPIWalletAPI.Models.Vendor;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -172,6 +174,9 @@ namespace EPIWalletAPI
             services.AddScoped<IAdminTimerRepository, AdminTimerRepository>();
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
             services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
+            services.AddScoped<ISuburbRepository, SuburbRepository>();
+            services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<IProvinceRepository, ProvinceRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

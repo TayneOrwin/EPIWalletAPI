@@ -41,17 +41,13 @@ namespace EPIWalletAPI.Controllers
 
 
         [HttpPost]
-        [Route("AddAccountType")]
-        public async Task<IActionResult> AddAccountType(City cvm)
+        [Route("AddCity")]
+        public async Task<IActionResult> AddAccountType(CityViewModel cvm)//fix
         {
 
-            var Taccounttype = new City { CityDesctiption = cvm.CityDesctiption,ProvinceID = cvm.ProvinceID };
-            var CheckType = await _cityRepository.getCityAsync(cvm.CityDesctiption);
-
-            if (CheckType != null)
-            {
-                return Ok(new { code = 401, message = "City Already Exists !!!!!" });
-            }
+            var Taccounttype = new City { CityDesctiption = cvm.CityDescription,ProvinceID = cvm.ProvinceID };
+          
+         
             try
             {
                 _cityRepository.Add(Taccounttype);
@@ -74,9 +70,9 @@ namespace EPIWalletAPI.Controllers
         }
 
         [HttpPut]
-        [Route("UpdateAccountType")]
+        [Route("UpdateCity")]
 
-        public async Task<object> UpdateAccountType(string id, CityViewModel cvm)
+        public async Task<IActionResult> UpdateCity(int id, CityViewModel cvm)
         {
 
 
@@ -113,12 +109,12 @@ namespace EPIWalletAPI.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteAccountType")]
+        [Route("DeleteCity")]
         public async Task<IActionResult> DeleteAccountType(string id)
         {
             try
             {
-                var existingCity = await _cityRepository.getCityAsync(id);
+                var existingCity = await _cityRepository.getCityForDeleteAsync(id);
                 if (existingCity == null) return NotFound();
 
 
@@ -141,7 +137,7 @@ namespace EPIWalletAPI.Controllers
         }
 
         [HttpGet]
-        [Route("SearchAccountType")]
+        [Route("SearchCity")]
 
         public async Task<ActionResult<IEnumerable<City>>> Search(string description)
         {
@@ -163,6 +159,54 @@ namespace EPIWalletAPI.Controllers
 
 
         }
+
+        [HttpGet]
+        [Route("CityByProvinceID")]
+
+        public async Task<ActionResult> CityByProvinceID(int provinceID)
+        {
+
+
+            try
+            {
+                var results = await _cityRepository.GetCityByProvinceID(provinceID);
+                return Ok(results);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal server error");
+            }
+        }
+
+
+        [HttpGet]
+        [Route("GetIDByCity")]
+
+
+        public async Task<IActionResult> GetIDByCity(string name)
+        {
+
+            var results = await _cityRepository.getIDByName(name);
+
+            try
+            {
+                return Ok(results);
+            }
+            catch (Exception err)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error");
+            }
+
+
+        }
+
+
+        
+
+
+       
+
+
 
     }
 }

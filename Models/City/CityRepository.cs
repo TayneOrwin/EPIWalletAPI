@@ -13,7 +13,7 @@ namespace EPIWalletAPI.Models.City
 
         public CityRepository(AppDbContext appDbContext)
         {
-            appDbContext = _appDbContext;
+            _appDbContext = appDbContext;
         }
 
         public void Add<T>(T entity) where T : class
@@ -32,7 +32,18 @@ namespace EPIWalletAPI.Models.City
             return await query.ToArrayAsync();
         }
 
-        public async Task<Entities.City> getCityAsync(string city)
+        public async Task<Entities.City> getCityAsync(int city)
+        {
+            IQueryable<Entities.City> query = _appDbContext.City;
+            var results = query.Where(zz => zz.CityID == city);
+
+            return await results.FirstOrDefaultAsync();
+        }
+
+
+
+
+        public async Task<Entities.City> getCityForDeleteAsync(string city)
         {
             IQueryable<Entities.City> query = _appDbContext.City;
             var results = query.Where(zz => zz.CityDesctiption == city);
@@ -40,9 +51,9 @@ namespace EPIWalletAPI.Models.City
             return await results.FirstOrDefaultAsync();
         }
 
-        public Task<bool> SaveChangesAsync()
+        public async Task<bool> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _appDbContext.SaveChangesAsync() > 0;
         }
 
         public async Task<IEnumerable<Entities.City>> Search(string description)
@@ -57,5 +68,26 @@ namespace EPIWalletAPI.Models.City
 
 
         }
+
+        public async Task<Entities.City[]> GetCityByProvinceID(int provinceid)
+        {
+            IQueryable<Entities.City> query = _appDbContext.City;
+            var results = query.Where(zz => zz.ProvinceID == provinceid);
+
+            return await results.ToArrayAsync();
+        }
+
+        public async Task<int[]> getIDByName(string name)
+        {
+            IQueryable<Entities.City> query = _appDbContext.City.Where(p => p.CityDesctiption == name);
+            var results = query.Select(z => z.ProvinceID);
+
+            return await results.ToArrayAsync();
+        }
+
+
+
+
+
     }
 }
