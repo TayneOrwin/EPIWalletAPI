@@ -43,5 +43,11 @@ namespace EPIWalletAPI.Models
             IQueryable<GuestList> query = _appDbContext.GuestLists;
             return await query.ToArrayAsync();
         }
+
+        public async Task<GuestList> getAttAsync(int id)
+        {
+            IQueryable<GuestList> query = _appDbContext.GuestLists.Where(c => c.GuestListID == id);
+            return await query.FirstOrDefaultAsync();
+        }
     }
 }
