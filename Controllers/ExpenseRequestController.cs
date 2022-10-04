@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Data.SqlClient;
 using EPIWalletAPI.Models.ExpenseType;
 using EPIWalletAPI.Models.Identity;
+using System.Data;
 
 namespace EPIWalletAPI.Controllers
 {
@@ -1567,10 +1568,132 @@ namespace EPIWalletAPI.Controllers
 
 
 
+        [HttpGet]
+        [Route("GetRequestsPerEmployee")]
+
+        public object GetRequestsPerEmployee()
+        {
+            var list = new List<RequestsPerEmployee>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select Employees.Name, count(ExpenseRequests.ExpenseID) as ExpenseRequests from Employees inner join ExpenseRequests on ExpenseRequests.EmployeeID = Employees.EmployeeID Group By Employees.Name";
+
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new RequestsPerEmployee
+                {
+                    
+                    Name = (string)reader["Name"],
+                     Total = (int)reader["ExpenseRequests"]
+                    
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+        [HttpGet]
+        [Route("GetRequestsPerStatus")]
+
+        public object GetRequestsPerStatus()
+        {
+            var list = new List<RequestPerStatus>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            var sql = "select approvalStatuses.status, count(ExpenseRequests.ExpenseID) as Total from ExpenseRequests inner join approvalStatuses on ExpenseRequests.ApprovalID = approvalStatuses.ApprovalID group by approvalStatuses.status";
+            connection.Open();
+            using SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                var results = new RequestPerStatus
+                {
+
+                    Status = (string)reader["status"],
+                    Total = (int)reader["Total"]
+
+                };
+                list.Add(results);
+            }
+            return list;
+        }
+
+
+
+        //////////////
+        ///
+        [HttpGet]
+        [Route("GetRequestsPerEmployeeSP")]
+
+        public object GetRequestsPerEmployeeSP()
+        {
+            var list = new List<RequestsPerEmployee>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlCommand cmd = new SqlCommand("getrequestsperemployee", connection) { CommandType = CommandType.StoredProcedure };
+           // cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            connection.Open();
+            var rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
 
 
 
 
+                var res = new RequestsPerEmployee
+                {
+                    Name = (string)rdr["Name"],
+                    Total = (int)rdr["ExpenseRequests"]
+                };
+
+                list.Add(res);
+                // return Ok(rdr["Email"]);
+            }
+
+            //return Ok(rdr["Email"]);
+
+            return list;
+
+
+        }
+
+        [HttpGet]
+        [Route("GetRequestsPerTitleSP")]
+
+        public object GetRequestsPerTitleSP()
+        {
+            var list = new List<RequestPerStatus>();
+            var connection = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            SqlCommand cmd = new SqlCommand("getrequestsperstatus", connection) { CommandType = CommandType.StoredProcedure };
+            // cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+            connection.Open();
+            var rdr = cmd.ExecuteReader();
+
+            while (rdr.Read())
+            {
+
+
+
+
+                var res = new RequestPerStatus
+                {
+                    Status = (string)rdr["status"],
+                    Total = (int)rdr["Total"]
+                };
+
+                list.Add(res);
+                // return Ok(rdr["Email"]);
+            }
+
+            //return Ok(rdr["Email"]);
+
+            return list;
+
+
+        }
 
 
     }
