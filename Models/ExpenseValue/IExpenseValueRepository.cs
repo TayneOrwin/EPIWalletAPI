@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 
 namespace EPIWalletAPI.Models
 {
-    public interface IAdminTimerRepository
+    public interface IExpenseValueRepository
     {
         Task<bool> SaveChangesAsync();
-        Task<Models.Entities.AdminTimer> getTimer(int timer);
+        Task<Models.Entities.ExpenseValue> getValue(int timer);
     }
 }
 

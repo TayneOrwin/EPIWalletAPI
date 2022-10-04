@@ -35,8 +35,10 @@
     <None Remove="Models\City\" />
     <None Remove="Models\Suburb\" />
     <None Remove="Models\AdminTimer\" />
+    <None Remove="Models\ExpenseValue\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\AdminTimer\" />
+    <Folder Include="Models\ExpenseValue\" />
   </ItemGroup>
 </Project>

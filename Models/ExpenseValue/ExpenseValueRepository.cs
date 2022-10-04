@@ -5,20 +5,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EPIWalletAPI.Models
 {
-    public class AdminTimerRepository:IAdminTimerRepository
+    public class ExpenseValueRepository: IExpenseValueRepository
     {
         private readonly AppDbContext _appDbContext;
 
 
-        public AdminTimerRepository(AppDbContext appDbContext)
+        public ExpenseValueRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
 
-        public async Task<Models.Entities.AdminTimer> getTimer(int timer)
+        public async Task<Models.Entities.ExpenseValue> getValue(int timer)
         {
-            IQueryable<Models.Entities.AdminTimer> query = _appDbContext.AdminTimer.Where(c => c.timerID == timer);
+            IQueryable<Models.Entities.ExpenseValue> query = _appDbContext.ExpenseValue.Where(c => c.value == timer);
             return await query.FirstOrDefaultAsync();
         }
 
