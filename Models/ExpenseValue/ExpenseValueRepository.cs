@@ -18,7 +18,7 @@ namespace EPIWalletAPI.Models
 
         public async Task<Models.Entities.ExpenseValue> getValue(int timer)
         {
-            IQueryable<Models.Entities.ExpenseValue> query = _appDbContext.ExpenseValue.Where(c => c.value == timer);
+            IQueryable<Models.Entities.ExpenseValue> query = _appDbContext.ExpenseValue.Where(c => c.valueID == timer);
             return await query.FirstOrDefaultAsync();
         }
 
